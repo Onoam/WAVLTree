@@ -6,7 +6,7 @@
  * (Haupler, Sen & Tarajan ‘15)
  *
  */
-//test2
+//test2.1
 public class WAVLTree {
 
   /**
