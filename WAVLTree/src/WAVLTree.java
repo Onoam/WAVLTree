@@ -3,11 +3,24 @@
  * WAVLTree
  *
  * An implementation of a WAVL Tree.
- * (Haupler, Sen & Tarajan ‘15)
+ * (Haupler, Sen & Tarajan ï¿½15)
  *
  */
 
 public class WAVLTree {
+    WAVLNode root;
+    int size;
+    int height;
+
+    public WAVLTree() {
+        this.root = null;
+    }
+
+    public WAVLTree(WAVLNode root){
+        this.root = root;
+        this.size = 1;
+        this.height = 0;
+    }
 
   /**
    * public boolean empty()
@@ -16,7 +29,11 @@ public class WAVLTree {
    *
    */
   public boolean empty() {
-    return false; // to be replaced by student code
+      if (this.root == null) {
+          return true;
+      } else {
+          return false;
+      }
   }
 
  /**
@@ -110,7 +127,9 @@ public class WAVLTree {
     */
    public int size()
    {
-           return 42; // to be replaced by student code
+       WAVLNode root;
+       root = this.getRoot()
+       return root.getSubtreeSize(); // to be replaced by student code
    }
    
      /**
@@ -121,7 +140,11 @@ public class WAVLTree {
     */
    public WAVLNode getRoot()
    {
+       if (this.empty()) {
            return null;
+        } else {
+           return root;
+        }
    }
      /**
     * public int select(int i)
