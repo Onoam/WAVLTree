@@ -8,18 +8,16 @@
  */
 
 public class WAVLTree {
-    WAVLNode root;
-    int size;
-    int height;
+    private WAVLNode root;
+    private int height;
 
     public WAVLTree() {
-        this.root = null;
+        this.root = new WAVLNode();
     }
 
     public WAVLTree(WAVLNode root){
         this.root = root;
-        this.size = 1;
-        this.height = 0;
+        this.height = root.height;
     }
 
   /**
@@ -29,10 +27,14 @@ public class WAVLTree {
    *
    */
   public boolean empty() {
-      if (this.root == null) {
-          return true;
-      } else {
+      /**
+       * Returns false if root is an inner node, and true if it is an outer leaf
+       * Run time O(isInnerNode)
+       */
+      if (this.root.isInnerNode()) {
           return false;
+      } else {
+          return true;
       }
   }
 
@@ -115,8 +117,8 @@ public class WAVLTree {
    */
    public String[] infoToArray()
    {
-        String[] arr = new String[42]; // to be replaced by student code
-        return arr;                    // to be replaced by student code
+       String[] arr = new String[42]; // to be replaced by student code
+       return arr;                    // to be replaced by student code
    }
 
    /**
@@ -127,9 +129,14 @@ public class WAVLTree {
     */
    public int size()
    {
+       /**
+        * This method should be realized from the root node.
+        * If we save a node.size, then the Tree.size should be
+        * the size of the root node.
+        * */
        WAVLNode root;
-       root = this.getRoot()
-       return root.getSubtreeSize(); // to be replaced by student code
+       root = this.getRoot();
+       return root.getSubtreeSize()+1; // can also be getSubtreeSize()
    }
    
      /**
