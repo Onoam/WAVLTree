@@ -2,11 +2,23 @@
  *
  * WAVLTree
  *
+
  * An implementation of a WAVL Tree. (Haupler, Sen & Tarajan ‘15)
  *
  */
 //test2.1
 public class WAVLTree {
+    private WAVLNode root;
+    private int height;
+
+    public WAVLTree() {
+        this.root = new WAVLNode();
+    }
+
+    public WAVLTree(WAVLNode root){
+        this.root = root;
+        this.height = root.height;
+    }
 
 	/**
 	 * public boolean empty()
