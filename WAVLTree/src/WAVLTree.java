@@ -9,25 +9,33 @@
 //test2.1
 public class WAVLTree {
     private WAVLNode root;
-    private int height;
+    public static final WAVLNode OUTER_NODE = new WAVLNode();
 
-    public WAVLTree() {
-        this.root = new WAVLNode();
+    public WAVLTree(WAVLNode root, WAVLNode ext){
+        this.root = root;
+        this.ext = ext;
     }
 
     public WAVLTree(WAVLNode root){
-        this.root = root;
-        this.height = root.height;
+        this(root, OUTER_NODE)
     }
+
+    public WAVLTree() {
+        this(new WAVLNode(), OUTER_NODE)
+    }
+
 
 	/**
 	 * public boolean empty()
 	 *
 	 * returns true if and only if the tree is empty
-	 *
-	 */
+	 **/
 	public boolean empty() {
-		return false; // to be replaced by student code
+	    /** Returns false if root is an inner node,
+         * and true if it is an outer leaf.
+         * Run time O(1)
+         **/
+		return !this.root.isInnerNode()
 	}
 
 	/**
@@ -113,7 +121,16 @@ public class WAVLTree {
 	 *
 	 */
 	public int size() {
-		return 42; // to be replaced by student code
+        /**
+         * @return the size of the root node.
+         * Complexity O(1), given that the size of each node is
+         * updated at every insert, delete, and rebalance
+         */
+		if (empty()) {
+		    return 0 // to be replaced by student code
+        } else {
+		    return getRoot().size
+        }
 	}
 
 	/**
@@ -123,7 +140,11 @@ public class WAVLTree {
 	 *
 	 */
 	public WAVLNode getRoot() {
-		return null;
+		if (this.empty()) {
+		    return null
+        } else {
+		    return this.root
+        }
 	}
 
 	/**
@@ -198,7 +219,7 @@ public class WAVLTree {
 		}
 
 		public boolean isInnerNode() {
-			return rank == OUTER_NODE_RANK;
+			return rank != OUTER_NODE_RANK;
 		}
 		/**
 		 * 
