@@ -218,6 +218,21 @@ public class WAVLTree {
 			return parent;
 		}
 
+		public int getRank() {
+			return rank
+		}
+		public void setRank(int rank) {
+			this.rank = rank
+		}
+
+		public void promote() {
+			setRank(getRank()+1);
+		}
+
+		public void demote() {
+			setRank(getRank()-1);
+		}
+
 		public boolean isInnerNode() {
 			return rank != OUTER_NODE_RANK;
 		}
