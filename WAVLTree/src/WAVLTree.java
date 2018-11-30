@@ -136,13 +136,26 @@ public class WAVLTree {
 	//
 	public class WAVLNode {
 		private int key;
-		
+		private String value;
+		private WAVLNode right;
+		private WAVLNode left;
+		private int rank;
+
+		public WAVLNode(int key, String value, WAVLNode right, WAVLNode left, int rank) {
+			super();
+			this.key = key;
+			this.value = value;
+			this.right = right;
+			this.left = left;
+			this.rank = rank;
+		}
+
 		public int getKey() {
 			return key; // to be replaced by student code
 		}
 
 		public String getValue() {
-			return null; // to be replaced by student code
+			return value; // to be replaced by student code
 		}
 
 		public WAVLNode getLeft() {
