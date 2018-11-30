@@ -129,49 +129,79 @@ public class WAVLTree {
 		return null;
 	}
 
-	// TEST CODE
 	/**
 	 * public class WAVLNode
 	 */
 	//
 	public class WAVLNode {
+		public static final int OUTER_NODE_RANK = -1;
+		public static final String OUTER_NODE_VALUE = "";
+		public static final int OUTER_NODE_KEY = -1;
 		private int key;
 		private String value;
+		private WAVLNode parent;
 		private WAVLNode right;
 		private WAVLNode left;
 		private int rank;
+		private int size; // the size field needs to be updated after inserts or rebalances.
 
-		public WAVLNode(int key, String value, WAVLNode right, WAVLNode left, int rank) {
-			super();
+		public WAVLNode(int key, String value, WAVLNode parent, WAVLNode right, WAVLNode left, int rank) {
 			this.key = key;
 			this.value = value;
+			this.parent = parent;
 			this.right = right;
 			this.left = left;
 			this.rank = rank;
+			this.size = this.getSubtreeSize();
 		}
 
+		public WAVLNode(int key, String value) {
+			this(key, value, null, null, null, 1);
+		}
+		
+		/**
+		 * The default constructor for the WAVLNode class.
+		 * Constructs an external node.
+		 */
+		public WAVLNode() {
+			this(OUTER_NODE_KEY, OUTER_NODE_VALUE, null, null, null, OUTER_NODE_RANK);
+		}
 		public int getKey() {
-			return key; // to be replaced by student code
+			return key; 
 		}
 
 		public String getValue() {
-			return value; // to be replaced by student code
+			return value;
 		}
 
 		public WAVLNode getLeft() {
-			return null; // to be replaced by student code
+			return left;
 		}
 
 		public WAVLNode getRight() {
-			return null; // to be replaced by student code
+			return right;
+		}
+		public WAVLNode getParent() {
+			return parent;
 		}
 
 		public boolean isInnerNode() {
-			return true; // to be replaced by student code
+			return rank == OUTER_NODE_RANK;
 		}
-
+		/**
+		 * 
+		 * @return the size of the subtree that has this as its root, including this.
+		 */
 		public int getSubtreeSize() {
-			return 42; // to be replaced by student code
+			int lsize = 0;
+			int rsize = 0;
+			if (left != null) {
+				lsize = left.size;
+			}
+			if (right != null) {
+				rsize = right.size;
+			}
+			return rsize + lsize + 1; // 
 		}
 	}
 
