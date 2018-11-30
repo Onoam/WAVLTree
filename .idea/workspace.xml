@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c26defb4-7c91-494d-a714-385d186e9f1b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WAVLTree/src/WAVLTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/WAVLTree/src/WAVLTree.java" afterDir="false" />
     </list>
@@ -16,33 +17,52 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/WAVLTree/src/WAVLTree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1360">
-              <caret line="141" column="8" lean-forward="true" selection-start-line="141" selection-start-column="8" selection-end-line="141" selection-end-column="8" />
+            <state relative-caret-position="-1152">
+              <caret line="131" column="33" selection-start-line="131" selection-start-column="29" selection-end-line="131" selection-end-column="33" />
               <folding>
                 <element signature="docComment;class#WAVLTree#0" />
-                <element signature="e#195#196#0" expanded="true" />
-                <element signature="e#237#238#0" expanded="true" />
+                <element signature="e#365#366#0" expanded="true" />
+                <element signature="e#386#387#0" expanded="true" />
+                <element signature="e#446#447#0" expanded="true" />
+                <element signature="e#493#494#0" expanded="true" />
                 <element signature="docComment;method#search#0;class#WAVLTree#0" />
-                <element signature="e#785#846#1" />
-                <element signature="e#959#960#0" expanded="true" />
+                <element signature="e#899#952#1" />
+                <element signature="e#988#989#0" expanded="true" />
                 <element signature="docComment;method#insert#0;class#WAVLTree#0" />
-                <element signature="e#1226#1290#1" />
-                <element signature="e#1403#1404#0" expanded="true" />
+                <element signature="e#1322#1373#1" />
+                <element signature="e#1409#1410#0" expanded="true" />
                 <element signature="docComment;method#delete#0;class#WAVLTree#0" />
-                <element signature="e#1659#1723#1" />
-                <element signature="e#1836#1837#0" expanded="true" />
+                <element signature="e#1728#1779#1" />
+                <element signature="e#1815#1816#0" expanded="true" />
                 <element signature="docComment;method#min#0;class#WAVLTree#0" />
+                <element signature="e#1941#1994#1" />
+                <element signature="e#2030#2031#0" expanded="true" />
                 <element signature="docComment;method#max#0;class#WAVLTree#0" />
-                <element signature="e#2144#2208#1" />
-                <element signature="e#2321#2322#0" expanded="true" />
+                <element signature="e#2155#2208#1" />
+                <element signature="e#2244#2245#0" expanded="true" />
                 <element signature="docComment;method#keysToArray#0;class#WAVLTree#0" />
                 <element signature="method#keysToArray#0;class#WAVLTree#0" />
                 <element signature="docComment;method#infoToArray#0;class#WAVLTree#0" />
+                <element signature="method#infoToArray#0;class#WAVLTree#0" />
                 <element signature="docComment;method#select#0;class#WAVLTree#0" />
-                <element signature="e#3910#3941#1" />
-                <element signature="e#4238#4239#0" expanded="true" />
-                <element signature="docComment;class#WAVLNode#0;class#WAVLTree#0" />
-                <element signature="class#WAVLNode#0;class#WAVLTree#0" />
+                <element signature="e#3582#3601#1" />
+                <element signature="e#3978#3979#0" expanded="true" />
+                <element signature="e#4161#4162#0" expanded="true" />
+                <element signature="e#4207#4208#0" expanded="true" />
+                <element signature="e#4331#4332#0" expanded="true" />
+                <element signature="e#4413#4414#0" expanded="true" />
+                <element signature="e#4437#4438#0" expanded="true" />
+                <element signature="e#4457#4458#0" expanded="true" />
+                <element signature="e#4487#4488#0" expanded="true" />
+                <element signature="e#4508#4509#0" expanded="true" />
+                <element signature="e#4539#4540#0" expanded="true" />
+                <element signature="e#4559#4560#0" expanded="true" />
+                <element signature="e#4591#4592#0" expanded="true" />
+                <element signature="e#4612#4613#0" expanded="true" />
+                <element signature="e#4644#4645#0" expanded="true" />
+                <element signature="e#4666#4667#0" expanded="true" />
+                <element signature="e#4700#4701#0" expanded="true" />
+                <element signature="e#4739#4740#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -76,6 +96,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -99,11 +120,10 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543497949805" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543498141784" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
@@ -135,7 +155,7 @@
     <frame x="68" y="20" width="1400" height="794" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2533532" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26080477" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -150,8 +170,8 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.3298193" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5007452" side_tool="true" weight="0.3298193" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49925485" weight="0.3298193" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -165,33 +185,52 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/WAVLTree/src/WAVLTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1360">
-          <caret line="141" column="8" lean-forward="true" selection-start-line="141" selection-start-column="8" selection-end-line="141" selection-end-column="8" />
+        <state relative-caret-position="-1152">
+          <caret line="131" column="33" selection-start-line="131" selection-start-column="29" selection-end-line="131" selection-end-column="33" />
           <folding>
             <element signature="docComment;class#WAVLTree#0" />
-            <element signature="e#195#196#0" expanded="true" />
-            <element signature="e#237#238#0" expanded="true" />
+            <element signature="e#365#366#0" expanded="true" />
+            <element signature="e#386#387#0" expanded="true" />
+            <element signature="e#446#447#0" expanded="true" />
+            <element signature="e#493#494#0" expanded="true" />
             <element signature="docComment;method#search#0;class#WAVLTree#0" />
-            <element signature="e#785#846#1" />
-            <element signature="e#959#960#0" expanded="true" />
+            <element signature="e#899#952#1" />
+            <element signature="e#988#989#0" expanded="true" />
             <element signature="docComment;method#insert#0;class#WAVLTree#0" />
-            <element signature="e#1226#1290#1" />
-            <element signature="e#1403#1404#0" expanded="true" />
+            <element signature="e#1322#1373#1" />
+            <element signature="e#1409#1410#0" expanded="true" />
             <element signature="docComment;method#delete#0;class#WAVLTree#0" />
-            <element signature="e#1659#1723#1" />
-            <element signature="e#1836#1837#0" expanded="true" />
+            <element signature="e#1728#1779#1" />
+            <element signature="e#1815#1816#0" expanded="true" />
             <element signature="docComment;method#min#0;class#WAVLTree#0" />
+            <element signature="e#1941#1994#1" />
+            <element signature="e#2030#2031#0" expanded="true" />
             <element signature="docComment;method#max#0;class#WAVLTree#0" />
-            <element signature="e#2144#2208#1" />
-            <element signature="e#2321#2322#0" expanded="true" />
+            <element signature="e#2155#2208#1" />
+            <element signature="e#2244#2245#0" expanded="true" />
             <element signature="docComment;method#keysToArray#0;class#WAVLTree#0" />
             <element signature="method#keysToArray#0;class#WAVLTree#0" />
             <element signature="docComment;method#infoToArray#0;class#WAVLTree#0" />
+            <element signature="method#infoToArray#0;class#WAVLTree#0" />
             <element signature="docComment;method#select#0;class#WAVLTree#0" />
-            <element signature="e#3910#3941#1" />
-            <element signature="e#4238#4239#0" expanded="true" />
-            <element signature="docComment;class#WAVLNode#0;class#WAVLTree#0" />
-            <element signature="class#WAVLNode#0;class#WAVLTree#0" />
+            <element signature="e#3582#3601#1" />
+            <element signature="e#3978#3979#0" expanded="true" />
+            <element signature="e#4161#4162#0" expanded="true" />
+            <element signature="e#4207#4208#0" expanded="true" />
+            <element signature="e#4331#4332#0" expanded="true" />
+            <element signature="e#4413#4414#0" expanded="true" />
+            <element signature="e#4437#4438#0" expanded="true" />
+            <element signature="e#4457#4458#0" expanded="true" />
+            <element signature="e#4487#4488#0" expanded="true" />
+            <element signature="e#4508#4509#0" expanded="true" />
+            <element signature="e#4539#4540#0" expanded="true" />
+            <element signature="e#4559#4560#0" expanded="true" />
+            <element signature="e#4591#4592#0" expanded="true" />
+            <element signature="e#4612#4613#0" expanded="true" />
+            <element signature="e#4644#4645#0" expanded="true" />
+            <element signature="e#4666#4667#0" expanded="true" />
+            <element signature="e#4700#4701#0" expanded="true" />
+            <element signature="e#4739#4740#0" expanded="true" />
           </folding>
         </state>
       </provider>
