@@ -139,11 +139,11 @@ public class WAVLTree {
 		if (!tree.empty()) {
 			return;
 		} else {
-			WAVLTree L = new WAVLTree(getRoot().getLeft())
+			WAVLTree L = new WAVLTree(getRoot().getLeft());
 			infoToArrayRec(L, array, counter);
 			array[counter[0]] = getRoot().getValue();
 			counter[0] = counter[0] + 1;
-			WAVLTree R = new WAVLTree(getRoot().getLeft())
+			WAVLTree R = new WAVLTree(getRoot().getLeft());
 			infoToArrayRec(R, array, counter);
 		}
 	}
@@ -165,11 +165,11 @@ public class WAVLTree {
 		if (!tree.empty()) {
 			return;
 		} else {
-			WAVLTree L = new WAVLTree(getRoot().getLeft())
+			WAVLTree L = new WAVLTree(getRoot().getLeft());
 			keysToArrayRec(L, array, counter);
 			array[counter[0]] = getRoot().getKey();
 			counter[0] = counter[0] + 1;
-			WAVLTree R = new WAVLTree(getRoot().getRight())
+			WAVLTree R = new WAVLTree(getRoot().getRight());
 			keysToArrayRec(R, array, counter);
 		}
 	}
