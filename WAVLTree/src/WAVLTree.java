@@ -94,7 +94,7 @@ public class WAVLTree {
 	 * if the tree is empty.
 	 */
 	public int[] keysToArray() {
-		int[] arr = new int[getRoot().size];
+		int[] arr = new int[root.size];
 		int[] count = new int[1];
 		if (!this.empty()) {
 			keysToArrayRec(this, arr, count);
@@ -274,10 +274,10 @@ public class WAVLTree {
 		}
 
 		public int getRank() {
-			return rank
+			return rank;
 		}
 		public void setRank(int rank) {
-			this.rank = rank
+			this.rank = rank;
 		}
 
 		public void promote() {
