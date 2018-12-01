@@ -109,7 +109,7 @@ public class WAVLTree {
 	 * respective keys, or an empty array if the tree is empty.
 	 */
 	public String[] infoToArray() {
-		String[] arr = new String[getRoot().size];
+		String[] arr = new String[root.size];
 		int[] count = new int[1];
 		if (!this.empty()) {
 			infoToArrayRec(this, arr, count);
