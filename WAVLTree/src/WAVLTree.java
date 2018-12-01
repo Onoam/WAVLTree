@@ -11,17 +11,12 @@ public class WAVLTree {
     private WAVLNode root;
     public static final WAVLNode OUTER_NODE = new WAVLNode();
 
-    public WAVLTree(WAVLNode root, WAVLNode ext){
-        this.root = root;
-        this.ext = ext;
-    }
-
     public WAVLTree(WAVLNode root){
-        this(root, OUTER_NODE)
+        this.root = root;
     }
 
     public WAVLTree() {
-        this(new WAVLNode(), OUTER_NODE)
+        this(new WAVLNode());
     }
 
 
@@ -35,7 +30,7 @@ public class WAVLTree {
          * and true if it is an outer leaf.
          * Run time O(1)
          **/
-		return !this.root.isInnerNode()
+		return !this.root.isInnerNode();
 	}
 
 	/**
@@ -187,9 +182,9 @@ public class WAVLTree {
          * updated at every insert, delete, and rebalance
          */
 		if (empty()) {
-		    return 0 // to be replaced by student code
+		    return 0; // to be replaced by student code
         } else {
-		    return getRoot().size
+		    return getRoot().size;
         }
 	}
 
@@ -201,9 +196,9 @@ public class WAVLTree {
 	 */
 	public WAVLNode getRoot() {
 		if (this.empty()) {
-		    return null
+		    return null;
         } else {
-		    return this.root
+		    return this.root;
         }
 	}
 
