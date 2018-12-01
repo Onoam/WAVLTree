@@ -130,7 +130,7 @@ public class WAVLTree {
 	 * Complexity - We need to go through all the nodes in the tree (n)
 	 * and we do a set number of O(1) operations for each, thus O(n)
 	 */
-	public String[] infoToArrayRec(WAVLTree tree, String[] array, int[] counter) {
+	private String[] infoToArrayRec(WAVLTree tree, String[] array, int[] counter) {
 		if (!tree.empty()) {
 			return;
 		} else {
