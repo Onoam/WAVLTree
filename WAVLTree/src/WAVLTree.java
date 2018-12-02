@@ -275,7 +275,7 @@ public class WAVLTree {
 		 * Constructs an external node.
 		 */
 		public WAVLNode() {
-			this(OUTER_NODE_KEY, OUTER_NODE_VALUE, null, null, null, OUTER_NODE_RANK);
+			this(OUTER_NODE_KEY, null, null, null, null, OUTER_NODE_RANK);
 		}
 		public int getKey() {
 			return key; 
