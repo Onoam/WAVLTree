@@ -74,7 +74,18 @@ public class WAVLTree {
 	 * the tree is empty
 	 */
 	public String min() {
-		return "42"; // to be replaced by student code
+		return min(root);
+	}
+	/**
+	 * implemented recursively
+	 * @param node the root of the current subtree
+	 * @return info of minimal node in tree
+	 */
+	private String min(WAVLNode node) {
+		if (node.left == OUTER_NODE) {
+			return node.getValue();
+		}
+		return min(node.left);
 	}
 
 	/**
@@ -84,7 +95,19 @@ public class WAVLTree {
 	 * tree is empty
 	 */
 	public String max() {
-		return "42"; // to be replaced by student code
+		return max(root); 
+	}
+
+	/**
+	 * implemented recursively
+	 * @param node the root of the current subtree
+	 * @return info of maximal node in the tree
+	 */
+	private String max(WAVLNode node) {
+		if (node.right == OUTER_NODE) {
+			return node.getValue();
+		}
+		return max(node.right);
 	}
 
 	/**
@@ -223,7 +246,7 @@ public class WAVLTree {
 	//
 	public class WAVLNode {
 		public static final int OUTER_NODE_RANK = -1;
-		public static final String OUTER_NODE_VALUE = "";
+		public static final String OUTER_NODE_VALUE = ""; // not used
 		public static final int OUTER_NODE_KEY = -1;
 		private int key;
 		private String value;
