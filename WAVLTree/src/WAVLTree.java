@@ -2,23 +2,22 @@
  *
  * WAVLTree
  *
-
+ * 
  * An implementation of a WAVL Tree. (Haupler, Sen & Tarajan ‘15)
  *
  */
 //test2.1
 public class WAVLTree {
-    private WAVLNode root;
-    public static final WAVLNode OUTER_NODE = new WAVLNode();
+	private WAVLNode root;
+	public static final WAVLNode OUTER_NODE = new WAVLNode();
 
-    public WAVLTree(WAVLNode root){
-        this.root = root;
-    }
+	public WAVLTree(WAVLNode root) {
+		this.root = root;
+	}
 
-    public WAVLTree() {
-        this(new WAVLNode());
-    }
-
+	public WAVLTree() {
+		this(new WAVLNode());
+	}
 
 	/**
 	 * public boolean empty()
@@ -26,10 +25,10 @@ public class WAVLTree {
 	 * returns true if and only if the tree is empty
 	 **/
 	public boolean empty() {
-	    /** Returns false if root is an inner node,
-         * and true if it is an outer leaf.
-         * Run time O(1)
-         **/
+		/**
+		 * Returns false if root is an inner node, and true if it is an outer leaf. Run
+		 * time O(1)
+		 **/
 		return !this.root.isInnerNode();
 	}
 
@@ -66,29 +65,50 @@ public class WAVLTree {
 	public int delete(int k) {
 		return 42; // to be replaced by student code
 	}
+
 	/**
-	 * performs right rotation, making 
-	 * @param x y's left child
-	 * @param y x's parent
+	 * performs right rotation. Does not handle demotions.
+	 * 
+	 * @param x       y's left child
+	 * @param y       x's parent
 	 * @param counter the rebalance counter
 	 * @return counter increased by 1 (1 rebalance operation)
+	 * @post y is x's right child, x is y's parent's child (same side as y was)
 	 */
 	private int rotateRight(WAVLNode x, WAVLNode y, int counter) {
 		if (y.parent != null && y.key > y.getParent().key) {
 			y.parent.right = x;
-		}
-		else if (y.parent != null) {
+		} else if (y.parent != null) { // y is left child of its parent
 			y.parent.left = x;
 		}
 		x.parent = y.parent;
 		y.left = x.right;
 		x.right = y;
-		demote(y);
-		return counter+1;
+		y.parent = x;
+		return counter + 1;
 	}
-	private void demote(WAVLNode y) {
-		// TODO Auto-generated method stub
-		
+
+	/**
+	 * performs left rotation, does not handle demotions.
+	 * 
+	 * @param z       x's right child
+	 * @param x       z's parent
+	 * @param counter the rebalance counter
+	 * @return counter increased by 1 (1 rebalance operation)
+	 * @post x is z's left child, z is x's parent's child (same side as x was)
+	 */
+	private int rotateLeft(WAVLNode z, WAVLNode x, int counter) {
+
+		if (x.parent != null && x.key > x.getParent().key) {
+			x.parent.right = z;
+		} else if (x.parent != null) { // y is left child of its parent
+			x.parent.left = z;
+		}
+		z.parent = x.parent;
+		x.right = z.left;
+		z.left = x;
+		x.parent = z;
+		return counter + 1;
 	}
 
 	/**
@@ -100,8 +120,10 @@ public class WAVLTree {
 	public String min() {
 		return min(root);
 	}
+
 	/**
 	 * implemented recursively
+	 * 
 	 * @param node the root of the current subtree
 	 * @return info of minimal node in tree
 	 */
@@ -124,6 +146,7 @@ public class WAVLTree {
 
 	/**
 	 * implemented recursively
+	 * 
 	 * @param node the root of the current subtree
 	 * @return info of maximal node in the tree
 	 */
@@ -165,17 +188,14 @@ public class WAVLTree {
 	}
 
 	/**
-	 * Used recursive inner function.
-	 * Needs to pass a tree, the array that we're populating with keys
-	 * and a coutner.
-	 * The counter is to validate that we're adding values in the right places.
-	 * Stopping conditions - if we reach an empty tree, we return without
-	 * changing the array (hope this works like Python or JS)
-	 * Otherwiase, we first run on the left side of the root,
-	 * then add the root to the array and move the counter + 1,
-	 * then move to the right.
-	 * Complexity - We need to go through all the nodes in the tree (n)
-	 * and we do a set number of O(1) operations for each, thus O(n)
+	 * Used recursive inner function. Needs to pass a tree, the array that we're
+	 * populating with keys and a coutner. The counter is to validate that we're
+	 * adding values in the right places. Stopping conditions - if we reach an empty
+	 * tree, we return without changing the array (hope this works like Python or
+	 * JS) Otherwiase, we first run on the left side of the root, then add the root
+	 * to the array and move the counter + 1, then move to the right. Complexity -
+	 * We need to go through all the nodes in the tree (n) and we do a set number of
+	 * O(1) operations for each, thus O(n)
 	 */
 	private String[] infoToArrayRec(WAVLTree tree, String[] array, int[] counter) {
 		if (!tree.empty()) {
@@ -191,17 +211,14 @@ public class WAVLTree {
 	}
 
 	/**
-	 * Used recursive inner function.
-	 * Needs to pass a tree, the array that we're populating with keys
-	 * and a coutner.
-	 * The counter is to validate that we're adding values in the right places.
-	 * Stopping conditions - if we reach an empty tree, we return without
-	 * changing the array (hope this works like Python or JS)
-	 * Otherwiase, we first run on the left side of the root,
-	 * then add the root to the array and move the counter + 1,
-	 * then move to the right.
-	 * Complexity - We need to go through all the nodes in the tree (n)
-	 * and we do a set number of O(1) operations for each, thus O(n)
+	 * Used recursive inner function. Needs to pass a tree, the array that we're
+	 * populating with keys and a coutner. The counter is to validate that we're
+	 * adding values in the right places. Stopping conditions - if we reach an empty
+	 * tree, we return without changing the array (hope this works like Python or
+	 * JS) Otherwiase, we first run on the left side of the root, then add the root
+	 * to the array and move the counter + 1, then move to the right. Complexity -
+	 * We need to go through all the nodes in the tree (n) and we do a set number of
+	 * O(1) operations for each, thus O(n)
 	 */
 	private String[] keysToArrayRec(WAVLTree tree, String[] array, int[] counter) {
 		if (!tree.empty()) {
@@ -223,16 +240,15 @@ public class WAVLTree {
 	 *
 	 */
 	public int size() {
-        /**
-         * @return the size of the root node.
-         * Complexity O(1), given that the size of each node is
-         * updated at every insert, delete, and rebalance
-         */
+		/**
+		 * @return the size of the root node. Complexity O(1), given that the size of
+		 *         each node is updated at every insert, delete, and rebalance
+		 */
 		if (empty()) {
-		    return 0; // to be replaced by student code
-        } else {
-		    return getRoot().size;
-        }
+			return 0; // to be replaced by student code
+		} else {
+			return getRoot().size;
+		}
 	}
 
 	/**
@@ -243,10 +259,10 @@ public class WAVLTree {
 	 */
 	public WAVLNode getRoot() {
 		if (this.empty()) {
-		    return null;
-        } else {
-		    return this.root;
-        }
+			return null;
+		} else {
+			return this.root;
+		}
 	}
 
 	/**
@@ -293,16 +309,16 @@ public class WAVLTree {
 		public WAVLNode(int key, String value) {
 			this(key, value, null, null, null, 1);
 		}
-		
+
 		/**
-		 * The default constructor for the WAVLNode class.
-		 * Constructs an external node.
+		 * The default constructor for the WAVLNode class. Constructs an external node.
 		 */
 		public WAVLNode() {
 			this(OUTER_NODE_KEY, null, null, null, null, OUTER_NODE_RANK);
 		}
+
 		public int getKey() {
-			return key; 
+			return key;
 		}
 
 		public String getValue() {
@@ -316,6 +332,7 @@ public class WAVLTree {
 		public WAVLNode getRight() {
 			return right;
 		}
+
 		public WAVLNode getParent() {
 			return parent;
 		}
@@ -323,21 +340,23 @@ public class WAVLTree {
 		public int getRank() {
 			return rank;
 		}
+
 		public void setRank(int rank) {
 			this.rank = rank;
 		}
 
 		public void promote() {
-			setRank(getRank()+1);
+			setRank(getRank() + 1);
 		}
 
 		public void demote() {
-			setRank(getRank()-1);
+			setRank(getRank() - 1);
 		}
 
 		public boolean isInnerNode() {
 			return rank != OUTER_NODE_RANK;
 		}
+
 		/**
 		 * 
 		 * @return the size of the subtree that has this as its root, including this.
@@ -351,7 +370,7 @@ public class WAVLTree {
 			if (right != null) {
 				rsize = right.size;
 			}
-			return rsize + lsize + 1; // 
+			return rsize + lsize + 1; //
 		}
 	}
 
