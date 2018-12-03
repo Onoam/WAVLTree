@@ -95,8 +95,8 @@ public class WAVLTree {
 	 * tree is empty
 	 */
 	public String max() {
-		return max(root); 
-	}
+		return max(root);
+	} //test
 
 	/**
 	 * implemented recursively
