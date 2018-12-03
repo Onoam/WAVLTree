@@ -70,6 +70,8 @@ public class WAVLTree {
 	 * performs right rotation, making 
 	 * @param x y's left child
 	 * @param y x's parent
+	 * @param counter the rebalance counter
+	 * @return counter increased by 1 (1 rebalance operation)
 	 */
 	private int rotateRight(WAVLNode x, WAVLNode y, int counter) {
 		if (y.parent != null && y.key > y.getParent().key) {
