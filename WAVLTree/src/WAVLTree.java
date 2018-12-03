@@ -66,6 +66,28 @@ public class WAVLTree {
 	public int delete(int k) {
 		return 42; // to be replaced by student code
 	}
+	/**
+	 * performs right rotation, making 
+	 * @param x y's left child
+	 * @param y x's parent
+	 */
+	private int rotateRight(WAVLNode x, WAVLNode y, int counter) {
+		if (y.parent != null && y.key > y.getParent().key) {
+			y.parent.right = x;
+		}
+		else if (y.parent != null) {
+			y.parent.left = x;
+		}
+		x.parent = y.parent;
+		y.left = x.right;
+		x.right = y;
+		demote(y);
+		return counter+1;
+	}
+	private void demote(WAVLNode y) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	/**
 	 * public String min()
@@ -96,7 +118,7 @@ public class WAVLTree {
 	 */
 	public String max() {
 		return max(root);
-	} //test
+	}
 
 	/**
 	 * implemented recursively
