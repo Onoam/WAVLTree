@@ -112,6 +112,43 @@ public class WAVLTree {
 	}
 
 	/**
+	 * Returns the node with the key directly following x.
+	 * @param x WAVLNode A node in the tree
+	 * @return y The WAVLNode with the following key
+	 */
+	private WAVLNode successor(WAVLNode x) {
+		if (x.getRight().getRank() != -1) {
+			return min(x.right);
+		} else {
+			WAVLNode y = x.getParent();
+			while (y != null && x == y.getRight()) {
+				x = y;
+				y = x.getParent();
+			}
+			return y;
+		}
+	}
+
+
+	/**
+	 * Returns the node with the key directly preceding x.
+	 * @param x WAVLNode A node in the tree
+	 * @return y The WAVLNode with the preceding key
+	 */
+	private WAVLNode predecessor(WAVLNode x) {
+		if (x.getLeft().getRank() != -1) {
+			return max(x.left);
+		} else {
+			WAVLNode y = x.getParent();
+			while (y != null && x == y.getLeft()) {
+				x = y;
+				y = x.getParent();
+			}
+			return y;
+		}
+	}
+
+	/**
 	 * public String min()
 	 *
 	 * Returns the info of the item with the smallest key in the tree, or null if
