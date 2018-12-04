@@ -111,7 +111,7 @@ public class WAVLTree {
 		WAVLNode current = getRoot();
 		WAVLNode parent;
 		while (current.getRank() != -1) {
-			if (k = current.getKey()) {
+			if (k == current.getKey()) {
 				return current;
 			} else if (k < current.getKey()) {
 				parent = current;
