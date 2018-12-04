@@ -113,12 +113,14 @@ public class WAVLTree {
 
 	/**
 	 * Returns the node with the key directly following x.
+	 * This does not deal with call successor on the maximum of the tree,
+	 * because we don't meet this case in any other operation.
 	 * @param x WAVLNode A node in the tree
 	 * @return y The WAVLNode with the following key
 	 */
 	private WAVLNode successor(WAVLNode x) {
 		if (x.getRight().getRank() != -1) {
-			return min(x.right);
+			return min(x.getRight());
 		} else {
 			WAVLNode y = x.getParent();
 			while (y != null && x == y.getRight()) {
@@ -132,12 +134,14 @@ public class WAVLTree {
 
 	/**
 	 * Returns the node with the key directly preceding x.
+	 * This does not deal with call predecessor on the minimum of the tree,
+	 * because we don't meet this case in any other operation.
 	 * @param x WAVLNode A node in the tree
 	 * @return y The WAVLNode with the preceding key
 	 */
 	private WAVLNode predecessor(WAVLNode x) {
 		if (x.getLeft().getRank() != -1) {
-			return max(x.left);
+			return max(x.getLeft());
 		} else {
 			WAVLNode y = x.getParent();
 			while (y != null && x == y.getLeft()) {
