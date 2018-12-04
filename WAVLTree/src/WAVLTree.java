@@ -84,7 +84,7 @@ public class WAVLTree {
 		WAVLNode parent = current.getParent();
 		WAVLNode[] array = new WAVLNode[2];
 		while (current.getRank() != -1) {
-			if (k = current.getKey()) {
+			if (k == current.getKey()) {
 				WAVLNode[0] = current;
 				WAVLNode[1] = parent;
 				return array;
