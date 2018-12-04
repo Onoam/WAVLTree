@@ -38,9 +38,63 @@ public class WAVLTree {
 	 *
 	 * returns the info of an item with key k if it exists in the tree otherwise,
 	 * returns null
+	 * * * * * * * * *
+	 * Complexity - same as select(). Worst case O(log n)
 	 */
 	public String search(int k) {
-		return "42"; // to be replaced by student code
+		WAVLNode item = select(k);
+		if (item.getRank() == -1) {
+			return null;
+		} else {
+			return item.getValue();
+		}
+	}
+
+	/**
+	 * Select the node with key k.
+	 * If node doesn't exist, return external node.
+	 * Complexity - O(log n). Upper bounded by height of tree.
+	 * @param k int - key of node to select
+	 * @return current WAVLNode - the node with key k, or external node.
+	 */
+	private WAVLNode select(int k) {
+		WAVLNode current = getRoot();
+		WAVLNode parent;
+		while (current.getRank() != -1) {
+			if (k = current.getKey()) {
+				return current;
+			} else if (k < current.getKey()) {
+				parent = current;
+				current = current.getLeft();
+			} else {
+				parent = current;
+				current = current.getRight();
+			}
+		}
+		return current;
+	}
+
+	/**
+	 * Finds the WAVLNode underwhich to insert a new WAVLNode with key k.
+	 * Complexity - O(log n). Upper bounded by height of tree.
+	 * @param k int - the new key that we want to insert
+	 * @return parent WAVLNode - the WAVLNode underwhich to insert.
+	 */
+	private WAVLNode findInsertParent(int k) {
+		WAVLNode current = getRoot();
+		WAVLNode parent;
+		while (current.getRank() != -1) {
+			if (k = current.getKey()) {
+				return current;
+			} else if (k < current.getKey()) {
+				parent = current;
+				current = current.getLeft();
+			} else {
+				parent = current;
+				current = current.getRight();
+			}
+		}
+		return parent;
 	}
 
 	/**
