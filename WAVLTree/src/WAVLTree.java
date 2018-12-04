@@ -9,14 +9,15 @@
 //test2.1
 public class WAVLTree {
 	private WAVLNode root;
-	public static final WAVLNode OUTER_NODE = new WAVLNode();
+	public final WAVLNode OUTER_NODE = new WAVLNode();
 
 	public WAVLTree(WAVLNode root) {
 		this.root = root;
 	}
 
 	public WAVLTree() {
-		this(new WAVLNode());
+		WAVLNode root = new WAVLNode();
+		this(root);
 	}
 
 	/**
@@ -203,12 +204,24 @@ public class WAVLTree {
 	 *
 	 * Returns a sorted array which contains all keys in the tree, or an empty array
 	 * if the tree is empty.
+	 * * * * * * * * * *
+	 * Complexity:
+	 * 		this.min() = O(log n)
+	 * 		successor - called n times, with an amortized cost of O(1) per call
+	 * 			total cost O(n) amortized
+	 * 		total cost O(n)
+	 * @return arr int[] sorted array of the keys of tree nodes
 	 */
 	public int[] keysToArray() {
 		int[] arr = new int[root.size];
-		int[] count = new int[1];
 		if (!this.empty()) {
-			keysToArrayRec(this, arr, count);
+			WAVLNode current = this.min();
+			int i = 0;
+			while (i < root.size) {
+				arr[i] = current.getKey();
+				current = successor(current);
+				i++;
+			}
 		}
 		return arr;
 	}
@@ -218,61 +231,29 @@ public class WAVLTree {
 	 *
 	 * Returns an array which contains all info in the tree, sorted by their
 	 * respective keys, or an empty array if the tree is empty.
+	 * * * * * * * * * *
+	 * Complexity:
+	 * 		this.min() = O(log n)
+	 * 		successor - called n times, with an amortized cost of O(1) per call
+	 * 			total cost O(n) amortized
+	 * 		total cost O(n)
+	 * @return arr String[] sorted array of the keys of tree nodes
 	 */
 	public String[] infoToArray() {
 		String[] arr = new String[root.size];
 		int[] count = new int[1];
 		if (!this.empty()) {
-			infoToArrayRec(this, arr, count);
+			WAVLNode current = this.min();
+			int i = 0;
+			while (i < root.size) {
+				arr[i] = current.getValue();
+				current = successor(current);
+				i++;
+			}
 		}
 		return arr; // to be replaced by student code
 	}
 
-	/**
-	 * Used recursive inner function. Needs to pass a tree, the array that we're
-	 * populating with keys and a coutner. The counter is to validate that we're
-	 * adding values in the right places. Stopping conditions - if we reach an empty
-	 * tree, we return without changing the array (hope this works like Python or
-	 * JS) Otherwiase, we first run on the left side of the root, then add the root
-	 * to the array and move the counter + 1, then move to the right. Complexity -
-	 * We need to go through all the nodes in the tree (n) and we do a set number of
-	 * O(1) operations for each, thus O(n)
-	 */
-	private String[] infoToArrayRec(WAVLTree tree, String[] array, int[] counter) {
-		if (!tree.empty()) {
-			return;
-		} else {
-			WAVLTree L = new WAVLTree(getRoot().getLeft());
-			infoToArrayRec(L, array, counter);
-			array[counter[0]] = getRoot().getValue();
-			counter[0] = counter[0] + 1;
-			WAVLTree R = new WAVLTree(getRoot().getLeft());
-			infoToArrayRec(R, array, counter);
-		}
-	}
-
-	/**
-	 * Used recursive inner function. Needs to pass a tree, the array that we're
-	 * populating with keys and a coutner. The counter is to validate that we're
-	 * adding values in the right places. Stopping conditions - if we reach an empty
-	 * tree, we return without changing the array (hope this works like Python or
-	 * JS) Otherwiase, we first run on the left side of the root, then add the root
-	 * to the array and move the counter + 1, then move to the right. Complexity -
-	 * We need to go through all the nodes in the tree (n) and we do a set number of
-	 * O(1) operations for each, thus O(n)
-	 */
-	private String[] keysToArrayRec(WAVLTree tree, String[] array, int[] counter) {
-		if (!tree.empty()) {
-			return;
-		} else {
-			WAVLTree L = new WAVLTree(getRoot().getLeft());
-			keysToArrayRec(L, array, counter);
-			array[counter[0]] = getRoot().getKey();
-			counter[0] = counter[0] + 1;
-			WAVLTree R = new WAVLTree(getRoot().getRight());
-			keysToArrayRec(R, array, counter);
-		}
-	}
 
 	/**
 	 * public int size()
