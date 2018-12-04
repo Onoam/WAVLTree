@@ -75,6 +75,33 @@ public class WAVLTree {
 	}
 
 	/**
+	 * If this is legal, this can stop us from having 2 functions that do the same thing.
+	 * @param k
+	 * @return
+	 */
+	private WAVLNode[] findNode(int k) {
+		WAVLNode current = getRoot();
+		WAVLNode parent = current.getParent();
+		WAVLNode[] array = new WAVLNode[2];
+		while (current.getRank() != -1) {
+			if (k = current.getKey()) {
+				WAVLNode[0] = current;
+				WAVLNode[1] = parent;
+				return array;
+			} else if (k < current.getKey()) {
+				parent = current;
+				current = current.getLeft();
+			} else {
+				parent = current;
+				current = current.getRight();
+			}
+		}
+		WAVLNode[0] = current;
+		WAVLNode[1] = parent;
+		return array;
+	}
+
+	/**
 	 * Finds the WAVLNode underwhich to insert a new WAVLNode with key k.
 	 * Complexity - O(log n). Upper bounded by height of tree.
 	 * @param k int - the new key that we want to insert
