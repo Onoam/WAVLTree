@@ -125,6 +125,54 @@ public class WAVLTree {
 	}
 
 	/**
+	 * Implementation of Tree-Search from slides, done deterministicly
+	 * @param x - WAVLNode
+	 * @param k - int the key to look for
+	 * @return WAVLNode - if not found, then returns a, OUTER_NODE
+	 */
+	private WAVLNode treeSearch(WAVLNode x, int k) {
+		while (x.getRank() != -1) {
+			if (k == x.getKey()) {
+				return x;
+			} else if (k < x.getKey()) {
+				x = x.getLeft();
+			} else {
+				x = x.getRight();
+			}
+		}
+		return x;
+//		if (x.getRank() == -1 || k == x.getKey()) {
+//			return x;
+//		} else {
+//			if (k < x.getKey()) {
+//				return treeSearch(x.getLeft(), k);
+//			} else {
+//				return treeSearch(x.getRight(), k);
+//			}
+//		}
+	}
+
+	/**
+	 * Implementation of Tree-Position from slides. Done deterministicly.
+	 * @param x - WAVLNode
+	 * @param k - int the key to look for
+	 * @return WAVLNode - return the last node encountered, or an existing node
+	 */
+	private WAVLNode treePosition(WAVLNode x, int k) {
+		while (x.getRank() != -1) {
+			WAVLNode y = x;
+			if (k == x.getKey()) {
+				return x;
+			} else if (k < x.getKey()) {
+				x = x.getLeft();
+			} else {
+				x = x.getRight();
+			}
+		}
+		return y;
+	}
+
+	/**
 	 * public int insert(int k, String i)
 	 *
 	 * inserts an item with key k and info i to the WAVL tree. the tree must remain
@@ -145,7 +193,77 @@ public class WAVLTree {
 	 * item with key k was not found in the tree.
 	 */
 	public int delete(int k) {
-		return 42; // to be replaced by student code
+		WAVLNode z = treeSearch(getRoot(), k);
+		if (z.getRank() == -1) {
+			return -1;
+		}
+		WAVLNode y = successor(z);
+		remove(z);
+		return rebalance(y);
+	}
+
+	private void remove(WAVLNode node) {
+		WAVLNode succ;
+		// If leaf of tree, find side of parent and remove
+		if (node.getRight().getRank() == -1 && node.getLeft().getRank() == -1) {
+			removeLeaf(node);
+		} else { // Is an inner node
+			succ = successor(node);
+			if (succ == node.getRight()) {
+				/*
+				* If this is his right child, then we need to:
+				* 1) make succ's parent the parent of node
+				* 2) make succ's left child node's left child
+				* 3) attach succ to node's parent base on side*/
+				succ.parent = node.getParent();
+				succ.left = node.getLeft();
+				if (side(node) == 0) {
+					node.getParent().left = succ;
+				} else if (side(node) == 1) {
+					node.getParent().right = succ;
+				}
+			} else {
+				/*
+				* If this isn't his right child then:
+				* 1) If he has a right child, set it as the left child of succ's parent
+				* 2) set succ.right and succ.left to node.right and node.left repectively
+				* 3) set succ.parent to node.parent*/
+				succ.getParent().left = succ.getRight();
+				succ.parent = node.getParent();
+				succ.right = node.getRight();
+				succ.left = node.getLeft();
+			}
+		}
+		node = null;
+
+	}
+
+	private void removeLeaf(WAVLNode node) {
+		switch (side(node)) {
+			case 0:
+				node.getParent().left = OUTER_NODE;
+				node.parent = null;
+				break;
+			case 1:
+				node.getParent().right = OUTER_NODE;
+				node.parent = null;
+				break;
+			default:
+				break;
+		}
+		return void;
+	}
+
+	private int side(WAVLNode node) {
+		WAVLNode parent = node.getParent();
+		if (parent != null) {
+			if (parent.getLeft() == node) {
+				return 0;
+			} else {
+				return 1;
+			}
+		}
+		return -1;
 	}
 
 	/**
