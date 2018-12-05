@@ -2,6 +2,8 @@
 .classpath
 .project
 .settings/
+.metadata/
+.recommenders/
 
 .idea/
 *.iml
