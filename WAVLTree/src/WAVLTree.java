@@ -181,7 +181,33 @@ public class WAVLTree {
 	 * k already exists in the tree.
 	 */
 	public int insert(int k, String i) {
-		return 42; // to be replaced by student code
+		WAVLNode x = new WAVLNode(k, i);
+		if (empty()) {
+			this.root = x;
+			return 0;
+		} else {
+			int counter = treeInsert(getRoot(), x);
+			if (counter == -1) {
+				return counter;
+			} else {
+				return rebalance(x);
+			}
+		}
+	}
+
+	private int treeInsert(WAVLNode root, WAVLNode z) {
+		WAVLNode y = treePosition(root, z.getKey());
+		if (z.getKey() == y.getKey()) {
+			return -1;
+		}
+		z.parent = y;
+		if (z.getKey() < y .getKey()) {
+			y.left = z;
+			return 0;
+		} else {
+			y.right = z;
+			return 0;
+		}
 	}
 
 	/**
