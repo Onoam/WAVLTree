@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * WAVLTree
@@ -16,8 +22,7 @@ public class WAVLTree {
 	}
 
 	public WAVLTree() {
-		WAVLNode root = new WAVLNode();
-		this(root);
+		this.root = new WAVLNode();
 	}
 
 	/**
@@ -42,7 +47,7 @@ public class WAVLTree {
 	 * Complexity - same as select(). Worst case O(log n)
 	 */
 	public String search(int k) {
-		WAVLNode item = select(k);
+		WAVLNode item = treeSearch(getRoot(), k);
 		if (item.getRank() == -1) {
 			return null;
 		} else {
@@ -57,49 +62,49 @@ public class WAVLTree {
 	 * @param k int - key of node to select
 	 * @return current WAVLNode - the node with key k, or external node.
 	 */
-	private WAVLNode select(int k) {
-		WAVLNode current = getRoot();
-		WAVLNode parent;
-		while (current.getRank() != -1) {
-			if (k == current.getKey()) {
-				return current;
-			} else if (k < current.getKey()) {
-				parent = current;
-				current = current.getLeft();
-			} else {
-				parent = current;
-				current = current.getRight();
-			}
-		}
-		return current;
-	}
+//	private WAVLNode select(int k) {
+//		WAVLNode current = getRoot();
+//		WAVLNode parent;
+//		while (current.getRank() != -1) {
+//			if (k == current.getKey()) {
+//				return current;
+//			} else if (k < current.getKey()) {
+//				parent = current;
+//				current = current.getLeft();
+//			} else {
+//				parent = current;
+//				current = current.getRight();
+//			}
+//		}
+//		return current;
+//	}
 
 	/**
 	 * If this is legal, this can stop us from having 2 functions that do the same thing.
 	 * @param k
 	 * @return
 	 */
-	private WAVLNode[] findNode(int k) {
-		WAVLNode current = getRoot();
-		WAVLNode parent = current.getParent();
-		WAVLNode[] array = new WAVLNode[2];
-		while (current.getRank() != -1) {
-			if (k == current.getKey()) {
-				WAVLNode[0] = current;
-				WAVLNode[1] = parent;
-				return array;
-			} else if (k < current.getKey()) {
-				parent = current;
-				current = current.getLeft();
-			} else {
-				parent = current;
-				current = current.getRight();
-			}
-		}
-		WAVLNode[0] = current;
-		WAVLNode[1] = parent;
-		return array;
-	}
+//	private WAVLNode[] findNode(int k) {
+//		WAVLNode current = getRoot();
+//		WAVLNode parent = current.getParent();
+//		WAVLNode[] array = new WAVLNode[2];
+//		while (current.getRank() != -1) {
+//			if (k == current.getKey()) {
+//				WAVLNode[0] = current;
+//				WAVLNode[1] = parent;
+//				return array;
+//			} else if (k < current.getKey()) {
+//				parent = current;
+//				current = current.getLeft();
+//			} else {
+//				parent = current;
+//				current = current.getRight();
+//			}
+//		}
+//		WAVLNode[0] = current;
+//		WAVLNode[1] = parent;
+//		return array;
+//	}
 
 	/**
 	 * Finds the WAVLNode underwhich to insert a new WAVLNode with key k.
@@ -107,22 +112,22 @@ public class WAVLTree {
 	 * @param k int - the new key that we want to insert
 	 * @return parent WAVLNode - the WAVLNode underwhich to insert.
 	 */
-	private WAVLNode findInsertParent(int k) {
-		WAVLNode current = getRoot();
-		WAVLNode parent;
-		while (current.getRank() != -1) {
-			if (k == current.getKey()) {
-				return current;
-			} else if (k < current.getKey()) {
-				parent = current;
-				current = current.getLeft();
-			} else {
-				parent = current;
-				current = current.getRight();
-			}
-		}
-		return parent;
-	}
+//	private WAVLNode findInsertParent(int k) {
+//		WAVLNode current = getRoot();
+//		WAVLNode parent;
+//		while (current.getRank() != -1) {
+//			if (k == current.getKey()) {
+//				return current;
+//			} else if (k < current.getKey()) {
+//				parent = current;
+//				current = current.getLeft();
+//			} else {
+//				parent = current;
+//				current = current.getRight();
+//			}
+//		}
+//		return parent;
+//	}
 
 	/**
 	 * Implementation of Tree-Search from slides, done deterministicly
@@ -159,8 +164,9 @@ public class WAVLTree {
 	 * @return WAVLNode - return the last node encountered, or an existing node
 	 */
 	private WAVLNode treePosition(WAVLNode x, int k) {
+		WAVLNode y = new WAVLNode();
 		while (x.getRank() != -1) {
-			WAVLNode y = x;
+			y = x;
 			if (k == x.getKey()) {
 				return x;
 			} else if (k < x.getKey()) {
@@ -193,6 +199,11 @@ public class WAVLTree {
 				return rebalance(x);
 			}
 		}
+	}
+
+	private int rebalance(WAVLNode x) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	private int treeInsert(WAVLNode root, WAVLNode z) {
@@ -277,7 +288,6 @@ public class WAVLTree {
 			default:
 				break;
 		}
-		return void;
 	}
 
 	private int side(WAVLNode node) {
@@ -480,6 +490,7 @@ public class WAVLTree {
 	}
 
 
+
 	/**
 	 * public int size()
 	 *
@@ -526,6 +537,130 @@ public class WAVLTree {
 	public String select(int i) {
 		return null;
 	}
+	
+	public void print(WAVLNode node, int height) {
+		// originally meant to get height from a method, i.e. height(root);
+	       if(root == OUTER_NODE) {
+	           System.out.println("(XXXXXX)");
+	           return;
+	       }
+
+	       //int height = height(root); //PROBLEM??
+	       int width = (int)Math.pow(2, height-1);
+
+	       // Preparing variables for loop.
+	       List<WAVLNode> current = new ArrayList<WAVLNode>(1),
+	           next = new ArrayList<WAVLNode>(2);
+	       current.add(root);
+
+	       final int maxHalfLength = 4;
+	       int elements = 1;
+
+	       StringBuilder sb = new StringBuilder(maxHalfLength*width);
+	       for(int i = 0; i < maxHalfLength*width; i++)
+	           sb.append(' ');
+	       String textBuffer;
+
+	       // Iterating through height levels.
+	       for(int i = 0; i < height; i++) {
+
+	           sb.setLength(maxHalfLength * ((int)Math.pow(2, height-1-i) - 1));
+
+	           // Creating spacer space indicator.
+	           textBuffer = sb.toString();
+
+	           // Print tree node elements
+	           for(WAVLNode n : current) {
+
+	               System.out.print(textBuffer);
+
+	               if(n == null) {
+
+	                   System.out.print("        ");
+	                   next.add(null);
+	                   next.add(null);
+
+	               } else {
+
+	                   System.out.printf( "("+Integer.toString(n.key)+","+Integer.toString(n.rank)+")	");
+	                   next.add(n.left);
+	                   next.add(n.right);
+
+	               }
+
+	               System.out.print(textBuffer);
+
+	           }
+
+	           System.out.println();
+	           // Print tree node extensions for next level.
+	           if(i < height - 1) {
+
+	               for(WAVLNode n : current) {
+
+	                   System.out.print(textBuffer);
+
+	                   if(n == null)
+	                       System.out.print("        ");
+	                   else
+	                       System.out.printf("%s      %s",
+	                               n.left == null ? " " : "/", n.right == null ? " " : "\\");
+
+	                   System.out.print(textBuffer);
+
+	               }
+
+	               System.out.println();
+
+	           }
+
+	           // Renewing indicators for next run.
+	           elements *= 2;
+	           current = next;
+	           next = new ArrayList<WAVLNode>(elements);
+
+	       }
+
+	   }
+
+	   public static void main(String args[]) {
+	       WAVLTree t = new WAVLTree();
+	       while (true) {
+	           System.out.println("(1) Insert");
+	           System.out.println("(2) Delete");
+	           System.out.println("(3) Break");
+
+
+	           try {
+	               BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+	               String s = bufferRead.readLine();
+
+	               if (Integer.parseInt(s) == 1) {
+	                   System.out.print("Value to be inserted: ");
+	                   int key =Integer.parseInt(bufferRead.readLine());
+	                   t.insert(key, "AMEN");
+	               }
+	               else if (Integer.parseInt(s) == 2) {
+	                   System.out.print("Value to be deleted: ");
+	                   int key =Integer.parseInt(bufferRead.readLine());
+	                   t.delete(key);
+	               }
+	               else if (Integer.parseInt(s) == 3) {
+	            	   break;
+	               }
+	               else {
+	                   System.out.println("Invalid choice, try again!");
+	                   continue;
+	               }
+	               
+	               t.print(t.root);
+	           }
+	           catch(IOException e) {
+	               e.printStackTrace();
+	           }
+	       }
+	       
+	   }
 
 	/**
 	 * public class WAVLNode
