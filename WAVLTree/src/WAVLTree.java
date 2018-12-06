@@ -537,7 +537,7 @@ public class WAVLTree {
 		if (empty()) {
 			return -1;
 		}
-		int[] info = infoToArray();
+		String[] info = infoToArray();
 		return info[i-1];
 	}
 
