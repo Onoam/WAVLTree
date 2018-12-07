@@ -234,11 +234,11 @@ public class WAVLTree {
 
 	private int iCaseOneRebalance(WAVLNode x) {
 		x.promote();
-		return insertRebalance(x.parent);
+		return 1+insertRebalance(x.parent);
 	}
 
 	private int iCaseTwoRebalance(WAVLNode x, char side) {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 
