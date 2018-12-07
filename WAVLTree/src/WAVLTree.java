@@ -774,7 +774,7 @@ public class WAVLTree {
 			if (right != null) {
 				rsize = right.size;
 			}
-			return rsize + lsize + 1; //
+			return rsize + lsize + 1; 
 		}
 		/**
 		 * updates the Node's subtree size in-place.
