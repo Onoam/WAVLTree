@@ -201,18 +201,52 @@ public class WAVLTree {
 		}
 	}
 	/**
-	 * this method is called after inserting. checks which case we are in
+	 * this method is called after inserting. 
+	 * Checks which rebalance case we are in and calls the appropriate 
+	 * rebalance helper-method.
 	 * @param x the node that was inserted.
 	 * @return the number of rebalance steps
 	 */
 	private int insertRebalance(WAVLNode x) {
-		int steps = 0;
-		return steps;
+		int ldiff = x.getRank() - x.getLeft().getRank();
+		int rdiff = x.getRank() - x.getRight().getRank();
+		if (rdiff * ldiff != 0) {
+			return 0; // tree is valid WAVL iff rdiff,ldiff!=0
+		}
+		//one of ldiff, rdiff is 0
+		//choose which side is the problem side
+		char side = ldiff == 0 ? 'l': 'r';
+		//case 1, including symmetry
+		if (rdiff + ldiff == 1) { // one is zero (established), the other is 1 
+			return iCaseOneRebalance(x); 
+		}
+		//case 2, no need to check that x is (0,2) node
+		if ((side == 'l' && x.getLeft().getRank()-x.getLeft().getLeft().getRank() == 1) ||
+			 (side == 'r' && x.getRight().getRank() - x.getRight().getRight().getRank() == 1)) {
+			return iCaseTwoRebalance(x, side);
+		}
+		//case 3, the only remaining option
+		return iCaseThreeRebalance(x, side);
+	}
+
+	private int iCaseOneRebalance(WAVLNode x) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private int iCaseTwoRebalance(WAVLNode x, char side) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private int iCaseThreeRebalance(WAVLNode x, char side) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	private int deleteRebalance(WAVLNode y) {
-		// TODO Auto-generated method stub
-		return 0;
+		int steps = 0;
+		return steps;
 	}
 
 	private int treeInsert(WAVLNode root, WAVLNode z) {
