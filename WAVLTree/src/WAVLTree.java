@@ -208,6 +208,9 @@ public class WAVLTree {
 	 * @return the number of rebalance steps
 	 */
 	private int insertRebalance(WAVLNode x) {
+		if (x == null) { // should only happen if we've reached the root
+			return 0; 
+		}
 		int ldiff = x.getRank() - x.getLeft().getRank();
 		int rdiff = x.getRank() - x.getRight().getRank();
 		if (rdiff * ldiff != 0) {
@@ -230,8 +233,8 @@ public class WAVLTree {
 	}
 
 	private int iCaseOneRebalance(WAVLNode x) {
-		// TODO Auto-generated method stub
-		return 0;
+		x.promote();
+		return insertRebalance(x.parent);
 	}
 
 	private int iCaseTwoRebalance(WAVLNode x, char side) {
