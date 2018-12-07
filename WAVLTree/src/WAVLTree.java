@@ -763,6 +763,9 @@ public class WAVLTree {
 		 * @return the size of the subtree that has this as its root, including this.
 		 */
 		public int getSubtreeSize() {
+			if (rank == OUTER_NODE_RANK) {
+				return 0;
+			}
 			int lsize = 0;
 			int rsize = 0;
 			if (left != null) {
@@ -772,6 +775,13 @@ public class WAVLTree {
 				rsize = right.size;
 			}
 			return rsize + lsize + 1; //
+		}
+		/**
+		 * updates the Node's subtree size in-place.
+		 * Should be used after changes to the tree (insert, delete, rebalance).
+		 */
+		public void updateSubtreeSize() {
+			size = getSubtreeSize();
 		}
 	}
 
