@@ -236,15 +236,75 @@ public class WAVLTree {
 		x.promote();
 		return 1+insertRebalance(x.parent);
 	}
-
+	/**
+	 * rebalances after insertion, case 2.
+	 * @param x the node that needs to be rotated
+	 * @param side which of x's children need to be rotated with it
+	 * @return 1, 1 rebalance operation
+	 */
 	private int iCaseTwoRebalance(WAVLNode x, char side) {
-		
-		return 0;
+		x.demote();
+		if (side == 'l') {
+			rotateRight(x, x.left);
+		}
+		else { 
+			rotateLeft(x, x.right);
+		}
+		return 1;
+	}
+	/**
+	 * rebalances after insertion, case 3.
+	 * @param x the node that needs to be double rotated
+	 * @param side which direction (in terms of symmetry) needs to be rotated
+	 * @return 2, 2 rebalance operations
+	 */
+	private int iCaseThreeRebalance(WAVLNode x, char side) {
+		if (side == 'l') {
+			rotateLeft(x.getLeft(), x.getLeft().getRight());
+			rotateRight(x, x.getLeft());
+		}
+		return 2;
 	}
 
-	private int iCaseThreeRebalance(WAVLNode x, char side) {
-		// TODO Auto-generated method stub
-		return 0;
+	/**
+	 * performs right rotation. Does not handle demotions.
+	 * 
+	 * @param x       y's parent
+	 * @param y       x's left child
+	 * @param counter the rebalance counter
+	 * @post y is x's right child, x is y's parent's child (same side as y was)
+	 */
+	private void rotateRight(WAVLNode x, WAVLNode y) {
+		if (x.parent != null && x.key > x.getParent().key) {
+			x.parent.right = y;
+		} else if (x.parent != null) { // y is left child of its parent
+			x.parent.left = y;
+		}
+		y.parent = x.parent;
+		x.left = y.right;
+		y.right = x;
+		x.parent = y;
+	}
+
+	/**
+	 * performs left rotation, does not handle demotions.
+	 * 
+	 * @param z       x's right child
+	 * @param x       z's parent
+	 * @param counter the rebalance counter
+	 * @post x is z's left child, z is x's parent's child (same side as x was)
+	 */
+	private void rotateLeft(WAVLNode z, WAVLNode x) {
+	
+		if (x.parent != null && x.key > x.getParent().key) {
+			x.parent.right = z;
+		} else if (x.parent != null) { // y is left child of its parent
+			x.parent.left = z;
+		}
+		z.parent = x.parent;
+		x.right = z.left;
+		z.left = x;
+		x.parent = z;
 	}
 
 	private int deleteRebalance(WAVLNode y) {
@@ -346,51 +406,6 @@ public class WAVLTree {
 			}
 		}
 		return -1;
-	}
-
-	/**
-	 * performs right rotation. Does not handle demotions.
-	 * 
-	 * @param x       y's left child
-	 * @param y       x's parent
-	 * @param counter the rebalance counter
-	 * @return counter increased by 1 (1 rebalance operation)
-	 * @post y is x's right child, x is y's parent's child (same side as y was)
-	 */
-	private int rotateRight(WAVLNode x, WAVLNode y, int counter) {
-		if (y.parent != null && y.key > y.getParent().key) {
-			y.parent.right = x;
-		} else if (y.parent != null) { // y is left child of its parent
-			y.parent.left = x;
-		}
-		x.parent = y.parent;
-		y.left = x.right;
-		x.right = y;
-		y.parent = x;
-		return counter + 1;
-	}
-
-	/**
-	 * performs left rotation, does not handle demotions.
-	 * 
-	 * @param z       x's right child
-	 * @param x       z's parent
-	 * @param counter the rebalance counter
-	 * @return counter increased by 1 (1 rebalance operation)
-	 * @post x is z's left child, z is x's parent's child (same side as x was)
-	 */
-	private int rotateLeft(WAVLNode z, WAVLNode x, int counter) {
-
-		if (x.parent != null && x.key > x.getParent().key) {
-			x.parent.right = z;
-		} else if (x.parent != null) { // y is left child of its parent
-			x.parent.left = z;
-		}
-		z.parent = x.parent;
-		x.right = z.left;
-		z.left = x;
-		x.parent = z;
-		return counter + 1;
 	}
 
 	/**
