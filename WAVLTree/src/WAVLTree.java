@@ -687,9 +687,28 @@ public class WAVLTree {
 			this.rank = rank;
 			this.size = this.getSubtreeSize();
 		}
+		/**
+		 * constructor for building a WAVLNode item with only key and value
+		 * DEPRECATED: should use constructor with left and right children 
+		 * (so we can use OUTER_NODE for left and right)
+		 * @param key 
+		 * @param value 
+		 */
 
 		public WAVLNode(int key, String value) {
-			this(key, value, null, null, null, 1);
+			this(key, value, null, null, null, 0);
+		}
+		/**
+		 * The constructor for adding with left and right children and parent. 
+		 * Use this constructor for adding a leaf to the tree.
+		 * @param parent the parent of the added leaf (insertion point)
+		 * @param key node's key
+		 * @param value node's value (info)
+		 * @param right should be OUTER_NODE when adding a leaf
+		 * @param left should be OUTER_NODE when adding a leaf
+		 */
+		public WAVLNode(int key, String value, WAVLNode parent, WAVLNode right, WAVLNode left) {
+			this(key, value, parent, right, left, 0);
 		}
 
 		/**
@@ -744,6 +763,9 @@ public class WAVLTree {
 		 * @return the size of the subtree that has this as its root, including this.
 		 */
 		public int getSubtreeSize() {
+			if (rank == OUTER_NODE_RANK) {
+				return 0;
+			}
 			int lsize = 0;
 			int rsize = 0;
 			if (left != null) {
@@ -752,7 +774,14 @@ public class WAVLTree {
 			if (right != null) {
 				rsize = right.size;
 			}
-			return rsize + lsize + 1; //
+			return rsize + lsize + 1; 
+		}
+		/**
+		 * updates the Node's subtree size in-place.
+		 * Should be used after changes to the tree (insert, delete, rebalance).
+		 */
+		public void updateSubtreeSize() {
+			size = getSubtreeSize();
 		}
 	}
 
