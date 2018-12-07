@@ -689,7 +689,7 @@ public class WAVLTree {
 		}
 
 		public WAVLNode(int key, String value) {
-			this(key, value, null, null, null, 1);
+			this(key, value, null, null, null, 0);
 		}
 
 		/**
