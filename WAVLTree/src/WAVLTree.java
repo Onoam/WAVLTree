@@ -271,8 +271,7 @@ public class WAVLTree {
 	 * 
 	 * @param x       y's parent
 	 * @param y       x's left child
-	 * @param counter the rebalance counter
-	 * @post y is x's right child, x is y's parent's child (same side as y was)
+	 * @post x is y's right child, y is x's parent's child (same side as x was)
 	 */
 	private void rotateRight(WAVLNode x, WAVLNode y) {
 		if (x.parent != null && x.key > x.getParent().key) {
@@ -284,27 +283,31 @@ public class WAVLTree {
 		x.left = y.right;
 		y.right = x;
 		x.parent = y;
+		x.updateSubtreeSize();
+		y.updateSubtreeSize();
 	}
 
 	/**
 	 * performs left rotation, does not handle demotions.
 	 * 
-	 * @param z       x's right child
-	 * @param x       z's parent
-	 * @param counter the rebalance counter
-	 * @post x is z's left child, z is x's parent's child (same side as x was)
+	 * @param y       x's right child
+	 * @param x       y's parent
+	 * @post x is y's left child, y is x's parent's child (same side as x was)
 	 */
-	private void rotateLeft(WAVLNode z, WAVLNode x) {
+	private void rotateLeft(WAVLNode x, WAVLNode y) {
 	
 		if (x.parent != null && x.key > x.getParent().key) {
-			x.parent.right = z;
+			x.parent.right = y;
 		} else if (x.parent != null) { // y is left child of its parent
-			x.parent.left = z;
+			x.parent.left = y;
 		}
-		z.parent = x.parent;
-		x.right = z.left;
-		z.left = x;
-		x.parent = z;
+		y.parent = x.parent;
+		x.right = y.left;
+		y.left = x;
+		x.parent = y;
+		x.updateSubtreeSize();
+		y.updateSubtreeSize();
+		
 	}
 
 	private int deleteRebalance(WAVLNode y) {
