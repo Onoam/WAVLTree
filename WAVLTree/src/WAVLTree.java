@@ -196,12 +196,21 @@ public class WAVLTree {
 			if (counter == -1) {
 				return counter;
 			} else {
-				return rebalance(x);
+				return insertRebalance(x);
 			}
 		}
 	}
+	/**
+	 * this method is called after inserting. checks which case we are in
+	 * @param x the node that was inserted.
+	 * @return the number of rebalance steps
+	 */
+	private int insertRebalance(WAVLNode x) {
+		int steps = 0;
+		return steps;
+	}
 
-	private int rebalance(WAVLNode x) {
+	private int deleteRebalance(WAVLNode y) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -236,7 +245,7 @@ public class WAVLTree {
 		}
 		WAVLNode y = successor(z);
 		remove(z);
-		return rebalance(y);
+		return deleteRebalance(y);
 	}
 
 	private void remove(WAVLNode node) {
