@@ -450,7 +450,7 @@ public class WAVLTree {
 	public int[] keysToArray() {
 		int[] arr = new int[root.size];
 		if (!this.empty()) {
-			WAVLNode current = this.min();
+			WAVLNode current = this.min(root);
 			int i = 0;
 			while (i < root.size) {
 				arr[i] = current.getKey();
@@ -478,7 +478,7 @@ public class WAVLTree {
 		String[] arr = new String[root.size];
 		int[] count = new int[1];
 		if (!this.empty()) {
-			WAVLNode current = this.min();
+			WAVLNode current = this.min(root);
 			int i = 0;
 			while (i < root.size) {
 				arr[i] = current.getValue();
@@ -652,8 +652,8 @@ public class WAVLTree {
 	                   System.out.println("Invalid choice, try again!");
 	                   continue;
 	               }
-	               
-	               t.print(t.root);
+	               int height = 1; // change this
+	               t.print(t.root, height);
 	           }
 	           catch(IOException e) {
 	               e.printStackTrace();
