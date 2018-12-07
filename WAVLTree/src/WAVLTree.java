@@ -395,7 +395,7 @@ public class WAVLTree {
 	 * the tree is empty
 	 */
 	public String min() {
-		return min(root);
+		return min(root).getValue();
 	}
 
 	/**
@@ -404,9 +404,9 @@ public class WAVLTree {
 	 * @param node the root of the current subtree
 	 * @return info of minimal node in tree
 	 */
-	private String min(WAVLNode node) {
+	private WAVLNode min(WAVLNode node) {
 		if (node.left == OUTER_NODE) {
-			return node.getValue();
+			return node;
 		}
 		return min(node.left);
 	}
@@ -418,7 +418,7 @@ public class WAVLTree {
 	 * tree is empty
 	 */
 	public String max() {
-		return max(root);
+		return max(root).getValue();
 	}
 
 	/**
@@ -427,9 +427,9 @@ public class WAVLTree {
 	 * @param node the root of the current subtree
 	 * @return info of maximal node in the tree
 	 */
-	private String max(WAVLNode node) {
+	private WAVLNode max(WAVLNode node) {
 		if (node.right == OUTER_NODE) {
-			return node.getValue();
+			return node;
 		}
 		return max(node.right);
 	}
