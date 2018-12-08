@@ -304,7 +304,7 @@ public class WAVLTree {
 
 	/**
 	 * performs right rotation. Does not handle demotions.
-	 * 
+	 *
 	 * @param x       y's left child
 	 * @param y       x's parent
 	 * @param counter the rebalance counter
@@ -326,7 +326,7 @@ public class WAVLTree {
 
 	/**
 	 * performs left rotation, does not handle demotions.
-	 * 
+	 *
 	 * @param z       x's right child
 	 * @param x       z's parent
 	 * @param counter the rebalance counter
@@ -400,7 +400,7 @@ public class WAVLTree {
 
 	/**
 	 * implemented recursively
-	 * 
+	 *
 	 * @param node the root of the current subtree
 	 * @return info of minimal node in tree
 	 */
@@ -423,7 +423,7 @@ public class WAVLTree {
 
 	/**
 	 * implemented recursively
-	 * 
+	 *
 	 * @param node the root of the current subtree
 	 * @return info of maximal node in the tree
 	 */
@@ -533,11 +533,14 @@ public class WAVLTree {
 	 * node minimal node's successor
 	 *
 	 */
-
 	public String select(int i) {
-		return null;
+		if (empty()) {
+			return -1;
+		}
+		String[] info = infoToArray();
+		return info[i-1];
 	}
-	
+
 	public void print(WAVLNode node, int height) {
 		// originally meant to get height from a method, i.e. height(root);
 	       if(root == OUTER_NODE) {
@@ -654,12 +657,13 @@ public class WAVLTree {
 	               }
 	               int height = 1; // change this
 	               t.print(t.root, height);
+
 	           }
 	           catch(IOException e) {
 	               e.printStackTrace();
 	           }
 	       }
-	       
+
 	   }
 
 	/**
