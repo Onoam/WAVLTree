@@ -395,7 +395,7 @@ public class WAVLTree {
 	 * the tree is empty
 	 */
 	public String min() {
-		return min(root);
+		return min(root).getValue();
 	}
 
 	/**
@@ -404,9 +404,9 @@ public class WAVLTree {
 	 * @param node the root of the current subtree
 	 * @return info of minimal node in tree
 	 */
-	private String min(WAVLNode node) {
+	private WAVLNode min(WAVLNode node) {
 		if (node.left == OUTER_NODE) {
-			return node.getValue();
+			return node;
 		}
 		return min(node.left);
 	}
@@ -418,7 +418,7 @@ public class WAVLTree {
 	 * tree is empty
 	 */
 	public String max() {
-		return max(root);
+		return max(root).getValue();
 	}
 
 	/**
@@ -427,9 +427,9 @@ public class WAVLTree {
 	 * @param node the root of the current subtree
 	 * @return info of maximal node in the tree
 	 */
-	private String max(WAVLNode node) {
+	private WAVLNode max(WAVLNode node) {
 		if (node.right == OUTER_NODE) {
-			return node.getValue();
+			return node;
 		}
 		return max(node.right);
 	}
@@ -450,7 +450,7 @@ public class WAVLTree {
 	public int[] keysToArray() {
 		int[] arr = new int[root.size];
 		if (!this.empty()) {
-			WAVLNode current = this.min();
+			WAVLNode current = this.min(root);
 			int i = 0;
 			while (i < root.size) {
 				arr[i] = current.getKey();
@@ -478,7 +478,7 @@ public class WAVLTree {
 		String[] arr = new String[root.size];
 		int[] count = new int[1];
 		if (!this.empty()) {
-			WAVLNode current = this.min();
+			WAVLNode current = this.min(root);
 			int i = 0;
 			while (i < root.size) {
 				arr[i] = current.getValue();
@@ -655,8 +655,9 @@ public class WAVLTree {
 	                   System.out.println("Invalid choice, try again!");
 	                   continue;
 	               }
+	               int height = 1; // change this
+	               t.print(t.root, height);
 
-	               t.print(t.root);
 	           }
 	           catch(IOException e) {
 	               e.printStackTrace();
@@ -690,9 +691,28 @@ public class WAVLTree {
 			this.rank = rank;
 			this.size = this.getSubtreeSize();
 		}
+		/**
+		 * constructor for building a WAVLNode item with only key and value
+		 * DEPRECATED: should use constructor with left and right children 
+		 * (so we can use OUTER_NODE for left and right)
+		 * @param key 
+		 * @param value 
+		 */
 
 		public WAVLNode(int key, String value) {
-			this(key, value, null, null, null, 1);
+			this(key, value, null, null, null, 0);
+		}
+		/**
+		 * The constructor for adding with left and right children and parent. 
+		 * Use this constructor for adding a leaf to the tree.
+		 * @param parent the parent of the added leaf (insertion point)
+		 * @param key node's key
+		 * @param value node's value (info)
+		 * @param right should be OUTER_NODE when adding a leaf
+		 * @param left should be OUTER_NODE when adding a leaf
+		 */
+		public WAVLNode(int key, String value, WAVLNode parent, WAVLNode right, WAVLNode left) {
+			this(key, value, parent, right, left, 0);
 		}
 
 		/**
@@ -747,6 +767,9 @@ public class WAVLTree {
 		 * @return the size of the subtree that has this as its root, including this.
 		 */
 		public int getSubtreeSize() {
+			if (rank == OUTER_NODE_RANK) {
+				return 0;
+			}
 			int lsize = 0;
 			int rsize = 0;
 			if (left != null) {
@@ -755,7 +778,14 @@ public class WAVLTree {
 			if (right != null) {
 				rsize = right.size;
 			}
-			return rsize + lsize + 1; //
+			return rsize + lsize + 1; 
+		}
+		/**
+		 * updates the Node's subtree size in-place.
+		 * Should be used after changes to the tree (insert, delete, rebalance).
+		 */
+		public void updateSubtreeSize() {
+			size = getSubtreeSize();
 		}
 	}
 
