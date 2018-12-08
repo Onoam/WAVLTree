@@ -55,79 +55,6 @@ public class WAVLTree {
 		}
 	}
 
-	/**
-	 * Select the node with key k.
-	 * If node doesn't exist, return external node.
-	 * Complexity - O(log n). Upper bounded by height of tree.
-	 * @param k int - key of node to select
-	 * @return current WAVLNode - the node with key k, or external node.
-	 */
-//	private WAVLNode select(int k) {
-//		WAVLNode current = getRoot();
-//		WAVLNode parent;
-//		while (current.getRank() != -1) {
-//			if (k == current.getKey()) {
-//				return current;
-//			} else if (k < current.getKey()) {
-//				parent = current;
-//				current = current.getLeft();
-//			} else {
-//				parent = current;
-//				current = current.getRight();
-//			}
-//		}
-//		return current;
-//	}
-
-	/**
-	 * If this is legal, this can stop us from having 2 functions that do the same thing.
-	 * @param k
-	 * @return
-	 */
-//	private WAVLNode[] findNode(int k) {
-//		WAVLNode current = getRoot();
-//		WAVLNode parent = current.getParent();
-//		WAVLNode[] array = new WAVLNode[2];
-//		while (current.getRank() != -1) {
-//			if (k == current.getKey()) {
-//				WAVLNode[0] = current;
-//				WAVLNode[1] = parent;
-//				return array;
-//			} else if (k < current.getKey()) {
-//				parent = current;
-//				current = current.getLeft();
-//			} else {
-//				parent = current;
-//				current = current.getRight();
-//			}
-//		}
-//		WAVLNode[0] = current;
-//		WAVLNode[1] = parent;
-//		return array;
-//	}
-
-	/**
-	 * Finds the WAVLNode underwhich to insert a new WAVLNode with key k.
-	 * Complexity - O(log n). Upper bounded by height of tree.
-	 * @param k int - the new key that we want to insert
-	 * @return parent WAVLNode - the WAVLNode underwhich to insert.
-	 */
-//	private WAVLNode findInsertParent(int k) {
-//		WAVLNode current = getRoot();
-//		WAVLNode parent;
-//		while (current.getRank() != -1) {
-//			if (k == current.getKey()) {
-//				return current;
-//			} else if (k < current.getKey()) {
-//				parent = current;
-//				current = current.getLeft();
-//			} else {
-//				parent = current;
-//				current = current.getRight();
-//			}
-//		}
-//		return parent;
-//	}
 
 	/**
 	 * Implementation of Tree-Search from slides, done deterministicly
@@ -146,15 +73,6 @@ public class WAVLTree {
 			}
 		}
 		return x;
-//		if (x.getRank() == -1 || k == x.getKey()) {
-//			return x;
-//		} else {
-//			if (k < x.getKey()) {
-//				return treeSearch(x.getLeft(), k);
-//			} else {
-//				return treeSearch(x.getRight(), k);
-//			}
-//		}
 	}
 
 	/**
@@ -187,7 +105,7 @@ public class WAVLTree {
 	 * k already exists in the tree.
 	 */
 	public int insert(int k, String i) {
-		WAVLNode x = new WAVLNode(k, i);
+		WAVLNode x = new WAVLNode(k, i, null, OUTER_NODE, OUTER_NODE);
 		if (empty()) {
 			this.root = x;
 			return 0;
