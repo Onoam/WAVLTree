@@ -187,6 +187,8 @@ public class WAVLTree {
 				succ.parent = node.getParent();
 				succ.right = node.getRight();
 				succ.left = node.getLeft();
+				succ.rank = node.getRank();
+				succ.size = node.getSubtreeSize();
 			}
 		}
 		node = null;
@@ -453,7 +455,7 @@ public class WAVLTree {
 	 */
 	public String select(int i) {
 		if (empty()) {
-			return -1;
+			return "-1";
 		}
 		String[] info = infoToArray();
 		return info[i-1];
