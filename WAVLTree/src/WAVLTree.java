@@ -192,7 +192,7 @@ public class WAVLTree {
 	 * @return
 	 */
 	public int insert(int k, String i) {
-		WAVLNode x = new WAVLNode(k, i);
+		WAVLNode x = new WAVLNode(k, i,OUTER_NODE, OUTER_NODE, OUTER_NODE, 0);
 		if (empty()) {
 			this.root = x;
 			return 0;
@@ -225,9 +225,11 @@ public class WAVLTree {
 		z.parent = y;
 		if (z.getKey() < y .getKey()) {
 			y.left = z;
+			updateSizeUp(y);
 			return 0;
 		} else {
 			y.right = z;
+			updateSizeUp(y);
 			return 0;
 		}
 	}
@@ -345,7 +347,8 @@ public class WAVLTree {
 	}
 
 	/**
-	 * 
+	 * If a node is removed ot inserted, update the sizes up the tree.
+	 * @Complexity worst case O(log n) (height of tree)
 	 * @param node
 	 */
 	private void updateSizeUp(WAVLNode node) {
