@@ -192,7 +192,7 @@ public class WAVLTree {
 	 * @return
 	 */
 	public int insert(int k, String i) {
-		WAVLNode x = new WAVLNode(k, i,OUTER_NODE, OUTER_NODE, OUTER_NODE, 0);
+		WAVLNode x = new WAVLNode(k, i, null, OUTER_NODE, OUTER_NODE);
 		if (empty()) {
 			this.root = x;
 			return 0;
@@ -298,7 +298,8 @@ public class WAVLTree {
 				succ.parent = node.getParent();
 				succ.right = node.getRight();
 				succ.left = node.getLeft();
-				succ.size = node.size;
+				succ.rank = node.getRank();
+				succ.size = node.getSubtreeSize();
 			}
 		}
 		node = null;
