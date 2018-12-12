@@ -103,11 +103,6 @@ public class WAVLTree {
 	 * valid (keep its invariants). returns the number of rebalancing operations, or
 	 * 0 if no rebalancing operations were necessary. returns -1 if an item with key
 	 * k already exists in the tree.
-	 * ======================
-	 *
-	 * @param k
-	 * @param i
-	 * @return
 	 */
 	public int insert(int k, String i) {
 		WAVLNode x = new WAVLNode(k, i, null, OUTER_NODE, OUTER_NODE);
@@ -129,12 +124,6 @@ public class WAVLTree {
 		return 0;
 	}
 
-	/**
-	 *
-	 * @param root
-	 * @param z
-	 * @return
-	 */
 	private int treeInsert(WAVLNode root, WAVLNode z) {
 		WAVLNode y = treePosition(root, z.getKey());
 		if (z.getKey() == y.getKey()) {
@@ -143,11 +132,9 @@ public class WAVLTree {
 		z.parent = y;
 		if (z.getKey() < y .getKey()) {
 			y.left = z;
-			updateSizeUp(y);
 			return 0;
 		} else {
 			y.right = z;
-			updateSizeUp(y);
 			return 0;
 		}
 	}
@@ -159,10 +146,6 @@ public class WAVLTree {
 	 * must remain valid (keep its invariants). returns the number of rebalancing
 	 * operations, or 0 if no rebalancing operations were needed. returns -1 if an
 	 * item with key k was not found in the tree.
-	 * ===============
-	 *
-	 * @param k
-	 * @return
 	 */
 	public int delete(int k) {
 		WAVLNode z = treeSearch(getRoot(), k);
@@ -170,29 +153,23 @@ public class WAVLTree {
 			return -1;
 		}
 		WAVLNode y = successor(z);
-		remove(z); // This function deals with the updating the sizes
+		remove(z);
 		return rebalance(y);
 	}
 
-	/**
-	 *
-	 * @param node
-	 */
 	private void remove(WAVLNode node) {
 		WAVLNode succ;
 		// If leaf of tree, find side of parent and remove
 		if (node.getRight().getRank() == -1 && node.getLeft().getRank() == -1) {
-			removeLeaf(node); // This deals with updating the sizes.
+			removeLeaf(node);
 		} else { // Is an inner node
 			succ = successor(node);
 			if (succ == node.getRight()) {
 				/*
 				* If this is his right child, then we need to:
-				* 1) make node's parent the parent of succ
-				* 2) make node's left child the child of succ
-				* 3) attach succ to node's parent based on side
-				* 4) update the size of succ (and this will update
-				*    the size of parent)*/
+				* 1) make succ's parent the parent of node
+				* 2) make succ's left child node's left child
+				* 3) attach succ to node's parent base on side*/
 				succ.parent = node.getParent();
 				succ.left = node.getLeft();
 				if (side(node) == 0) {
@@ -200,19 +177,13 @@ public class WAVLTree {
 				} else if (side(node) == 1) {
 					node.getParent().right = succ;
 				}
-				updateSizeUp(succ);
 			} else {
 				/*
-				* If succ isn't node's right child then:
-				* 1) if succ has a right child, set it as the left child of succ's parent
-				* 2) update succ's parent's size
-				* 3) set succ.right and succ.left to node.right and node.left repectively
-				* 4) set succ.parent to node.parent
-				* 5) set succ's size to node's size
-				* (node's size got updated in stage 2, so it is set correctly)
-				* */
+				* If this isn't his right child then:
+				* 1) If he has a right child, set it as the left child of succ's parent
+				* 2) set succ.right and succ.left to node.right and node.left repectively
+				* 3) set succ.parent to node.parent*/
 				succ.getParent().left = succ.getRight();
-				updateSizeUp(succ.getParent());
 				succ.parent = node.getParent();
 				succ.right = node.getRight();
 				succ.left = node.getLeft();
@@ -224,23 +195,14 @@ public class WAVLTree {
 
 	}
 
-	/**
-	 *
-	 * @param node
-	 */
 	private void removeLeaf(WAVLNode node) {
-		// In each case, we switch the node in the appropraite side of the
-		// parent with an outer node, update the subtreeSize of the parent,
-		// and then remove the parent from the node.
 		switch (side(node)) {
 			case 0:
 				node.getParent().left = OUTER_NODE;
-				updateSizeUp(node.getParent());
 				node.parent = null;
 				break;
 			case 1:
 				node.getParent().right = OUTER_NODE;
-				updateSizeUp(node.getParent());
 				node.parent = null;
 				break;
 			default:
@@ -248,11 +210,6 @@ public class WAVLTree {
 		}
 	}
 
-	/**
-	 *
-	 * @param node
-	 * @return
-	 */
 	private int side(WAVLNode node) {
 		WAVLNode parent = node.getParent();
 		if (parent != null) {
@@ -263,25 +220,6 @@ public class WAVLTree {
 			}
 		}
 		return -1;
-	}
-
-	/**
-	 * If a node is removed ot inserted, update the sizes up the tree.
-	 * @Complexity worst case O(log n) (height of tree)
-	 * @param node
-	 */
-	private void updateSizeUp(WAVLNode node) {
-		node.updateSubtreeSize(); // update the size of the first node
-		// Then, updates the sizes up the tree
-		WAVLNode parent = node.getParent();
-		// If we reached the root, then we stop.
-		// This ensures that we update the the root last, and then stop.
-		while (node != this.getRoot()) {
-			node = parent;
-			node.updateSubtreeSize();
-			parent = node.getParent();
-		}
-
 	}
 
 	/**
