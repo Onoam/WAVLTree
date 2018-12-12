@@ -274,7 +274,8 @@ public class WAVLTree {
 				* 2) make node's left child the child of succ
 				* 3) attach succ to node's parent based on side
 				* 4) update the size of succ (and this will update
-				*    the size of parent)*/
+				*    the size of parent)
+				* */
 				succ.parent = node.getParent();
 				succ.left = node.getLeft();
 				if (side(node) == 0) {
@@ -363,7 +364,6 @@ public class WAVLTree {
 			node.updateSubtreeSize();
 			parent = node.getParent();
 		}
-
 	}
 
 	/**
