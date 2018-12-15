@@ -29,12 +29,12 @@ public class WAVLTree {
 	 * public boolean empty()
 	 *
 	 * returns true if and only if the tree is empty
+	 * ==============
+	 * Returns false if root is an inner node, and true if it is an outer leaf.
+	 * @Complexity O(1)
+	 * @return boolean false if root is an inner node
 	 **/
 	public boolean empty() {
-		/**
-		 * Returns false if root is an inner node, and true if it is an outer leaf. Run
-		 * time O(1)
-		 **/
 		return !this.root.isInnerNode();
 	}
 
@@ -43,8 +43,8 @@ public class WAVLTree {
 	 *
 	 * returns the info of an item with key k if it exists in the tree otherwise,
 	 * returns null
-	 * * * * * * * * *
-	 * Complexity - same as select(). Worst case O(log n)
+	 * ===============
+	 * @Complexity O(treeSearch) = O(log n)
 	 */
 	public String search(int k) {
 		WAVLNode item = treeSearch(getRoot(), k);
@@ -58,6 +58,7 @@ public class WAVLTree {
 
 	/**
 	 * Implementation of Tree-Search from slides, done deterministicly
+	 * @Complexity O(log n) - where n # nodes in tree (tree height)
 	 * @param x - WAVLNode
 	 * @param k - int the key to look for
 	 * @return WAVLNode - if not found, then returns a, OUTER_NODE
@@ -77,6 +78,7 @@ public class WAVLTree {
 
 	/**
 	 * Implementation of Tree-Position from slides. Done deterministicly.
+	 * @Complexity O(log n) - where n # nodes in tree (tree height)
 	 * @param x - WAVLNode
 	 * @param k - int the key to look for
 	 * @return WAVLNode - return the last node encountered, or an existing node
