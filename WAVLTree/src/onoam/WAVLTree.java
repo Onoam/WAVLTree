@@ -1,3 +1,4 @@
+package onoam;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -535,7 +536,7 @@ public class WAVLTree {
 	 */
 	public String select(int i) {
 		if (empty()) {
-			return -1;
+			return null;
 		}
 		String[] info = infoToArray();
 		return info[i-1];
