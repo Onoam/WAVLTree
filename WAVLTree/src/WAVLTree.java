@@ -454,7 +454,9 @@ public class WAVLTree {
 	 * public WAVLNode getRoot()
 	 *
 	 * Returns the root WAVL node, or null if the tree is empty
-	 *
+	 * =========
+	 * @Complexity O(empty) = O(1)
+	 * @return the root of the tree
 	 */
 	public WAVLNode getRoot() {
 		if (this.empty()) {
@@ -472,7 +474,11 @@ public class WAVLTree {
 	 * 2: select(size()) returns the value of the node with maximal key Example 3:
 	 * select(2) returns the value 2nd smallest minimal node, i.e the value of the
 	 * node minimal node's successor
+	 * ===========
 	 *
+	 * @Complexity O(selectNode) = O(log h), where h is tree height
+	 * @param i - int index to search for
+	 * @return String - the value of the i'th smallest node
 	 */
 	public String select(int i) {
 		if (empty()) {
@@ -483,6 +489,21 @@ public class WAVLTree {
 		}
 	}
 
+	/**
+	 * Recursivly find the node with the i'th smalles value.
+	 * If i < x.left.size, then the i'th smallest node is in the left
+	 * 		subtree of x (because it has more than i nodes).
+	 * 		We then need to keep on searching for the i'th smallest node.
+	 * If i > x.left.size, then the i'th smallest node is in the right
+	 * 		subtree of x. We then need to account for the x.left.size + 1
+	 * 		(all the nodes in order until x.right), and seach for the
+	 * 		i - x.left.size + 1 index in the rigth subtree.
+	 * @Complexity O(log h) worst case where h is the tree hight.
+	 * 				Because the longest route from root to leaf is log n.
+	 * @param x - WAVLNode the root of the subtree to find the node in
+	 * @param i - int the index to search for.
+	 * @return The node with the i'th smallest value
+	 */
 	private WAVLNode selectNode(WAVLNode x, int i) {
 		int r = x.getLeft().getSubtreeSize();
 		if (i == r) {
