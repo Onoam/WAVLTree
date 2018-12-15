@@ -476,7 +476,7 @@ public class WAVLTree {
 	 */
 	public String select(int i) {
 		if (empty()) {
-			return "-1";
+			return null;
 		} else {
 			WAVLNode x = selectNode(getRoot(), i - 1);
 			return x.getValue();
@@ -485,7 +485,7 @@ public class WAVLTree {
 
 	private WAVLNode selectNode(WAVLNode x, int i) {
 		int r = x.getLeft().getSubtreeSize();
-		if (i = r) {
+		if (i == r) {
 			return x;
 		} else if (i < r) {
 			return selectNode(x.getLeft(), i);
