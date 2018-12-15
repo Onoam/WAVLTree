@@ -292,6 +292,9 @@ public class WAVLTree {
 	 * Returns the node with the key directly following x.
 	 * This does not deal with call successor on the maximum of the tree,
 	 * because we don't meet this case in any other operation.
+	 *
+	 * Implement by peudo-code from class
+	 * @Complexity O(log n) worst case, where n is the number of nodes in the tree
 	 * @param x WAVLNode A node in the tree
 	 * @return y The WAVLNode with the following key
 	 */
@@ -313,6 +316,9 @@ public class WAVLTree {
 	 * Returns the node with the key directly preceding x.
 	 * This does not deal with call predecessor on the minimum of the tree,
 	 * because we don't meet this case in any other operation.
+	 *
+	 * Implement by peudo-code from class
+	 * @Complexity O(log n) worst case, where n is the number of nodes in the tree
 	 * @param x WAVLNode A node in the tree
 	 * @return y The WAVLNode with the preceding key
 	 */
@@ -334,6 +340,11 @@ public class WAVLTree {
 	 *
 	 * Returns the info of the item with the smallest key in the tree, or null if
 	 * the tree is empty
+	 * =============
+	 * We use the private WAVLNode min to find the node with the minimal key
+	 * in the subtree under node, and the return it's value
+	 * @Complexity O(log n) n the number of nodes in the tree
+	 * @return the value of the node with the minimal key
 	 */
 	public String min() {
 		return min(root).getValue();
@@ -341,7 +352,8 @@ public class WAVLTree {
 
 	/**
 	 * implemented recursively
-	 *
+	 * @Complexity O(log n) where n is the number of nodes in the subtree.
+	 * 				The worst case happens when the min is of depth = height.
 	 * @param node the root of the current subtree
 	 * @return info of minimal node in tree
 	 */
@@ -357,14 +369,20 @@ public class WAVLTree {
 	 *
 	 * Returns the info of the item with the largest key in the tree, or null if the
 	 * tree is empty
+	 * =============
+	 * We use the private WAVLNode max to find the node with the maximal key
+	 * in the subtree under node, and the return it's value
+	 * @Complexity O(log n) n the number of nodes in the tree
+	 * @return the value of the node with the maximal key
 	 */
 	public String max() {
 		return max(root).getValue();
 	}
 
 	/**
-	 * implemented recursively
-	 *
+	 * Implemented recursively
+	 * @Complexity O(log n) where n is the number of nodes in the subtree.
+	 * 				The worst case happens when the max is of depth = height.
 	 * @param node the root of the current subtree
 	 * @return info of maximal node in the tree
 	 */
@@ -380,8 +398,8 @@ public class WAVLTree {
 	 *
 	 * Returns a sorted array which contains all keys in the tree, or an empty array
 	 * if the tree is empty.
-	 * * * * * * * * * *
-	 * Complexity:
+	 * ===============
+	 * @Complexity
 	 * 		this.min() = O(log n)
 	 * 		successor - called n times, with an amortized cost of O(1) per call
 	 * 			total cost O(n) amortized
@@ -476,7 +494,7 @@ public class WAVLTree {
 	 * node minimal node's successor
 	 * ===========
 	 *
-	 * @Complexity O(selectNode) = O(log h), where h is tree height
+	 * @Complexity O(selectNode) = O(log n), where n is # of nodes in the tree.
 	 * @param i - int index to search for
 	 * @return String - the value of the i'th smallest node
 	 */
@@ -498,7 +516,7 @@ public class WAVLTree {
 	 * 		subtree of x. We then need to account for the x.left.size + 1
 	 * 		(all the nodes in order until x.right), and seach for the
 	 * 		i - x.left.size + 1 index in the rigth subtree.
-	 * @Complexity O(log h) worst case where h is the tree hight.
+	 * @Complexity O(log n) worst case where n is # of nodes in the tree.
 	 * 				Because the longest route from root to leaf is log n.
 	 * @param x - WAVLNode the root of the subtree to find the node in
 	 * @param i - int the index to search for.
