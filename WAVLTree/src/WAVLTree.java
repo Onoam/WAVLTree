@@ -407,8 +407,8 @@ public class WAVLTree {
 	 *
 	 * Returns an array which contains all info in the tree, sorted by their
 	 * respective keys, or an empty array if the tree is empty.
-	 * * * * * * * * * *
-	 * Complexity:
+	 * ===============
+	 * @Complexity
 	 * 		this.min() = O(log n)
 	 * 		successor - called n times, with an amortized cost of O(1) per call
 	 * 			total cost O(n) amortized
@@ -436,13 +436,13 @@ public class WAVLTree {
 	 * public int size()
 	 *
 	 * Returns the number of nodes in the tree.
+	 * ================
 	 *
+	 * @Complexity O(1) given that the size of each node is updated at
+	 * 					 every insert, delete, and rebalance
+	 * @return the size of the root node.
 	 */
 	public int size() {
-		/**
-		 * @return the size of the root node. Complexity O(1), given that the size of
-		 *         each node is updated at every insert, delete, and rebalance
-		 */
 		if (empty()) {
 			return 0; // to be replaced by student code
 		} else {
