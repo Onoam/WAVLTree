@@ -675,6 +675,10 @@ public class WAVLTree {
 			this(OUTER_NODE_KEY, null, null, null, null, OUTER_NODE_RANK);
 		}
 
+		/**
+		 * All the getters and setters for WAVLNode.
+		 * All run in O(1).
+		 */
 		public int getKey() {
 			return key;
 		}
@@ -703,6 +707,10 @@ public class WAVLTree {
 			this.rank = rank;
 		}
 
+		/**
+		 * promote and demote WAVLNodes in tree.
+		 * @Complexity O(1).
+		 */
 		public void promote() {
 			setRank(getRank() + 1);
 		}
@@ -711,12 +719,23 @@ public class WAVLTree {
 			setRank(getRank() - 1);
 		}
 
+		/**
+		 * @Complexity O(1)
+		 * @return boolean true - if node.rank != OUTER_NODE_RANK.
+		 */
 		public boolean isInnerNode() {
 			return rank != OUTER_NODE_RANK;
 		}
 
 		/**
-		 * 
+		 * This function is deterministic and not recursive.
+		 * We assume that in insertions and deletions from trees,
+		 * updating the sizes is done from the bottom up, and that each
+		 * new node inserted has static OUTER_NODEs as children, and
+		 * a size of 0.
+		 * In addition, if the tree is set, all sizes should be up-to-date.
+		 * =================
+		 * @Complexity O(1)
 		 * @return the size of the subtree that has this as its root, including this.
 		 */
 		public int getSubtreeSize() {
@@ -736,6 +755,11 @@ public class WAVLTree {
 		/**
 		 * updates the Node's subtree size in-place.
 		 * Should be used after changes to the tree (insert, delete, rebalance).
+		 * As explained in getSubtreeSize(), we assume that the update of
+		 * sizes will be done from the bottom-up.
+		 * ==================
+		 * @Complexity O(getSubtreeSize()) = O(1)
+		 * @return void. update the size field of the WAVLNode object
 		 */
 		public void updateSubtreeSize() {
 			size = getSubtreeSize();
