@@ -157,14 +157,20 @@ public class WAVLTree {
 		return rebalance(y);
 	}
 
+	/**
+	 * remove a node from the tree.
+	 * @Complexity O(updateSizeUp) = O(log n)
+	 * 				Each option does constant # operations + updateSizeUp
+	 * @param node
+	 */
 	private void remove(WAVLNode node) {
 		WAVLNode succ;
 		// If leaf of tree, find side of parent and remove
 		if (node.getRight().getRank() == -1 && node.getLeft().getRank() == -1) {
-			removeLeaf(node);
+			removeLeaf(node); // O(1)
 		} else { // Is an inner node
 			succ = successor(node);
-			if (succ == node.getRight()) {
+			if (succ == node.getRight()) { // O(1)
 				/*
 				* If this is his right child, then we need to:
 				* 1) make node's parent the parent of succ
@@ -198,14 +204,23 @@ public class WAVLTree {
 
 	}
 
+	/**
+	 * Function to remove leaf nodes. Used for readability.
+	 * If the node has no parent, we don't do anything, because in remove
+	 * we make the node null at the end.
+	 * @Complexity O(updateSizeUp) = O(log n)
+	 * @param node - the WAVLNode to remove
+	 */
 	private void removeLeaf(WAVLNode node) {
 		switch (side(node)) {
 			case 0:
 				node.getParent().left = OUTER_NODE;
+				updateSizeUp(node.getParent());
 				node.parent = null;
 				break;
 			case 1:
 				node.getParent().right = OUTER_NODE;
+				updateSizeUp(node.getParent());
 				node.parent = null;
 				break;
 			default:
@@ -213,6 +228,13 @@ public class WAVLTree {
 		}
 	}
 
+	/**
+	 * Find the side on which the node is.
+	 * Used in deletion to recognize cases
+	 * @Complexity O(1)
+	 * @param node - WAVLNODE to check what side of child it is.
+	 * @return 0 if left, 1 if right, -1 if has no parent
+	 */
 	private int side(WAVLNode node) {
 		WAVLNode parent = node.getParent();
 		if (parent != null) {
@@ -227,7 +249,8 @@ public class WAVLTree {
 
 	/**
 	 * If a node is removed ot inserted, update the sizes up the tree.
-	 * @Complexity worst case O(log n) (height of tree)
+	 *
+	 * @Complexity worst case O(log n) where n is # nodes in tree (height of tree)
 	 * @param node
 	 */
 	private void updateSizeUp(WAVLNode node) {
