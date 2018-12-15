@@ -29,12 +29,12 @@ public class WAVLTree {
 	 * public boolean empty()
 	 *
 	 * returns true if and only if the tree is empty
+	 * ==============
+	 * Returns false if root is an inner node, and true if it is an outer leaf.
+	 * @Complexity O(1)
+	 * @return boolean false if root is an inner node
 	 **/
 	public boolean empty() {
-		/**
-		 * Returns false if root is an inner node, and true if it is an outer leaf. Run
-		 * time O(1)
-		 **/
 		return !this.root.isInnerNode();
 	}
 
@@ -43,8 +43,8 @@ public class WAVLTree {
 	 *
 	 * returns the info of an item with key k if it exists in the tree otherwise,
 	 * returns null
-	 * * * * * * * * *
-	 * Complexity - same as select(). Worst case O(log n)
+	 * ===============
+	 * @Complexity O(treeSearch) = O(log n)
 	 */
 	public String search(int k) {
 		WAVLNode item = treeSearch(getRoot(), k);
@@ -58,6 +58,7 @@ public class WAVLTree {
 
 	/**
 	 * Implementation of Tree-Search from slides, done deterministicly
+	 * @Complexity O(log n) - where n # nodes in tree (tree height)
 	 * @param x - WAVLNode
 	 * @param k - int the key to look for
 	 * @return WAVLNode - if not found, then returns a, OUTER_NODE
@@ -77,6 +78,7 @@ public class WAVLTree {
 
 	/**
 	 * Implementation of Tree-Position from slides. Done deterministicly.
+	 * @Complexity O(log n) - where n # nodes in tree (tree height)
 	 * @param x - WAVLNode
 	 * @param k - int the key to look for
 	 * @return WAVLNode - return the last node encountered, or an existing node
@@ -157,14 +159,20 @@ public class WAVLTree {
 		return rebalance(y);
 	}
 
+	/**
+	 * remove a node from the tree.
+	 * @Complexity O(updateSizeUp) = O(log n)
+	 * 				Each option does constant # operations + updateSizeUp
+	 * @param node
+	 */
 	private void remove(WAVLNode node) {
 		WAVLNode succ;
 		// If leaf of tree, find side of parent and remove
 		if (node.getRight().getRank() == -1 && node.getLeft().getRank() == -1) {
-			removeLeaf(node);
+			removeLeaf(node); // O(1)
 		} else { // Is an inner node
 			succ = successor(node);
-			if (succ == node.getRight()) {
+			if (succ == node.getRight()) { // O(1)
 				/*
 				* If this is his right child, then we need to:
 				* 1) make node's parent the parent of succ
@@ -198,14 +206,23 @@ public class WAVLTree {
 
 	}
 
+	/**
+	 * Function to remove leaf nodes. Used for readability.
+	 * If the node has no parent, we don't do anything, because in remove
+	 * we make the node null at the end.
+	 * @Complexity O(updateSizeUp) = O(log n)
+	 * @param node - the WAVLNode to remove
+	 */
 	private void removeLeaf(WAVLNode node) {
 		switch (side(node)) {
 			case 0:
 				node.getParent().left = OUTER_NODE;
+				updateSizeUp(node.getParent());
 				node.parent = null;
 				break;
 			case 1:
 				node.getParent().right = OUTER_NODE;
+				updateSizeUp(node.getParent());
 				node.parent = null;
 				break;
 			default:
@@ -213,6 +230,13 @@ public class WAVLTree {
 		}
 	}
 
+	/**
+	 * Find the side on which the node is.
+	 * Used in deletion to recognize cases
+	 * @Complexity O(1)
+	 * @param node - WAVLNODE to check what side of child it is.
+	 * @return 0 if left, 1 if right, -1 if has no parent
+	 */
 	private int side(WAVLNode node) {
 		WAVLNode parent = node.getParent();
 		if (parent != null) {
@@ -227,7 +251,8 @@ public class WAVLTree {
 
 	/**
 	 * If a node is removed ot inserted, update the sizes up the tree.
-	 * @Complexity worst case O(log n) (height of tree)
+	 *
+	 * @Complexity worst case O(log n) where n is # nodes in tree (height of tree)
 	 * @param node
 	 */
 	private void updateSizeUp(WAVLNode node) {
@@ -292,6 +317,9 @@ public class WAVLTree {
 	 * Returns the node with the key directly following x.
 	 * This does not deal with call successor on the maximum of the tree,
 	 * because we don't meet this case in any other operation.
+	 *
+	 * Implement by peudo-code from class
+	 * @Complexity O(log n) worst case, where n is the number of nodes in the tree
 	 * @param x WAVLNode A node in the tree
 	 * @return y The WAVLNode with the following key
 	 */
@@ -313,6 +341,9 @@ public class WAVLTree {
 	 * Returns the node with the key directly preceding x.
 	 * This does not deal with call predecessor on the minimum of the tree,
 	 * because we don't meet this case in any other operation.
+	 *
+	 * Implement by peudo-code from class
+	 * @Complexity O(log n) worst case, where n is the number of nodes in the tree
 	 * @param x WAVLNode A node in the tree
 	 * @return y The WAVLNode with the preceding key
 	 */
@@ -334,6 +365,11 @@ public class WAVLTree {
 	 *
 	 * Returns the info of the item with the smallest key in the tree, or null if
 	 * the tree is empty
+	 * =============
+	 * We use the private WAVLNode min to find the node with the minimal key
+	 * in the subtree under node, and the return it's value
+	 * @Complexity O(log n) n the number of nodes in the tree
+	 * @return the value of the node with the minimal key
 	 */
 	public String min() {
 		return min(root).getValue();
@@ -341,7 +377,8 @@ public class WAVLTree {
 
 	/**
 	 * implemented recursively
-	 *
+	 * @Complexity O(log n) where n is the number of nodes in the subtree.
+	 * 				The worst case happens when the min is of depth = height.
 	 * @param node the root of the current subtree
 	 * @return info of minimal node in tree
 	 */
@@ -357,14 +394,20 @@ public class WAVLTree {
 	 *
 	 * Returns the info of the item with the largest key in the tree, or null if the
 	 * tree is empty
+	 * =============
+	 * We use the private WAVLNode max to find the node with the maximal key
+	 * in the subtree under node, and the return it's value
+	 * @Complexity O(log n) n the number of nodes in the tree
+	 * @return the value of the node with the maximal key
 	 */
 	public String max() {
 		return max(root).getValue();
 	}
 
 	/**
-	 * implemented recursively
-	 *
+	 * Implemented recursively
+	 * @Complexity O(log n) where n is the number of nodes in the subtree.
+	 * 				The worst case happens when the max is of depth = height.
 	 * @param node the root of the current subtree
 	 * @return info of maximal node in the tree
 	 */
@@ -380,8 +423,8 @@ public class WAVLTree {
 	 *
 	 * Returns a sorted array which contains all keys in the tree, or an empty array
 	 * if the tree is empty.
-	 * * * * * * * * * *
-	 * Complexity:
+	 * ===============
+	 * @Complexity
 	 * 		this.min() = O(log n)
 	 * 		successor - called n times, with an amortized cost of O(1) per call
 	 * 			total cost O(n) amortized
@@ -407,8 +450,8 @@ public class WAVLTree {
 	 *
 	 * Returns an array which contains all info in the tree, sorted by their
 	 * respective keys, or an empty array if the tree is empty.
-	 * * * * * * * * * *
-	 * Complexity:
+	 * ===============
+	 * @Complexity
 	 * 		this.min() = O(log n)
 	 * 		successor - called n times, with an amortized cost of O(1) per call
 	 * 			total cost O(n) amortized
@@ -436,13 +479,13 @@ public class WAVLTree {
 	 * public int size()
 	 *
 	 * Returns the number of nodes in the tree.
+	 * ================
 	 *
+	 * @Complexity O(1) given that the size of each node is updated at
+	 * 					 every insert, delete, and rebalance
+	 * @return the size of the root node.
 	 */
 	public int size() {
-		/**
-		 * @return the size of the root node. Complexity O(1), given that the size of
-		 *         each node is updated at every insert, delete, and rebalance
-		 */
 		if (empty()) {
 			return 0; // to be replaced by student code
 		} else {
@@ -454,7 +497,9 @@ public class WAVLTree {
 	 * public WAVLNode getRoot()
 	 *
 	 * Returns the root WAVL node, or null if the tree is empty
-	 *
+	 * =========
+	 * @Complexity O(empty) = O(1)
+	 * @return the root of the tree
 	 */
 	public WAVLNode getRoot() {
 		if (this.empty()) {
@@ -472,20 +517,39 @@ public class WAVLTree {
 	 * 2: select(size()) returns the value of the node with maximal key Example 3:
 	 * select(2) returns the value 2nd smallest minimal node, i.e the value of the
 	 * node minimal node's successor
+	 * ===========
 	 *
+	 * @Complexity O(selectNode) = O(log n), where n is # of nodes in the tree.
+	 * @param i - int index to search for
+	 * @return String - the value of the i'th smallest node
 	 */
 	public String select(int i) {
 		if (empty()) {
-			return "-1";
+			return null;
 		} else {
 			WAVLNode x = selectNode(getRoot(), i - 1);
 			return x.getValue();
 		}
 	}
 
+	/**
+	 * Recursivly find the node with the i'th smalles value.
+	 * If i < x.left.size, then the i'th smallest node is in the left
+	 * 		subtree of x (because it has more than i nodes).
+	 * 		We then need to keep on searching for the i'th smallest node.
+	 * If i > x.left.size, then the i'th smallest node is in the right
+	 * 		subtree of x. We then need to account for the x.left.size + 1
+	 * 		(all the nodes in order until x.right), and seach for the
+	 * 		i - x.left.size + 1 index in the rigth subtree.
+	 * @Complexity O(log n) worst case where n is # of nodes in the tree.
+	 * 				Because the longest route from root to leaf is log n.
+	 * @param x - WAVLNode the root of the subtree to find the node in
+	 * @param i - int the index to search for.
+	 * @return The node with the i'th smallest value
+	 */
 	private WAVLNode selectNode(WAVLNode x, int i) {
 		int r = x.getLeft().getSubtreeSize();
-		if (i = r) {
+		if (i == r) {
 			return x;
 		} else if (i < r) {
 			return selectNode(x.getLeft(), i);
@@ -675,6 +739,10 @@ public class WAVLTree {
 			this(OUTER_NODE_KEY, null, null, null, null, OUTER_NODE_RANK);
 		}
 
+		/**
+		 * All the getters and setters for WAVLNode.
+		 * All run in O(1).
+		 */
 		public int getKey() {
 			return key;
 		}
@@ -703,6 +771,10 @@ public class WAVLTree {
 			this.rank = rank;
 		}
 
+		/**
+		 * promote and demote WAVLNodes in tree.
+		 * @Complexity O(1).
+		 */
 		public void promote() {
 			setRank(getRank() + 1);
 		}
@@ -711,12 +783,23 @@ public class WAVLTree {
 			setRank(getRank() - 1);
 		}
 
+		/**
+		 * @Complexity O(1)
+		 * @return boolean true - if node.rank != OUTER_NODE_RANK.
+		 */
 		public boolean isInnerNode() {
 			return rank != OUTER_NODE_RANK;
 		}
 
 		/**
-		 * 
+		 * This function is deterministic and not recursive.
+		 * We assume that in insertions and deletions from trees,
+		 * updating the sizes is done from the bottom up, and that each
+		 * new node inserted has static OUTER_NODEs as children, and
+		 * a size of 0.
+		 * In addition, if the tree is set, all sizes should be up-to-date.
+		 * =================
+		 * @Complexity O(1)
 		 * @return the size of the subtree that has this as its root, including this.
 		 */
 		public int getSubtreeSize() {
@@ -736,6 +819,11 @@ public class WAVLTree {
 		/**
 		 * updates the Node's subtree size in-place.
 		 * Should be used after changes to the tree (insert, delete, rebalance).
+		 * As explained in getSubtreeSize(), we assume that the update of
+		 * sizes will be done from the bottom-up.
+		 * ==================
+		 * @Complexity O(getSubtreeSize()) = O(1)
+		 * @return void. update the size field of the WAVLNode object
 		 */
 		public void updateSubtreeSize() {
 			size = getSubtreeSize();
