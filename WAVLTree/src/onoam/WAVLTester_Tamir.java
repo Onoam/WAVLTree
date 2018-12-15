@@ -1,10 +1,11 @@
-package mainPackage;
-
+package onoam;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-import mainPackage.WAVLTree.IWAVLNode;
-import mainPackage.WAVLTree.WAVLNode;
+
+import onoam.WAVLTree;
+import onoam.WAVLTree.WAVLNode;
+
 
 public class WAVLTester_Tamir
 {
@@ -168,7 +169,7 @@ public class WAVLTester_Tamir
 			
 			//if (t == OperType.Delete)
 			//{
-				//IWAVLNode deleteMe = _tree.findbyKey(key, _tree.getRoot());
+				//WAVLNode deleteMe = _tree.findbyKey(key, _tree.getRoot());
 				//if (!deleteMe.getLeft().isRealNode() || !deleteMe.getRight().isRealNode())
 				//{
 					//CreateOperation(operIndex);
@@ -265,9 +266,9 @@ public class WAVLTester_Tamir
 		{
 			return checkBST_rec(_tree.getRoot(), Integer.MIN_VALUE, Integer.MAX_VALUE);
 		}
-		private boolean checkBST_rec(IWAVLNode node, int min, int max)
+		private boolean checkBST_rec(WAVLNode node, int min, int max)
 		{
-			if (node == null || !node.isRealNode())
+			if (node == null || !node.isInnerNode())
 				return true;
 			return node.getKey() >= min && node.getKey() <= max &&
 					checkBST_rec(node.getLeft(),min, node.getKey()-1) &&
@@ -278,16 +279,16 @@ public class WAVLTester_Tamir
 		{
 			return checkSubSizes_Rec(_tree.getRoot());
 		}
-		private boolean checkSubSizes_Rec(IWAVLNode node)
+		private boolean checkSubSizes_Rec(WAVLNode node)
 		{
-			if (node == null || !node.isRealNode())
+			if (node == null || !node.isInnerNode())
 				return true;
 			
-			IWAVLNode left = node.getLeft();
-			IWAVLNode right = node.getRight();
+			WAVLNode left = node.getLeft();
+			WAVLNode right = node.getRight();
 			
-			int leftCount = (left != null && left.isRealNode()) ? left.getSubtreeSize() : 0;
-			int rightCount = (right != null && right.isRealNode()) ? right.getSubtreeSize() : 0;
+			int leftCount = (left != null && left.isInnerNode()) ? left.getSubtreeSize() : 0;
+			int rightCount = (right != null && right.isInnerNode()) ? right.getSubtreeSize() : 0;
 			if (node.getSubtreeSize() == (leftCount + rightCount + 1) &&
 					checkSubSizes_Rec(node.getLeft()) && 
 					checkSubSizes_Rec(node.getRight()))
@@ -312,9 +313,9 @@ public class WAVLTester_Tamir
 			//return !badHeightDiff;
 		}
 		//boolean badHeightDiff = false;
-		private int height(IWAVLNode n)
+		private int height(WAVLNode n)
 		{
-			if (n == null || !n.isRealNode())
+			if (n == null || !n.isInnerNode())
 				return -1;
 			
 			int leftHeight = height(n.getLeft());
@@ -334,7 +335,7 @@ public class WAVLTester_Tamir
 		}
 		private boolean checkRank_rec(WAVLNode node)
 		{
-			if (node == null || (!node.isRealNode() && node.getRank() == -1))
+			if (node == null || (!node.isInnerNode() && node.getRank() == -1))
 				return true;
 			
 			int leftRank = node.getLeft() != null ? ((WAVLNode)node.getLeft()).getRank() : -1;
@@ -361,9 +362,9 @@ public class WAVLTester_Tamir
 				return 0;
 			return 1;
 		}
-		private boolean containsNodes_rec(IWAVLNode node, ArrayList<Integer> shouldExistsKeys)
+		private boolean containsNodes_rec(WAVLNode node, ArrayList<Integer> shouldExistsKeys)
 		{
-			if (node == null || !node.isRealNode())
+			if (node == null || !node.isInnerNode())
 				return true;
 			
 			if (shouldExistsKeys.contains((Integer)node.getKey()))
@@ -381,7 +382,7 @@ public class WAVLTester_Tamir
 			
 			return checkExtNodes_rec(_tree.getRoot());
 		}
-		private boolean checkExtNodes_rec(IWAVLNode node)
+		private boolean checkExtNodes_rec(WAVLNode node)
 		{
 			if (node == null)
 				return false;
@@ -389,12 +390,12 @@ public class WAVLTester_Tamir
 			boolean leftNull = node.getLeft() == null;
 			boolean rightNull = node.getRight() == null;
 			if (leftNull && rightNull) // both null - this node must be external
-				return !node.isRealNode();
+				return !node.isInnerNode();
 			
 			if ((leftNull && !rightNull) || (rightNull && !leftNull)) // one null and one not null - not good
 				return false;
 			
-			return node.isRealNode() && checkExtNodes_rec(node.getLeft()) && checkExtNodes_rec(node.getRight());
+			return node.isInnerNode() && checkExtNodes_rec(node.getLeft()) && checkExtNodes_rec(node.getRight());
 		}
 		
 		private boolean checkIfEmptyIsEmpty()
