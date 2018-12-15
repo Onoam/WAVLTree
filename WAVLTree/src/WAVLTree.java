@@ -167,9 +167,12 @@ public class WAVLTree {
 			if (succ == node.getRight()) {
 				/*
 				* If this is his right child, then we need to:
-				* 1) make succ's parent the parent of node
-				* 2) make succ's left child node's left child
-				* 3) attach succ to node's parent base on side*/
+				* 1) make node's parent the parent of succ
+				* 2) make node's left child the child of succ
+				* 3) attach succ to node's parent based on side
+				* 4) update the size of succ (and this will update
+				*    the size of parent)
+				* */
 				succ.parent = node.getParent();
 				succ.left = node.getLeft();
 				if (side(node) == 0) {
@@ -220,6 +223,24 @@ public class WAVLTree {
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * If a node is removed ot inserted, update the sizes up the tree.
+	 * @Complexity worst case O(log n) (height of tree)
+	 * @param node
+	 */
+	private void updateSizeUp(WAVLNode node) {
+		node.updateSubtreeSize(); // update the size of the first node
+		// Then, updates the sizes up the tree
+		WAVLNode parent = node.getParent();
+		// If we reached the root, then we stop.
+		// This ensures that we update the the root last, and then stop.
+		while (node != this.getRoot()) {
+			node = parent;
+			node.updateSubtreeSize();
+			parent = node.getParent();
+		}
 	}
 
 	/**
