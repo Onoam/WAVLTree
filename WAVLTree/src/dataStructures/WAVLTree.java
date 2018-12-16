@@ -181,12 +181,57 @@ public class WAVLTree {
 			return dCaseOneRebalance();
 		}
 		assert Math.min(ldiff, rdiff)== 1;
-		if(Math.min(ldiff, rdiff) == 1)
-		
-		return 0; //TODO: delete
+		//x is confirmed as (3,1) node
+		int[] grandChildDiffs = checkDiffs(x, side);
+		if (grandChildDiffs[0] == 2 && grandChildDiffs[1] == 2) {
+			return dCaseTwoRebalance();
+		}
+		//one diff or more isn't 2
+		if (grandChildDiffs[1] == 1) {
+			return dCaseThreeRebalance();
+		}
+		assert grandChildDiffs[1] == 2; // only option remaining
+		return dCaseFourRebalance();
+	}
+	
+	/**
+	 * checks the differences as shown in the WAVL presentation, slide 47
+	 * the returned array stores the "outer" grandchild diff (same side as child)
+	 * in index 1, and the "inner" grandchild diff (opposite from child) in index 0
+	 * e.g. if side='r', then outer is x.right.right and inner is x.right.left
+	 * @param x the grandparent to check
+	 * @param side which side's children need to be checked
+	 * @return the differences in an array
+	 */
+	private int[] checkDiffs(WAVLNode x, char side) {
+		int[] diffs = new int[2];
+		if (side == 'r') {
+			diffs[0] = x.getRight().getRank() - x.getRight().getLeft().getRank();
+			diffs[1] = x.getRight().getRank() - x.getRight().getRight().getRank();
+		}
+		else {
+			diffs[0] = x.getLeft().getRank() - x.getLeft().getRight().getRank();
+			diffs[1] = x.getLeft().getRank() - x.getLeft().getLeft().getRank();
+		}
+		return diffs;
 	}
 
 	private int dCaseOneRebalance() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private int dCaseTwoRebalance() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private int dCaseThreeRebalance() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private int dCaseFourRebalance() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
