@@ -1,3 +1,4 @@
+package dataStructures;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,7 +9,7 @@ import java.util.List;
  *
  * WAVLTree
  *
- * 
+ *
  * An implementation of a WAVL Tree. (Haupler, Sen & Tarajan ‘15)
  *
  */
@@ -558,131 +559,6 @@ public class WAVLTree {
 		}
 	}
 
-	public void print(WAVLNode node, int height) {
-		// originally meant to get height from a method, i.e. height(root);
-	       if(root == OUTER_NODE) {
-	           System.out.println("(XXXXXX)");
-	           return;
-	       }
-
-	       //int height = height(root); //PROBLEM??
-	       int width = (int)Math.pow(2, height-1);
-
-	       // Preparing variables for loop.
-	       List<WAVLNode> current = new ArrayList<WAVLNode>(1),
-	           next = new ArrayList<WAVLNode>(2);
-	       current.add(root);
-
-	       final int maxHalfLength = 4;
-	       int elements = 1;
-
-	       StringBuilder sb = new StringBuilder(maxHalfLength*width);
-	       for(int i = 0; i < maxHalfLength*width; i++)
-	           sb.append(' ');
-	       String textBuffer;
-
-	       // Iterating through height levels.
-	       for(int i = 0; i < height; i++) {
-
-	           sb.setLength(maxHalfLength * ((int)Math.pow(2, height-1-i) - 1));
-
-	           // Creating spacer space indicator.
-	           textBuffer = sb.toString();
-
-	           // Print tree node elements
-	           for(WAVLNode n : current) {
-
-	               System.out.print(textBuffer);
-
-	               if(n == null) {
-
-	                   System.out.print("        ");
-	                   next.add(null);
-	                   next.add(null);
-
-	               } else {
-
-	                   System.out.printf( "("+Integer.toString(n.key)+","+Integer.toString(n.rank)+")	");
-	                   next.add(n.left);
-	                   next.add(n.right);
-
-	               }
-
-	               System.out.print(textBuffer);
-
-	           }
-
-	           System.out.println();
-	           // Print tree node extensions for next level.
-	           if(i < height - 1) {
-
-	               for(WAVLNode n : current) {
-
-	                   System.out.print(textBuffer);
-
-	                   if(n == null)
-	                       System.out.print("        ");
-	                   else
-	                       System.out.printf("%s      %s",
-	                               n.left == null ? " " : "/", n.right == null ? " " : "\\");
-
-	                   System.out.print(textBuffer);
-
-	               }
-
-	               System.out.println();
-
-	           }
-
-	           // Renewing indicators for next run.
-	           elements *= 2;
-	           current = next;
-	           next = new ArrayList<WAVLNode>(elements);
-
-	       }
-
-	   }
-
-	   public static void main(String args[]) {
-	       WAVLTree t = new WAVLTree();
-	       while (true) {
-	           System.out.println("(1) Insert");
-	           System.out.println("(2) Delete");
-	           System.out.println("(3) Break");
-
-
-	           try {
-	               BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-	               String s = bufferRead.readLine();
-
-	               if (Integer.parseInt(s) == 1) {
-	                   System.out.print("Value to be inserted: ");
-	                   int key =Integer.parseInt(bufferRead.readLine());
-	                   t.insert(key, "AMEN");
-	               }
-	               else if (Integer.parseInt(s) == 2) {
-	                   System.out.print("Value to be deleted: ");
-	                   int key =Integer.parseInt(bufferRead.readLine());
-	                   t.delete(key);
-	               }
-	               else if (Integer.parseInt(s) == 3) {
-	            	   break;
-	               }
-	               else {
-	                   System.out.println("Invalid choice, try again!");
-	                   continue;
-	               }
-	               int height = 1; // change this
-	               t.print(t.root, height);
-
-	           }
-	           catch(IOException e) {
-	               e.printStackTrace();
-	           }
-	       }
-
-	   }
-
 	/**
 	 * public class WAVLNode
 	 */
@@ -710,17 +586,17 @@ public class WAVLTree {
 		}
 		/**
 		 * constructor for building a WAVLNode item with only key and value
-		 * DEPRECATED: should use constructor with left and right children 
+		 * DEPRECATED: should use constructor with left and right children
 		 * (so we can use OUTER_NODE for left and right)
-		 * @param key 
-		 * @param value 
+		 * @param key
+		 * @param value
 		 */
 
 		public WAVLNode(int key, String value) {
 			this(key, value, null, null, null, 0);
 		}
 		/**
-		 * The constructor for adding with left and right children and parent. 
+		 * The constructor for adding with left and right children and parent.
 		 * Use this constructor for adding a leaf to the tree.
 		 * @param parent the parent of the added leaf (insertion point)
 		 * @param key node's key
@@ -814,7 +690,7 @@ public class WAVLTree {
 			if (right != null) {
 				rsize = right.size;
 			}
-			return rsize + lsize + 1; 
+			return rsize + lsize + 1;
 		}
 		/**
 		 * updates the Node's subtree size in-place.
