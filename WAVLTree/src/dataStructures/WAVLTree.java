@@ -129,6 +129,7 @@ public class WAVLTree {
 	 * @return the number of rebalance steps
 	 */
 	private int insertRebalance(WAVLNode x) {
+		x = x.getParent(); // we actually work on the parent-child edge
 		if (x == null) { // should only happen if we've reached the root
 			return 0;
 		}
