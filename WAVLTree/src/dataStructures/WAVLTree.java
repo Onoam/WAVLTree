@@ -142,10 +142,12 @@ public class WAVLTree {
 		//choose which side is the problem side
 		char side = ldiff == 0 ? 'l': 'r';
 		//case 1, including symmetry
+		assert rdiff == 0 || ldiff == 0;
 		if (rdiff + ldiff == 1) { // one is zero (established), the other is 1
 			return iCaseOneRebalance(x);
 		}
-		//case 2, no need to check that x is (0,2) node
+		assert ldiff == 2 || rdiff == 2;
+		//case 2, established that x is (0,2) node
 		if ((side == 'l' && x.getLeft().getRank()-x.getLeft().getLeft().getRank() == 1) ||
 			 (side == 'r' && x.getRight().getRank() - x.getRight().getRight().getRank() == 1)) {
 			return iCaseTwoRebalance(x, side);
@@ -154,9 +156,44 @@ public class WAVLTree {
 		return iCaseThreeRebalance(x, side);
 	}
 
+	/**
+	 * performs the rebalancing of the tree after deletion
+	 * calls appropriate helper methods
+	 * @param x the parent of the node that was deleted
+	 * @return the number of rebalance steps taken
+	 * @pre x.parent is not OUTERNODE
+	 */
+	private int deleteRebalance(WAVLNode x) {
+		if (x == null) { // should only happen if we've reached the root
+			return 0;
+		}
+		if (x.getRank() == 2 && !x.getLeft().isInnerNode()) {
+			return dCaseOneRebalance(); //demotion, equivalent to other type of case-one
+		}
+		int ldiff = x.getRank() - x.getLeft().getRank();
+		int rdiff = x.getRank() - x.getRight().getRank();
+		char side = ldiff == 3? 'l':'r'; // choose problem side 
+		if (Math.max(ldiff, rdiff)<3) {
+			return 0; //tree is valid WAVL, no rank 2 leaf, no rank diff>=3
+		}
+		assert Math.max(ldiff, rdiff)==3;
+		if (Math.min(ldiff, rdiff)== 2) {
+			return dCaseOneRebalance();
+		}
+		assert Math.min(ldiff, rdiff)== 1;
+		if(Math.min(ldiff, rdiff) == 1)
+		
+		return 0; //TODO: delete
+	}
+
+	private int dCaseOneRebalance() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	private int iCaseOneRebalance(WAVLNode x) {
 		x.promote();
-		return 1+insertRebalance(x.parent);
+		return 1+insertRebalance(x.getParent());
 	}
 	/**
 	 * rebalances after insertion, case 2.
@@ -231,12 +268,6 @@ public class WAVLTree {
 		y.updateSubtreeSize();
 
 	}
-
-	private int deleteRebalance(WAVLNode y) {
-		int steps = 0;
-		return steps;
-	}
-
 	private int treeInsert(WAVLNode root, WAVLNode z) {
 		WAVLNode y = treePosition(root, z.getKey());
 		if (z.getKey() == y.getKey()) {
