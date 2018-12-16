@@ -1,10 +1,10 @@
-package onoam;
+package dataStructures;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import onoam.WAVLTree;
-import onoam.WAVLTree.WAVLNode;
+import dataStructures.WAVLTree;
+import dataStructures.WAVLTree.WAVLNode;
 
 
 public class WAVLTester_Tamir
