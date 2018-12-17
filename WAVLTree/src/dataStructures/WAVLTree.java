@@ -240,11 +240,11 @@ public class WAVLTree {
 		x.demote();
 		if (side == 'r') {
 			x.getRight().demote();
-			rotateLeft(x, x.getRight());
+			rotateLeft(x);
 		}
 		else {
 			x.getLeft().demote();
-			rotateRight(x, x.getLeft());
+			rotateRight(x);
 		}
 		if (x.isLeaf() && x.getRank() == 1) {
 			x.demote();
@@ -271,10 +271,10 @@ public class WAVLTree {
 	private int iCaseTwoRebalance(WAVLNode x, char side) {
 		x.demote();
 		if (side == 'l') {
-			rotateRight(x, x.left);
+			rotateRight(x);
 		}
 		else {
-			rotateLeft(x, x.right);
+			rotateLeft(x);
 		}
 		return 1;
 	}
@@ -290,14 +290,14 @@ public class WAVLTree {
 		if (side == 'l') {
 			x.getLeft().demote();
 			x.getLeft().getRight().promote();
-			rotateLeft(x.getLeft(), x.getLeft().getRight());
-			rotateRight(x, x.getLeft());
+			rotateLeft(x.getLeft());
+			rotateRight(x);
 		}
 		else {
 			x.getRight().demote();
 			x.getRight().getLeft().promote();
-			rotateRight(x.getRight(), x.getRight().getLeft());
-			rotateLeft(x, x.getRight());
+			rotateRight(x.getRight());
+			rotateLeft(x);
 		}
 		return 2;
 	}
@@ -305,11 +305,11 @@ public class WAVLTree {
 	/**
 	 * performs right rotation. Does not handle demotions.
 	 *
-	 * @param x       y's parent
-	 * @param y       x's left child
+	 * @param x the node to be rotated
 	 * @post x is y's right child, y is x's parent's child (same side as x was)
 	 */
-	private void rotateRight(WAVLNode x, WAVLNode y) {
+	private void rotateRight(WAVLNode x) {
+		WAVLNode y = x.getLeft();
 		if (x.parent != null && x.key > x.getParent().key) {
 			x.parent.right = y;
 		} else if (x.parent != null) { // y is left child of its parent
@@ -326,12 +326,11 @@ public class WAVLTree {
 	/**
 	 * performs left rotation, does not handle demotions.
 	 *
-	 * @param y       x's right child
-	 * @param x       y's parent
+	 * @param x the node to rotate 
 	 * @post x is y's left child, y is x's parent's child (same side as x was)
 	 */
-	private void rotateLeft(WAVLNode x, WAVLNode y) {
-
+	private void rotateLeft(WAVLNode x) {
+		WAVLNode y = x.getRight();
 		if (x.parent != null && x.key > x.getParent().key) {
 			x.parent.right = y;
 		} else if (x.parent != null) { // y is left child of its parent
