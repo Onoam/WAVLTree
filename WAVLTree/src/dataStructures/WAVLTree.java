@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import dataStructures.WAVLTree.WAVLNode;
+
 /**
  *
  * WAVLTree
@@ -167,8 +169,8 @@ public class WAVLTree {
 		if (x == null) { // should only happen if we've reached the root
 			return 0;
 		}
-		if (x.getRank() == 2 && !x.getLeft().isInnerNode()) {
-			return dCaseOneRebalance(); //demotion, equivalent to other type of case-one
+		if (x.getRank() == 1 && x.isLeaf()) {//x is leaf
+			return dCaseOneRebalance(x); //demotion, equivalent to other type of case-one
 		}
 		int ldiff = x.getRank() - x.getLeft().getRank();
 		int rdiff = x.getRank() - x.getRight().getRank();
@@ -178,20 +180,20 @@ public class WAVLTree {
 		}
 		assert Math.max(ldiff, rdiff)==3;
 		if (Math.min(ldiff, rdiff)== 2) {
-			return dCaseOneRebalance();
+			return dCaseOneRebalance(x);
 		}
 		assert Math.min(ldiff, rdiff)== 1;
 		//x is confirmed as (3,1) node
 		int[] grandChildDiffs = checkDiffs(x, side);
 		if (grandChildDiffs[0] == 2 && grandChildDiffs[1] == 2) {
-			return dCaseTwoRebalance();
+			return dCaseTwoRebalance(x, side);
 		}
 		//one diff or more isn't 2
 		if (grandChildDiffs[1] == 1) {
-			return dCaseThreeRebalance();
+			return dCaseThreeRebalance(x, side);
 		}
 		assert grandChildDiffs[1] == 2; // only option remaining
-		return dCaseFourRebalance();
+		return dCaseFourRebalance(x, side);
 	}
 	
 	/**
@@ -216,22 +218,30 @@ public class WAVLTree {
 		return diffs;
 	}
 
-	private int dCaseOneRebalance() {
+	private int dCaseOneRebalance(WAVLNode x) {
+		x.demote();
+		
+		return 1+deleteRebalance(x.getParent());
+	}
+
+	private int dCaseTwoRebalance(WAVLNode x, char side) {
+		x.demote();
+		if (side == 'r') {
+			x.getRight().demote();
+		}
+		else {
+			x.getLeft().demote();
+		}
+		return 1+deleteRebalance(x.getParent());
+		
+	}
+
+	private int dCaseThreeRebalance(WAVLNode x, char side) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	private int dCaseTwoRebalance() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	private int dCaseThreeRebalance() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	private int dCaseFourRebalance() {
+	private int dCaseFourRebalance(WAVLNode x, char side) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -341,7 +351,7 @@ public class WAVLTree {
 		if (z.getRank() == -1) {
 			return -1;
 		}
-		WAVLNode y = successor(z);
+		WAVLNode y = z.getParent();
 		remove(z);
 		return deleteRebalance(y);
 	}
@@ -356,6 +366,7 @@ public class WAVLTree {
 		WAVLNode succ;
 		// If leaf of tree, find side of parent and remove
 		if (node.getRight().getRank() == -1 && node.getLeft().getRank() == -1) {
+			//TODO Replace with IsLeaf() method
 			removeLeaf(node); // O(1)
 		} else { // Is an inner node
 			succ = successor(node);
@@ -769,6 +780,14 @@ public class WAVLTree {
 			this.left = left;
 			this.rank = rank;
 			this.size = this.getSubtreeSize();
+		}
+		/**
+		 * @pre not called on OUTER_NODE
+		 * @return whether node is leaf
+		 */
+		public boolean isLeaf() {
+			// TODO Auto-generated method stub
+			return getLeft().getRank() == -1 && getLeft().getRank() == -1;
 		}
 		/**
 		 * constructor for building a WAVLNode item with only key and value
