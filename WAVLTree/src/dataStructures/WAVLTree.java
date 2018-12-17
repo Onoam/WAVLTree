@@ -235,10 +235,17 @@ public class WAVLTree {
 		return 1+deleteRebalance(x.getParent());
 		
 	}
-
+	
 	private int dCaseThreeRebalance(WAVLNode x, char side) {
-		
-		
+		x.demote();
+		if (side == 'r') {
+			x.getRight().demote();
+			rotateLeft(x, x.getRight());
+		}
+		else {
+			x.getLeft().demote();
+			rotateRight(x, x.getLeft());
+		}
 		if (x.isLeaf() && x.getRank() == 1) {
 			x.demote();
 		}
@@ -256,6 +263,7 @@ public class WAVLTree {
 	}
 	/**
 	 * rebalances after insertion, case 2.
+	 * also handles demotions
 	 * @param x the node that needs to be rotated
 	 * @param side which of x's children need to be rotated with it
 	 * @return 1, 1 rebalance operation
@@ -272,14 +280,24 @@ public class WAVLTree {
 	}
 	/**
 	 * rebalances after insertion, case 3.
+	 * also handles demotions
 	 * @param x the node that needs to be double rotated
 	 * @param side which direction (in terms of symmetry) needs to be rotated
 	 * @return 2, 2 rebalance operations
 	 */
 	private int iCaseThreeRebalance(WAVLNode x, char side) {
+		x.demote();
 		if (side == 'l') {
+			x.getLeft().demote();
+			x.getLeft().getRight().promote();
 			rotateLeft(x.getLeft(), x.getLeft().getRight());
 			rotateRight(x, x.getLeft());
+		}
+		else {
+			x.getRight().demote();
+			x.getRight().getLeft().promote();
+			rotateRight(x.getRight(), x.getRight().getLeft());
+			rotateLeft(x, x.getRight());
 		}
 		return 2;
 	}
