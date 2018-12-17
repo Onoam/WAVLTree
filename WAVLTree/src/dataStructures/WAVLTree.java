@@ -174,7 +174,7 @@ public class WAVLTree {
 		}
 		int ldiff = x.getRank() - x.getLeft().getRank();
 		int rdiff = x.getRank() - x.getRight().getRank();
-		char side = ldiff == 3? 'l':'r'; // choose problem side 
+		char side = ldiff == 3? 'r':'l'; // choose which side we work on 
 		if (Math.max(ldiff, rdiff)<3) {
 			return 0; //tree is valid WAVL, no rank 2 leaf, no rank diff>=3
 		}
@@ -237,8 +237,12 @@ public class WAVLTree {
 	}
 
 	private int dCaseThreeRebalance(WAVLNode x, char side) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		
+		if (x.isLeaf() && x.getRank() == 1) {
+			x.demote();
+		}
+		return 1;
 	}
 
 	private int dCaseFourRebalance(WAVLNode x, char side) {
@@ -787,7 +791,7 @@ public class WAVLTree {
 		 */
 		public boolean isLeaf() {
 			// TODO Auto-generated method stub
-			return getLeft().getRank() == -1 && getLeft().getRank() == -1;
+			return getLeft().getRank() == OUTER_NODE_RANK && getLeft().getRank() == OUTER_NODE_RANK;
 		}
 		/**
 		 * constructor for building a WAVLNode item with only key and value
