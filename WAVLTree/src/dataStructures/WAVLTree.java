@@ -16,6 +16,10 @@ import dataStructures.WAVLTree.WAVLNode;
  *
  */
 //test2.1
+/**
+ * @author Eytan-c, Onoam
+ *
+ */
 public class WAVLTree {
 	private WAVLNode root;
 	public final WAVLNode OUTER_NODE = new WAVLNode();
@@ -197,7 +201,7 @@ public class WAVLTree {
 	}
 	
 	/**
-	 * checks the differences as shown in the WAVL presentation, slide 47
+	 * checks the differences for delete rebalancing as shown in the WAVL presentation, slide 47
 	 * the returned array stores the "outer" grandchild diff (same side as child)
 	 * in index 1, and the "inner" grandchild diff (opposite from child) in index 0
 	 * e.g. if side='r', then outer is x.right.right and inner is x.right.left
@@ -217,13 +221,18 @@ public class WAVLTree {
 		}
 		return diffs;
 	}
-
+	
+	/**
+	 * performs rebalance after deletion, case 1
+	 * @param x the problematic node (the one which has the illegal rank difference)
+	 * @return 1 + the number of rebalance steps taken after, in case of non terminal demotion.
+	 */
 	private int dCaseOneRebalance(WAVLNode x) {
 		x.demote();
 		
 		return 1+deleteRebalance(x.getParent());
 	}
-
+	
 	private int dCaseTwoRebalance(WAVLNode x, char side) {
 		x.demote();
 		if (side == 'r') {
@@ -239,11 +248,11 @@ public class WAVLTree {
 	private int dCaseThreeRebalance(WAVLNode x, char side) {
 		x.demote();
 		if (side == 'r') {
-			x.getRight().demote();
+			x.getRight().promote();
 			rotateLeft(x);
 		}
 		else {
-			x.getLeft().demote();
+			x.getLeft().promote();
 			rotateRight(x);
 		}
 		if (x.isLeaf() && x.getRank() == 1) {
@@ -251,12 +260,31 @@ public class WAVLTree {
 		}
 		return 1;
 	}
-
+	
 	private int dCaseFourRebalance(WAVLNode x, char side) {
-		// TODO Auto-generated method stub
-		return 0;
+		x.demote();
+		x.demote();
+		if (side == 'r') {
+			x.getRight().demote();
+			x.getRight().getLeft().promote();
+			x.getRight().getLeft().promote();
+			rotateRight(x.getRight());
+			rotateLeft(x);
+		}
+		else {
+			x.getLeft().demote();
+			x.getLeft().getRight().demote();
+			x.getLeft().getRight().demote();
+			rotateLeft(x.getLeft());
+			rotateRight(x);
+		}
+		return 1;
 	}
-
+	/**
+	 * performs rebalancing after insertion, case 1
+	 * @param the "problematic" node (the one with the invalid rank difference)
+	 * @return 1+number of rebalances done after (in case problem moved up)
+	 */
 	private int iCaseOneRebalance(WAVLNode x) {
 		x.promote();
 		return 1+insertRebalance(x.getParent());
