@@ -149,11 +149,10 @@ public class WAVLTree {
 	 * @return the number of rebalance steps
 	 */
 	private int insertRebalance(WAVLNode x) {
-		
-		x = x.getParent(); // we actually work on the parent-child edge
 		if (x == null) { // should only happen if we've reached the root
 			return 0;
 		}
+		x = x.getParent(); // we actually work on the parent-child edge
 		int ldiff = x.getRankDiff('l');
 		int rdiff = x.getRankDiff('r');
 		if (rdiff * ldiff != 0) {
@@ -385,7 +384,7 @@ public class WAVLTree {
 		WAVLNode y = x.getLeft();
 		if (x.getParent() != null && x.key > x.getParent().key) {
 			x.getParent().setRight(y);
-		} else if (x.getParent() != null) { // y is left child of its parent
+		} else if (x.getParent() != null) { // x is left child of its parent
 			x.getParent().setLeft(y);
 		}
 		y.setParent(x.getParent());
