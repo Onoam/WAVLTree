@@ -226,13 +226,20 @@ public class WAVLTree {
 	 * performs rebalance after deletion, case 1
 	 * @param x the problematic node (the one which has the illegal rank difference)
 	 * @return 1 + the number of rebalance steps taken after, in case of non terminal demotion.
+	 * @Complexity O(logn) worst case, O(1) amortised (as shown in class)
 	 */
 	private int dCaseOneRebalance(WAVLNode x) {
 		x.demote();
 		
 		return 1+deleteRebalance(x.getParent());
 	}
-	
+	/**
+	 * performs rebalance after deletion, case 2
+	 * @param x the problematic node
+	 * @param side the side that needs to be demoted (not the 3 rank diff side)
+	 * @return 2 + the number of rebalance steps taken after, in case of non terminal demotion.
+	 * @Complexity O(logn) worst-case, O(1) amortised (as shown in class)
+	 */
 	private int dCaseTwoRebalance(WAVLNode x, char side) {
 		x.demote();
 		if (side == 'r') {
@@ -241,10 +248,17 @@ public class WAVLTree {
 		else {
 			x.getLeft().demote();
 		}
-		return 1+deleteRebalance(x.getParent());
+		return 2+deleteRebalance(x.getParent());
 		
 	}
-	
+	/**
+	 * performs rebalance after deletion, case 3
+	 * also handles demotions
+	 * @param x the problematic node
+	 * @param side the side that needs to be rotated (not the 3 rank diff side)
+	 * @return 3 the number of rebalance steps.
+	 * @Complexity O(1)
+	 */
 	private int dCaseThreeRebalance(WAVLNode x, char side) {
 		x.demote();
 		if (side == 'r') {
@@ -258,9 +272,18 @@ public class WAVLTree {
 		if (x.isLeaf() && x.getRank() == 1) {
 			x.demote();
 		}
-		return 1;
+		return 3;
 	}
 	
+	/**
+	 * performs rebalance after deletion, case 4
+	 * also handles demotions
+	 * @param x the problematic node
+	 * @param side the side that needs to be demoted (not the 3 rank diff side)
+	 * @return 7 the number of rebalance steps (3 demotes, 2 promotes, 2 rotations).
+	 * @Complexity O(1)
+	 * 
+	 */
 	private int dCaseFourRebalance(WAVLNode x, char side) {
 		x.demote();
 		x.demote();
@@ -278,8 +301,9 @@ public class WAVLTree {
 			rotateLeft(x.getLeft());
 			rotateRight(x);
 		}
-		return 1;
+		return 7;
 	}
+	
 	/**
 	 * performs rebalancing after insertion, case 1
 	 * @param the "problematic" node (the one with the invalid rank difference)
@@ -294,7 +318,7 @@ public class WAVLTree {
 	 * also handles demotions
 	 * @param x the node that needs to be rotated
 	 * @param side which of x's children need to be rotated with it
-	 * @return 1, 1 rebalance operation
+	 * @return 2, 2 rebalance operations (demote and rotate)
 	 */
 	private int iCaseTwoRebalance(WAVLNode x, char side) {
 		x.demote();
@@ -304,14 +328,14 @@ public class WAVLTree {
 		else {
 			rotateLeft(x);
 		}
-		return 1;
+		return 2;
 	}
 	/**
 	 * rebalances after insertion, case 3.
 	 * also handles demotions
 	 * @param x the node that needs to be double rotated
 	 * @param side which direction (in terms of symmetry) needs to be rotated
-	 * @return 2, 2 rebalance operations
+	 * @return 5, 5 rebalance operations (2 demotes, 1 promote, 2 rotations)
 	 */
 	private int iCaseThreeRebalance(WAVLNode x, char side) {
 		x.demote();
@@ -327,7 +351,7 @@ public class WAVLTree {
 			rotateRight(x.getRight());
 			rotateLeft(x);
 		}
-		return 2;
+		return 5;
 	}
 
 	/**
