@@ -709,16 +709,17 @@ public class WAVLTree {
 			this.size = this.getSubtreeSize();
 		}
 		/**
+		 * @deprecated
 		 * constructor for building a WAVLNode item with only key and value
 		 * DEPRECATED: should use constructor with left and right children 
 		 * (so we can use OUTER_NODE for left and right)
 		 * @param key 
 		 * @param value 
 		 */
-
 		public WAVLNode(int key, String value) {
 			this(key, value, null, null, null, 0);
 		}
+
 		/**
 		 * The constructor for adding with left and right children and parent. 
 		 * Use this constructor for adding a leaf to the tree.
