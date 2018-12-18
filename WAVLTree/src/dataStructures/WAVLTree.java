@@ -308,6 +308,7 @@ public class WAVLTree {
 	 * performs rebalancing after insertion, case 1
 	 * @param the "problematic" node (the one with the invalid rank difference)
 	 * @return 1+number of rebalances done after (in case problem moved up)
+	 * @Complexity O(logn) worst case, O(1) amortised, as in class.
 	 */
 	private int iCaseOneRebalance(WAVLNode x) {
 		x.promote();
