@@ -106,6 +106,18 @@ public class WAVLTree {
 	 * valid (keep its invariants). returns the number of rebalancing operations, or
 	 * 0 if no rebalancing operations were necessary. returns -1 if an item with key
 	 * k already exists in the tree.
+	 * =================
+	 * First, create a new WAVLNode with OUTER_NODEs as children.
+	 * Check if the tree is empty, and if true - set x to root and return 0
+	 * If tree isn't empty, use treeInsert to insert the node.
+	 * If treeInsert found that the key is already in the tree - return -1
+	 * Else, x was already inserted in treeInsert, so we need to
+	 * updateSizeUp(x), and then rebalance(x)
+	 * @Complexity O(treeInsert + updateSize + rebalance) =
+	 * 				O(log n) WC, O(1) amortized
+	 * @param k - int key of WAVLNode to insert
+	 * @param i - String info of WAVLNode to insert
+	 * @return the number of rebalance operations after inserting x
 	 */
 	public int insert(int k, String i) {
 		WAVLNode x = new WAVLNode(k, i, null, OUTER_NODE, OUTER_NODE);
@@ -114,9 +126,10 @@ public class WAVLTree {
 			return 0;
 		} else {
 			int counter = treeInsert(getRoot(), x);
-			if (counter == -1) {
-				return counter;
+			if (counter == -1) { // key k is already in the tree
+				return counter; // counter = -1
 			} else {
+				updateSizeUp(x);
 				return rebalance(x);
 			}
 		}
@@ -127,12 +140,22 @@ public class WAVLTree {
 		return 0;
 	}
 
+	/**
+	 * Function to insert the node into the tree.
+	 * Uses treePosition to find parent to insert under (y)
+	 * @Complexity O(treePosition) = O(log n), n # nodes in tree
+	 * @param root - WAVLNode root of tree to insert into
+	 * @param z - WAVLNode to insert
+	 * @return int, for counting purposes
+	 */
 	private int treeInsert(WAVLNode root, WAVLNode z) {
-		WAVLNode y = treePosition(root, z.getKey());
-		if (z.getKey() == y.getKey()) {
+		WAVLNode y = treePosition(root, z.getKey()); // parent to inser under
+		if (z.getKey() == y.getKey()) { // z is already in the tree
 			return -1;
 		}
-		z.parent = y;
+		z.parent = y; // set z's parent
+
+		// insert z into the right position and return
 		if (z.getKey() < y .getKey()) {
 			y.left = z;
 			return 0;
@@ -149,6 +172,17 @@ public class WAVLTree {
 	 * must remain valid (keep its invariants). returns the number of rebalancing
 	 * operations, or 0 if no rebalancing operations were needed. returns -1 if an
 	 * item with key k was not found in the tree.
+	 * =================
+	 * First, perform a treeSearch (according to pseudo-code from slides)
+	 * If treeSearch return an OUTER_NODE, then the node isn't in the tree
+	 * If treeSearch return a normal node, we save it's parent for rebalancing,
+	 * then remove(z), and finally rebalance the tree.
+	 * remove and rebalance are used as private functions, for reabability,
+	 * and to have rebalance count the number of rebalance ops.
+	 * @Complexity O(remove + rebalance) = O(updateSizeUp + rebalance) =
+	 * 				= O(log n + rebalance) worst case. Amortized - O(1)
+	 * @param k - int key to search for in the tree
+	 * @return number of rebalancing operations.
 	 */
 	public int delete(int k) {
 		WAVLNode z = treeSearch(getRoot(), k);
@@ -156,54 +190,72 @@ public class WAVLTree {
 			return -1;
 		}
 		WAVLNode y = successor(z);
-		remove(z);
-		return rebalance(y);
+		remove(z); // This function deals with updating the sizes when removing
+		return rebalance(y); // rebalance counts the # rebalance ops
 	}
 
 	/**
 	 * remove a node from the tree.
+	 * Three cases:
+	 * 		1) Node is a leaf
+	 * 		2) Node's successor is his right child
+	 * 		3) Node's successor is not his right child
 	 * @Complexity O(updateSizeUp) = O(log n)
 	 * 				Each option does constant # operations + updateSizeUp
 	 * @param node
 	 */
 	private void remove(WAVLNode node) {
 		WAVLNode succ;
+		// Case 1
 		// If leaf of tree, find side of parent and remove
 		if (node.getRight().getRank() == -1 && node.getLeft().getRank() == -1) {
 			removeLeaf(node); // O(1)
 		} else { // Is an inner node
 			succ = successor(node);
+			// Case 2
 			if (succ == node.getRight()) { // O(1)
 				/*
-				* If this is his right child, then we need to:
+				* If succ is node's right child, then we need to:
 				* 1) make node's parent the parent of succ
 				* 2) make node's left child the child of succ
 				* 3) attach succ to node's parent based on side
 				* 4) update the size of succ (and this will update
 				*    the size of parent)
 				* */
-				succ.parent = node.getParent();
-				succ.left = node.getLeft();
-				if (side(node) == 0) {
+				succ.parent = node.getParent(); // (1)
+				succ.left = node.getLeft(); // (2)
+				if (side(node) == 0) { // (3)
 					node.getParent().left = succ;
 				} else if (side(node) == 1) {
 					node.getParent().right = succ;
 				}
+				updateSizeUp(succ); // (4)
+			// Case 3
 			} else {
 				/*
-				* If this isn't his right child then:
-				* 1) If he has a right child, set it as the left child of succ's parent
-				* 2) set succ.right and succ.left to node.right and node.left repectively
-				* 3) set succ.parent to node.parent*/
-				succ.getParent().left = succ.getRight();
-				succ.parent = node.getParent();
-				succ.right = node.getRight();
-				succ.left = node.getLeft();
-				succ.rank = node.getRank();
-				succ.size = node.getSubtreeSize();
+				* If succ isn't node's right child then:
+				* 1) If succ has a right child, set it as the left child of succ's parent
+				* 		## succ can't have a left child,
+				* 		## because then it would be the successor
+				* 2) update the sizes starting from succ's right child
+				* 		## this ensures that the size succ get's at stage 7
+				* 	 	## is the correct size.
+				* 3) set succ.parent to node.parent
+				* 4) set succ.right to node.right
+				* 5) set succ.left to node.left
+				* 6) set succ.rank to node.rank
+				* 7) set succ.size to node.size
+				* */
+				succ.getParent().left = succ.getRight(); // (1)
+				updateSizeUp(succ.getParent().left); // (2)
+				succ.parent = node.getParent(); // (3)
+				succ.right = node.getRight(); // (4)
+				succ.left = node.getLeft(); // (5)
+				succ.rank = node.getRank(); // (6)
+				succ.size = node.getSubtreeSize(); // (7)
 			}
 		}
-		node = null;
+		node = null; // actually deleting the node, to be removed by GC
 
 	}
 
@@ -585,16 +637,17 @@ public class WAVLTree {
 			this.size = this.getSubtreeSize();
 		}
 		/**
+		 * @deprecated
 		 * constructor for building a WAVLNode item with only key and value
 		 * DEPRECATED: should use constructor with left and right children
 		 * (so we can use OUTER_NODE for left and right)
 		 * @param key
 		 * @param value
 		 */
-
 		public WAVLNode(int key, String value) {
 			this(key, value, null, null, null, 0);
 		}
+
 		/**
 		 * The constructor for adding with left and right children and parent.
 		 * Use this constructor for adding a leaf to the tree.
