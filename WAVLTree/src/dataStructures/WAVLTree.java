@@ -139,8 +139,8 @@ public class WAVLTree {
 		if (x == null) { // should only happen if we've reached the root
 			return 0;
 		}
-		int ldiff = x.getRank() - x.getLeft().getRank();
-		int rdiff = x.getRank() - x.getRight().getRank();
+		int ldiff = x.getRankDiff('l');
+		int rdiff = x.getRankDiff('r');
 		if (rdiff * ldiff != 0) {
 			return 0; // tree is valid WAVL iff rdiff,ldiff!=0
 		}
@@ -154,8 +154,8 @@ public class WAVLTree {
 		}
 		assert ldiff == 2 || rdiff == 2;
 		//case 2, established that x is (0,2) node
-		if ((side == 'l' && x.getLeft().getRank()-x.getLeft().getLeft().getRank() == 1) ||
-			 (side == 'r' && x.getRight().getRank() - x.getRight().getRight().getRank() == 1)) {
+		if ((side == 'l' && x.getLeft().getRankDiff('l') == 1) ||
+			 (side == 'r' && x.getRight().getRankDiff('r')== 1)) {
 			return iCaseTwoRebalance(x, side);
 		}
 		//case 3, the only remaining option
@@ -176,8 +176,8 @@ public class WAVLTree {
 		if (x.getRank() == 1 && x.isLeaf()) {//x is leaf
 			return dCaseOneRebalance(x); //demotion, equivalent to other type of case-one
 		}
-		int ldiff = x.getRank() - x.getLeft().getRank();
-		int rdiff = x.getRank() - x.getRight().getRank();
+		int ldiff = x.getRankDiff('l');
+		int rdiff = x.getRankDiff('r');
 		char side = ldiff == 3? 'r':'l'; // choose which side we work on 
 		if (Math.max(ldiff, rdiff)<3) {
 			return 0; //tree is valid WAVL, no rank 2 leaf, no rank diff>=3
@@ -212,12 +212,12 @@ public class WAVLTree {
 	private int[] checkDiffs(WAVLNode x, char side) {
 		int[] diffs = new int[2];
 		if (side == 'r') {
-			diffs[0] = x.getRight().getRank() - x.getRight().getLeft().getRank();
-			diffs[1] = x.getRight().getRank() - x.getRight().getRight().getRank();
+			diffs[0] = x.getRight().getRankDiff('l');
+			diffs[1] = x.getRight().getRankDiff('r');
 		}
 		else {
-			diffs[0] = x.getLeft().getRank() - x.getLeft().getRight().getRank();
-			diffs[1] = x.getLeft().getRank() - x.getLeft().getLeft().getRank();
+			diffs[0] = x.getLeft().getRankDiff('r');
+			diffs[1] = x.getLeft().getRankDiff('l');
 		}
 		return diffs;
 	}
@@ -853,6 +853,20 @@ public class WAVLTree {
 			this.left = left;
 			this.rank = rank;
 			this.size = this.getSubtreeSize();
+		}
+		
+		/**
+		 * Calculates the difference between the node and node.side (right or left)
+		 * @param side the side to check
+		 * @return the difference
+		 * @Complexity O(1)
+		 */
+		public int getRankDiff(char side) {
+			assert this.getRank() != OUTER_NODE_RANK;
+			assert (this.getLeft() != null && this.getRight() != null);
+			if(side == 'r')
+				return getRank() - getRight().getRank();
+			return getRank() - getLeft().getRank();
 		}
 		/**
 		 * @pre not called on OUTER_NODE
