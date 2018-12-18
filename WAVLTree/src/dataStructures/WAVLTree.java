@@ -153,6 +153,9 @@ public class WAVLTree {
 			return 0;
 		}
 		x = x.getParent(); // we actually work on the parent-child edge
+		if (x == null) {
+			return 0;
+		}
 		int ldiff = x.getRankDiff('l');
 		int rdiff = x.getRankDiff('r');
 		if (rdiff * ldiff != 0) {
@@ -876,7 +879,7 @@ public class WAVLTree {
 
 	public static int hight(WAVLNode n) {
 
-		if (n.rank == WAVLNode.OUTER_NODE_RANK) {
+		if (n == null || n.rank == WAVLNode.OUTER_NODE_RANK) {
 			return 0;
 		}
 
@@ -966,7 +969,36 @@ public class WAVLTree {
 		}
 
 	}
-	public static void notmain2(String[] args) {
+	public static void notmain3(String[] args) {
+		WAVLTree t = new WAVLTree();
+		WAVLNode a = t.new WAVLNode(2, "a", t.root, t.OUTER_NODE, t.OUTER_NODE);
+		WAVLNode b = t.new WAVLNode(1, "b", a, t.OUTER_NODE, t.OUTER_NODE);
+		a.setLeft(b);
+		WAVLNode c = t.new WAVLNode(6, "c", a, t.OUTER_NODE, t.OUTER_NODE);
+		WAVLNode d = t.new WAVLNode(8, "d", c, t.OUTER_NODE, t.OUTER_NODE);
+		WAVLNode e = t.new WAVLNode(4, "e", c, t.OUTER_NODE, t.OUTER_NODE);
+		c.setRight(d);
+		c.setLeft(e);
+		a.setRight(c);
+		System.out.format("father is %s, right is %s, left is %s %n %n", a.value,a.getRight().value,a.getLeft().value);
+		System.out.format("one row down: from left to right %s %s %s %s %n", a.getLeft().getLeft().value,
+				a.getLeft().getRight().value, a.getRight().getLeft().value, a.getRight().getRight().value);
+		t.rotateLeft(a);
+		t.root = c;
+		WAVLNode r = t.root;
+		System.out.format("father is %s, right is %s, left is %s %n %n", t.root.value, t.root.getRight().value,t.root.getLeft().value);
+		System.out.format("one row down: from left to right %s %s %s %s %n", r.getLeft().getLeft().value,
+			r.getLeft().getRight().value, r.getRight().getLeft().value, r.getRight().getRight().value);
+		t.rotateRight(c);
+		t.root = a;
+		r = t.root;
+		System.out.format("father is %s, right is %s, left is %s %n %n", t.root.value, t.root.getRight().value,t.root.getLeft().value);
+		System.out.format("one row down: from left to right %s %s %s %s %n", r.getLeft().getLeft().value,
+			r.getLeft().getRight().value, r.getRight().getLeft().value, r.getRight().getRight().value);
+		
+		
+	}
+	public static void main(String[] args) {
 		WAVLTree t = new WAVLTree();
 	       while (true) {
 	           System.out.println("(1) Insert");
@@ -1091,7 +1123,7 @@ public class WAVLTree {
 		 * The default constructor for the WAVLNode class. Constructs an external node.
 		 */
 		public WAVLNode() {
-			this(OUTER_NODE_KEY, null, null, null, null, OUTER_NODE_RANK);
+			this(OUTER_NODE_KEY, "outerNODE", null, null, null, OUTER_NODE_RANK); //TODO: revert!
 		}
 
 		/**
@@ -1143,11 +1175,15 @@ public class WAVLTree {
 		 * @Complexity O(1).
 		 */
 		public void promote() {
-			setRank(getRank() + 1);
+			if (this.getRank() != -1) {				
+				setRank(getRank() + 1);
+			}
 		}
 
 		public void demote() {
-			setRank(getRank() - 1);
+			if (this.getRank() != -1) {
+				setRank(getRank() - 1);				
+			}
 		}
 
 		/**
