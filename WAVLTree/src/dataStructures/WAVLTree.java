@@ -443,11 +443,12 @@ public class WAVLTree {
 	 * item with key k was not found in the tree.
 	 * =================
 	 * First, perform a treeSearch (according to pseudo-code from slides)
-	 * If treeSearch return an OUTER_NODE, then the node isn't in the tree
+	 * If treeSearch return an OUTER_NODE, then the node isn't in the tree.
+	 * If the node is the root, we remove root. with specific function
 	 * If treeSearch return a normal node, we save it's parent for rebalancing,
 	 * then remove(z), and finally rebalance the tree.
-	 * remove and rebalance are used as private functions, for reabability,
-	 * and to have rebalance count the number of rebalance ops.
+	 * remove, removeRoot and rebalance are used as private functions,
+	 * for reabability, and have rebalance count the number of rebalance ops.
 	 * @Complexity O(remove + rebalance) = O(updateSizeUp + rebalance) =
 	 * 				= O(log n + rebalance) worst case. Amortized - O(1)
 	 * @param k - int key to search for in the tree
@@ -458,9 +459,14 @@ public class WAVLTree {
 		if (z.getRank() == -1) {
 			return -1;
 		}
-		WAVLNode y = z.getParent();
-		remove(z);
-		return deleteRebalance(y);
+		if (z == getRoot()) {
+			removeRoot();
+			return deleteRebalance(getRoot());
+		} else {
+			WAVLNode y = z.getParent();
+			remove(z);
+			return deleteRebalance(y);
+		}
 	}
 
 	/**
@@ -477,7 +483,7 @@ public class WAVLTree {
 		WAVLNode succ;
 		// Case 1
 		// If leaf of tree, find side of parent and remove
-		if (node.getRight().getRank() == -1 && node.getLeft().getRank() == -1) {
+		if (node.isLeaf()) {
 			//TODO Replace with IsLeaf() method
 			removeLeaf(node); // O(1)
 		} else { // Is an inner node
@@ -527,6 +533,69 @@ public class WAVLTree {
 		}
 		node = null; // actually deleting the node, to be removed by GC
 
+	}
+
+	/**
+	 * Removes the root of the tree.
+	 * 4 cases:
+	 * 1) The tree is of size 1 - just set the root to an empty node
+	 * 2) The root has a left child and no right child -
+	 * 			set the left child as the root
+	 * 		## There won't be a case where the left child has children -
+	 * 			because then an unbalanced tree
+	 * 3) The successor for root is the right child:
+	 * 		set the left child or right as the left child of root,
+	 * 	    and set the new root
+	 * 4) Same as case 3 from remove, just that instead of setting the parent,
+	 *    set the root of the tree.
+	 */
+	private void removeRoot() {
+		WAVLNode newRoot;
+		// Case 1
+		if (root.isLeaf()) {
+			this.root = new WAVLNode();
+
+		}
+		// Case 2
+		else if (getRoot().getRight().getRank() == WAVLNode.OUTER_NODE_RANK &&
+				getRoot().getLeft().getRank() != WAVLNode.OUTER_NODE_RANK) {
+			this.root = this.getRoot().getLeft();
+		}
+		// Case 3 + 4
+		else {
+			newRoot = successor(root);
+			// Case 3
+			if (newRoot == getRoot().getRight()) {
+				newRoot.setLeft() = getRoot().getLeft();
+				this.root = newRoot;
+				getRoot().getSubtreeSize();
+			}
+			// Case 4
+			else {
+				/*
+				 * If newRoot isn't root's right child then:
+				 * 1) If newRoot has a right child, set it as the
+				 *    left child of newRoot's parent
+				 * 		## succ can't have a left child,
+				 * 		## because then it would be the successor
+				 * 2) update the sizes starting from newRoot's right child
+				 * 		## this ensures that the size newRoot get's at stage 7
+				 * 	 	## is the correct size.
+				 * 3) set newRoot.right to root.right
+				 * 4) set newRoot.left to root.left
+				 * 5) set newRoot.rank to root.rank
+				 * 6) set newRoot.size to root.size
+				 * 7) set newRoot as this.root
+				 * */
+				newRoot.getParent().setLeft(newRoot.getRight()); // (1)
+				updateSizeUp(newRoot.getParent().getLeft()); // (2)
+				newRoot.setRight(getRoot().getRight()); // (3)
+				newRoot.setLeft(getRoot().getLeft()); // (4)
+				newRoot.rank = getRoot().getRank(); // (5)
+				newRoot.size = getRoot().getSubtreeSize(); // (6)
+				this.root = newRoot; // (7)
+			}
+		}
 	}
 
 	/**
@@ -926,7 +995,7 @@ public class WAVLTree {
 		 */
 		public boolean isLeaf() {
 			// TODO Auto-generated method stub
-			return getLeft().getRank() == OUTER_NODE_RANK && getLeft().getRank() == OUTER_NODE_RANK;
+			return getLeft().getRank() == OUTER_NODE_RANK && getRight().getRank() == OUTER_NODE_RANK;
 		}
 		/**
 		 * @deprecated
