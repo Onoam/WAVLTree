@@ -499,7 +499,7 @@ public class WAVLTree {
 				 * If succ is node's right child, then we need to: 1) make node's parent the
 				 * parent of succ 2) make node's left child the child of succ 3) attach succ to
 				 * node's parent based on side 4) update the size of succ (and this will update
-				 * the size of parent)
+				 * the size of parent) 5) set succ.rank to node.rank
 				 */
 				succ.setParent(node.getParent()); // (1)
 				succ.setLeft(node.getLeft()); // (2)
@@ -508,6 +508,7 @@ public class WAVLTree {
 				} else if (side(node) == 1) {
 					node.getParent().setRight(succ);
 				}
+				succ.setRank(node.getRank()); // (5)
 				updateSizeUp(succ); // (4)
 				// Case 3
 			} else {
