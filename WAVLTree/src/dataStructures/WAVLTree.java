@@ -1093,7 +1093,7 @@ public class WAVLTree {
 		 */
 		public boolean isLeaf() {
 			// TODO Auto-generated method stub
-			return getLeft().getRank() == OUTER_NODE_RANK && getLeft().getRank() == OUTER_NODE_RANK;
+			return getRight().getRank() == OUTER_NODE_RANK && getLeft().getRank() == OUTER_NODE_RANK;
 		}
 
 		/**
