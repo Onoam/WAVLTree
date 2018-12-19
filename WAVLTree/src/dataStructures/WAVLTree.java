@@ -136,7 +136,7 @@ public class WAVLTree {
 			if (counter == -1) { // key k is already in the tree
 				return counter; // counter = -1
 			} else {
-				return insertRebalance(x);
+				return insertRebalance(x.getParent());
 			}
 		}
 	}
@@ -145,15 +145,11 @@ public class WAVLTree {
 	 * this method is called after inserting. Checks which rebalance case we are in
 	 * and calls the appropriate rebalance helper-method.
 	 * 
-	 * @param x the node that was inserted.
+	 * @param x the father of the node that was inserted.
 	 * @return the number of rebalance steps
 	 */
 	private int insertRebalance(WAVLNode x) {
 		if (x == null) { // should only happen if we've reached the root
-			return 0;
-		}
-		x = x.getParent(); // we actually work on the parent-child edge
-		if (x == null) {
 			return 0;
 		}
 		int ldiff = x.getRankDiff('l');
@@ -176,6 +172,58 @@ public class WAVLTree {
 		}
 		// case 3, the only remaining option
 		return iCaseThreeRebalance(x, side);
+	}
+
+	/**
+	 * performs rebalancing after insertion, case 1
+	 * 
+	 * @param the "problematic" node (the one with the invalid rank difference)
+	 * @return 1+number of rebalances done after (in case problem moved up)
+	 * @Complexity O(logn) worst case, O(1) amortised, as in class.
+	 */
+	private int iCaseOneRebalance(WAVLNode x) {
+		x.promote();
+		return 1 + insertRebalance(x.getParent());
+	}
+
+	/**
+	 * rebalances after insertion, case 2. also handles demotions
+	 * 
+	 * @param x    the node that needs to be rotated
+	 * @param side which of x's children need to be rotated with it
+	 * @return 2, 2 rebalance operations (demote and rotate)
+	 */
+	private int iCaseTwoRebalance(WAVLNode x, char side) {
+		x.demote();
+		if (side == 'l') {
+			rotateRight(x);
+		} else {
+			rotateLeft(x);
+		}
+		return 2;
+	}
+
+	/**
+	 * rebalances after insertion, case 3. also handles demotions
+	 * 
+	 * @param x    the node that needs to be double rotated
+	 * @param side which direction (in terms of symmetry) needs to be rotated
+	 * @return 5, 5 rebalance operations (2 demotes, 1 promote, 2 rotations)
+	 */
+	private int iCaseThreeRebalance(WAVLNode x, char side) {
+		x.demote();
+		if (side == 'l') {
+			x.getLeft().demote();
+			x.getLeft().getRight().promote();
+			rotateLeft(x.getLeft());
+			rotateRight(x);
+		} else {
+			x.getRight().demote();
+			x.getRight().getLeft().promote();
+			rotateRight(x.getRight());
+			rotateLeft(x);
+		}
+		return 5;
 	}
 
 	/**
@@ -298,8 +346,8 @@ public class WAVLTree {
 	}
 
 	/**
-	 * performs rebalance after deletion, case 4 also handles demotions
-	 * 
+	 * performs rebalance after deletion, case 4
+	 * also handles demotions
 	 * @param x    the problematic node
 	 * @param side the side that needs to be demoted (not the 3 rank diff side)
 	 * @return 7 the number of rebalance steps (3 demotes, 2 promotes, 2 rotations).
@@ -323,58 +371,6 @@ public class WAVLTree {
 			rotateRight(x);
 		}
 		return 7;
-	}
-
-	/**
-	 * performs rebalancing after insertion, case 1
-	 * 
-	 * @param the "problematic" node (the one with the invalid rank difference)
-	 * @return 1+number of rebalances done after (in case problem moved up)
-	 * @Complexity O(logn) worst case, O(1) amortised, as in class.
-	 */
-	private int iCaseOneRebalance(WAVLNode x) {
-		x.promote();
-		return 1 + insertRebalance(x.getParent());
-	}
-
-	/**
-	 * rebalances after insertion, case 2. also handles demotions
-	 * 
-	 * @param x    the node that needs to be rotated
-	 * @param side which of x's children need to be rotated with it
-	 * @return 2, 2 rebalance operations (demote and rotate)
-	 */
-	private int iCaseTwoRebalance(WAVLNode x, char side) {
-		x.demote();
-		if (side == 'l') {
-			rotateRight(x);
-		} else {
-			rotateLeft(x);
-		}
-		return 2;
-	}
-
-	/**
-	 * rebalances after insertion, case 3. also handles demotions
-	 * 
-	 * @param x    the node that needs to be double rotated
-	 * @param side which direction (in terms of symmetry) needs to be rotated
-	 * @return 5, 5 rebalance operations (2 demotes, 1 promote, 2 rotations)
-	 */
-	private int iCaseThreeRebalance(WAVLNode x, char side) {
-		x.demote();
-		if (side == 'l') {
-			x.getLeft().demote();
-			x.getLeft().getRight().promote();
-			rotateLeft(x.getLeft());
-			rotateRight(x);
-		} else {
-			x.getRight().demote();
-			x.getRight().getLeft().promote();
-			rotateRight(x.getRight());
-			rotateLeft(x);
-		}
-		return 5;
 	}
 
 	/**
