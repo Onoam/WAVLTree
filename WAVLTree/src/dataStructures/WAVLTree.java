@@ -392,6 +392,9 @@ public class WAVLTree {
 		x.setParent(y);
 		x.updateSubtreeSize();
 		y.updateSubtreeSize();
+		if (x == this.getRoot()) {
+			this.root = y;
+		}
 	}
 
 	/**
@@ -413,6 +416,9 @@ public class WAVLTree {
 		x.setParent(y);
 		x.updateSubtreeSize();
 		y.updateSubtreeSize();
+		if (x == this.getRoot()) {
+			this.root = y;
+		}
 
 	}
 
