@@ -1001,7 +1001,7 @@ public class WAVLTree {
 		
 		
 	}
-	public static void main(String[] args) {
+	public static void notmain2(String[] args) {
 		WAVLTree t = new WAVLTree();
 	       while (true) {
 	           System.out.println("(1) Insert");
