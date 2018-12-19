@@ -566,7 +566,7 @@ public class WAVLTree {
 			newRoot = successor(root);
 			// Case 3
 			if (newRoot == getRoot().getRight()) {
-				newRoot.setLeft() = getRoot().getLeft();
+				newRoot.setLeft(getRoot().getLeft());
 				this.root = newRoot;
 				getRoot().getSubtreeSize();
 			}
