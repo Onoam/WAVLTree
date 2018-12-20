@@ -535,10 +535,79 @@ public class WAVLTree {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Function to remove leaf nodes. Used for readability. If the node has no
 	 * parent, we don't do anything, because in remove we make the node null at the
 	 * end.
 	 * 
+=======
+	 * Removes the root of the tree.
+	 * 4 cases:
+	 * 1) The tree is of size 1 - just set the root to an empty node
+	 * 2) The root has a left child and no right child -
+	 * 			set the left child as the root
+	 * 		## There won't be a case where the left child has children -
+	 * 			because then an unbalanced tree
+	 * 3) The successor for root is the right child:
+	 * 		set the left child or right as the left child of root,
+	 * 	    and set the new root
+	 * 4) Same as case 3 from remove, just that instead of setting the parent,
+	 *    set the root of the tree.
+	 */
+	private void removeRoot() {
+		WAVLNode newRoot; //TODO remove this comment
+		// Case 1
+		if (root.isLeaf()) {
+			this.root = new WAVLNode();
+
+		}
+		// Case 2
+		else if (getRoot().getRight().getRank() == WAVLNode.OUTER_NODE_RANK &&
+				getRoot().getLeft().getRank() != WAVLNode.OUTER_NODE_RANK) {
+			this.root = this.getRoot().getLeft();
+		}
+		// Case 3 + 4
+		else {
+			newRoot = successor(root);
+			// Case 3
+			if (newRoot == getRoot().getRight()) {
+				newRoot.setLeft(getRoot().getLeft());
+				this.root = newRoot;
+				getRoot().getSubtreeSize();
+			}
+			// Case 4
+			else {
+				/*
+				 * If newRoot isn't root's right child then:
+				 * 1) If newRoot has a right child, set it as the
+				 *    left child of newRoot's parent
+				 * 		## succ can't have a left child,
+				 * 		## because then it would be the successor
+				 * 2) update the sizes starting from newRoot's right child
+				 * 		## this ensures that the size newRoot get's at stage 7
+				 * 	 	## is the correct size.
+				 * 3) set newRoot.right to root.right
+				 * 4) set newRoot.left to root.left
+				 * 5) set newRoot.rank to root.rank
+				 * 6) set newRoot.size to root.size
+				 * 7) set newRoot as this.root
+				 * */
+				newRoot.getParent().setLeft(newRoot.getRight()); // (1)
+				updateSizeUp(newRoot.getParent().getLeft()); // (2)
+				newRoot.setRight(getRoot().getRight()); // (3)
+				newRoot.setLeft(getRoot().getLeft()); // (4)
+				newRoot.rank = getRoot().getRank(); // (5)
+				newRoot.size = getRoot().getSubtreeSize(); // (6)
+				this.root = newRoot; // (7)
+			}
+		}
+	}
+
+	/**
+	 * Function to remove leaf nodes. Used for readability.
+	 * If the node has no parent, we don't do anything, because in remove
+	 * we make the node null at the end.
+>>>>>>> master
 	 * @Complexity O(updateSizeUp) = O(log n)
 	 * @param node - the WAVLNode to remove
 	 */
