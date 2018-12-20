@@ -4,7 +4,7 @@ import java.util.Random;
 
 @SuppressWarnings({"Convert2Lambda", "Anonymous2MethodRef", "RedundantTypeArguments"})
 public class ExTester
-{
+{ // TODO remove this comment
 	//ActualWAVLTree fakeTree;
     ActualWAVLTree actualTree;
     WAVLTree wavlTree;
