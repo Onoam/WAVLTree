@@ -1034,32 +1034,6 @@ public class WAVLTree {
 		}
 
 	}
-	public static void notmain3(String[] args) {
-		WAVLTree t = new WAVLTree();
-		WAVLNode a = t.new WAVLNode(2, "a", t.root, t.OUTER_NODE, t.OUTER_NODE);
-		WAVLNode b = t.new WAVLNode(1, "b", a, t.OUTER_NODE, t.OUTER_NODE);
-		a.setLeft(b);
-		WAVLNode c = t.new WAVLNode(6, "c", a, t.OUTER_NODE, t.OUTER_NODE);
-		WAVLNode d = t.new WAVLNode(8, "d", c, t.OUTER_NODE, t.OUTER_NODE);
-		WAVLNode e = t.new WAVLNode(4, "e", c, t.OUTER_NODE, t.OUTER_NODE);
-		c.setRight(d);
-		c.setLeft(e);
-		a.setRight(c);
-		System.out.format("father is %s, right is %s, left is %s %n %n", a.value,a.getRight().value,a.getLeft().value);
-		System.out.format("one row down: from left to right %s %s %s %s %n", a.getLeft().getLeft().value,
-				a.getLeft().getRight().value, a.getRight().getLeft().value, a.getRight().getRight().value);
-		t.rotateLeft(a);
-		t.root = c;
-		WAVLNode r = t.root;
-		System.out.format("father is %s, right is %s, left is %s %n %n", t.root.value, t.root.getRight().value,t.root.getLeft().value);
-		System.out.format("one row down: from left to right %s %s %s %s %n", r.getLeft().getLeft().value,
-			r.getLeft().getRight().value, r.getRight().getLeft().value, r.getRight().getRight().value);
-		t.rotateRight(c);
-		t.root = a;
-		r = t.root;
-		System.out.format("father is %s, right is %s, left is %s %n %n", t.root.value, t.root.getRight().value,t.root.getLeft().value);
-		System.out.format("one row down: from left to right %s %s %s %s %n", r.getLeft().getLeft().value,
-			r.getLeft().getRight().value, r.getRight().getLeft().value, r.getRight().getRight().value);
 		
 		
 	}
