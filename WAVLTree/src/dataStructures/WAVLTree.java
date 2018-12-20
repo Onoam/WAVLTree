@@ -535,11 +535,6 @@ public class WAVLTree {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Function to remove leaf nodes. Used for readability. If the node has no
-	 * parent, we don't do anything, because in remove we make the node null at the
-	 * end.
-	 * 
 	 * Removes the root of the tree.
 	 * 4 cases:
 	 * 1) The tree is of size 1 - just set the root to an empty node
@@ -1068,7 +1063,7 @@ public class WAVLTree {
 		
 		
 	}
-	public static void notmain2(String[] args) {
+	public static void main(String[] args) {
 		WAVLTree t = new WAVLTree();
 	       while (true) {
 	           System.out.println("(1) Insert");
