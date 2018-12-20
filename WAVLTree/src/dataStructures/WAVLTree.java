@@ -1035,8 +1035,10 @@ public class WAVLTree {
 
 	}
 		
-		
-	}
+	/**
+	 * @main
+	 * Make sure to change this method's name (to `notmain` or something) so it isn't called if you use external tester
+	 */
 	public static void main(String[] args) {
 		WAVLTree t = new WAVLTree();
 	       while (true) {
