@@ -682,7 +682,7 @@ public class WAVLTree {
 				parent = node.getParent(); // find the next parent
 			}
 			// the last parent is root, update the size of parent
-			parent.updateSubtreeSize();
+			parent.updateSubtreeSize(); 
 		}
 	}
 
