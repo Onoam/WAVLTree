@@ -550,7 +550,7 @@ public class WAVLTree {
 	 *    set the root of the tree.
 	 */
 	private void removeRoot() {
-		WAVLNode newRoot;
+		WAVLNode newRoot; //TODO remove this comment
 		// Case 1
 		if (root.isLeaf()) {
 			this.root = new WAVLNode();
