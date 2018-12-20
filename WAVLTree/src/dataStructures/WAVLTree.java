@@ -540,7 +540,6 @@ public class WAVLTree {
 	 * parent, we don't do anything, because in remove we make the node null at the
 	 * end.
 	 * 
-=======
 	 * Removes the root of the tree.
 	 * 4 cases:
 	 * 1) The tree is of size 1 - just set the root to an empty node
@@ -555,7 +554,7 @@ public class WAVLTree {
 	 *    set the root of the tree.
 	 */
 	private void removeRoot() {
-		WAVLNode newRoot; //TODO remove this comment
+		WAVLNode newRoot; 
 		// Case 1
 		if (root.isLeaf()) {
 			this.root = new WAVLNode();
@@ -607,7 +606,6 @@ public class WAVLTree {
 	 * Function to remove leaf nodes. Used for readability.
 	 * If the node has no parent, we don't do anything, because in remove
 	 * we make the node null at the end.
->>>>>>> master
 	 * @Complexity O(updateSizeUp) = O(log n)
 	 * @param node - the WAVLNode to remove
 	 */
