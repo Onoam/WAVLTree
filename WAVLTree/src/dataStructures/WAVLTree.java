@@ -656,20 +656,33 @@ public class WAVLTree {
 
 	/**
 	 * If a node is removed ot inserted, update the sizes up the tree.
-	 *
+	 * If node isn't the root of the tree, we go up with a while loop.
+	 * Logic of loop:
+	 * 		We find the parent of the node.
+	 * 		While we haven't reached the root, we set node to parent
+	 * 		(going up the tree) and then update the size of node, and
+	 * 		find the next parent.
+	 * 	Once we reached the root, we exit the loop without
+	 * 	updating the size of root, so we update the size of the last parent.
 	 * @Complexity worst case O(log n) where n is # nodes in tree (height of tree)
 	 * @param node
 	 */
 	private void updateSizeUp(WAVLNode node) {
 		node.updateSubtreeSize(); // update the size of the first node
-		// Then, updates the sizes up the tree
-		WAVLNode parent = node.getParent();
-		// If we reached the root, then we stop.
-		// This ensures that we update the the root last, and then stop.
-		while (node != this.getRoot()) {
-			node = parent;
-			node.updateSubtreeSize();
-			parent = node.getParent();
+
+		// If node isn't the root, then we need to go up the tree
+		if (node != this.getRoot()) {
+			// Find the first parent
+			WAVLNode parent = node.getParent();
+			// If we reached the root, then we stop.
+			// This ensures that we update the the root last, and then stop.
+			while (parent != this.getRoot()) {
+				node = parent; // go up the tree
+				node.updateSubtreeSize(); // update the size of the node
+				parent = node.getParent(); // find the next parent
+			}
+			// the last parent is root, update the size of parent
+			parent.updateSubtreeSize(); 
 		}
 	}
 
