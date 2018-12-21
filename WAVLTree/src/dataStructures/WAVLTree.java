@@ -985,9 +985,6 @@ public class WAVLTree {
 
 		return 1 + Math.max(hight(n.getRight()), hight(n.getLeft()));
 	}
-	private void what() {
-		
-	}
 	
 	public void print(WAVLNode node) {
 
