@@ -563,7 +563,8 @@ public class WAVLTree {
 	 *    set the root of the tree.
 	 */
 	private void removeRoot() {
-		WAVLNode newRoot; 
+		WAVLNode newRoot;
+		WAVLNode currRoot = this.getRoot();
 		// Case 1
 		if (root.isLeaf()) {
 			this.root = new WAVLNode();
@@ -572,6 +573,7 @@ public class WAVLTree {
 		// Case 2
 		else if (getRoot().getRight().getRank() == WAVLNode.OUTER_NODE_RANK &&
 				getRoot().getLeft().getRank() != WAVLNode.OUTER_NODE_RANK) {
+			getRoot().getLeft().setParent(getRoot().getParent());
 			this.root = this.getRoot().getLeft();
 		}
 		// Case 3 + 4
@@ -580,6 +582,7 @@ public class WAVLTree {
 			// Case 3
 			if (newRoot == getRoot().getRight()) {
 				newRoot.setLeft(getRoot().getLeft());
+				newRoot.setParent(getRoot().getParent());
 				this.root = newRoot;
 				getRoot().getSubtreeSize();
 			}
@@ -604,11 +607,13 @@ public class WAVLTree {
 				updateSizeUp(newRoot.getParent().getLeft()); // (2)
 				newRoot.setRight(getRoot().getRight()); // (3)
 				newRoot.setLeft(getRoot().getLeft()); // (4)
-				newRoot.rank = getRoot().getRank(); // (5)
+				newRoot.setRank(getRoot().getRank()); // (5)
+				newRoot.setParent(getRoot().getParent()); // delete parent
 				newRoot.size = getRoot().getSubtreeSize(); // (6)
 				this.root = newRoot; // (7)
 			}
 		}
+		currRoot = null;
 	}
 
 	/**
@@ -682,7 +687,7 @@ public class WAVLTree {
 				parent = node.getParent(); // find the next parent
 			}
 			// the last parent is root, update the size of parent
-			parent.updateSubtreeSize(); 
+			parent.updateSubtreeSize();
 		}
 	}
 
