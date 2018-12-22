@@ -1084,6 +1084,8 @@ public class WAVLTree {
 	           System.out.println("(1) Insert");
 	           System.out.println("(2) Delete");
 	           System.out.println("(3) Break");
+	           System.out.println("(4) Search");
+	           
 
 
 	           try {
@@ -1093,7 +1095,7 @@ public class WAVLTree {
 	               if (Integer.parseInt(s) == 1) {
 	                   System.out.print("Value to be inserted: ");
 	                   int key =Integer.parseInt(bufferRead.readLine());
-	                   t.insert(key, "AMEN");
+	                   t.insert(key, "AMEN" + key);
 	               }
 	               else if (Integer.parseInt(s) == 2) {
 	                   System.out.print("Value to be deleted: ");
@@ -1102,6 +1104,11 @@ public class WAVLTree {
 	               }
 	               else if (Integer.parseInt(s) == 3) {
 	            	   break;
+	               }
+	               else if (Integer.parseInt(s) == 4) {
+	            	   System.out.print("Value to be searched: ");
+	            	   int key =Integer.parseInt(bufferRead.readLine());
+	            	   System.out.println(t.search(key));
 	               }
 	               else {
 	                   System.out.println("Invalid choice, try again!");
