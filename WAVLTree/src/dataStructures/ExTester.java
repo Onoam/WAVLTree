@@ -154,6 +154,7 @@ public class ExTester
             if (!actualTree.max().equals(wavlTree.max()) ||
                     !actualTree.min().equals(wavlTree.min())) {
                 // if the maximum / minimum are wrong
+            	System.out.println("min/max problem");
 
                 n++;
             }
@@ -161,7 +162,9 @@ public class ExTester
             for (int val1 : values3) {
                 if ((TesterUtils.intValue(actualTree.search(val1)) == val1) !=
                         (TesterUtils.intValue(wavlTree.search(val1)) == val1)) {
-                	System.out.println("search");
+                	System.out.println("search: should be " + val1 +", tester got " + 
+                        TesterUtils.intValue(actualTree.search(val1)) + "and ours got: " + 
+                        TesterUtils.intValue(wavlTree.search(val1)));
 
                     n++;
                 }
