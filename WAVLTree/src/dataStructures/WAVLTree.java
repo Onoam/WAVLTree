@@ -496,7 +496,6 @@ public class WAVLTree {
 		// Case 1
 		// If leaf of tree, find side of parent and remove
 		if (node.isLeaf()) {
-			//TODO Replace with IsLeaf() method
 			removeLeaf(node); // O(1)
 		} else { // Is an inner node
 			succ = successor(node);
