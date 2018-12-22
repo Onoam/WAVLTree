@@ -181,6 +181,7 @@ public class ExTester
             for (int val2 : values3) {
                 if ((TesterUtils.intValue(actualTree.search(val2)) == val2) !=
                         (TesterUtils.intValue(wavlTree.search(val2)) == val2)) {
+                	System.out.println("search error2: " + TesterUtils.intValue(wavlTree.search(val2))); 
                     n++;
                 }
             }

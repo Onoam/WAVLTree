@@ -106,6 +106,32 @@ public class WAVLTree {
 	}
 
 	/**
+	 * Function to insert the node into the tree. Uses treePosition to find parent
+	 * to insert under (y)
+	 * 
+	 * @Complexity O(treePosition) = O(log n), n # nodes in tree
+	 * @param root - WAVLNode root of tree to insert into
+	 * @param z    - WAVLNode to insert
+	 * @return int, for counting purposes
+	 */
+	private int treeInsert(WAVLNode root, WAVLNode z) {
+		WAVLNode y = treePosition(root, z.getKey()); // parent to inser under
+		if (z.getKey() == y.getKey()) { // z is already in the tree
+			return -1;
+		}
+		z.setParent(y); // set z's parent
+	
+		// insert z into the right position and return
+		if (z.getKey() < y.getKey()) {
+			y.setLeft(z);
+			return 0;
+		} else {
+			y.setRight(z);
+			return 0;
+		}
+	}
+
+	/**
 	 * public int insert(int k, String i)
 	 *
 	 * inserts an item with key k and info i to the WAVL tree. the tree must remain
@@ -418,32 +444,6 @@ public class WAVLTree {
 			this.root = y;
 		}
 
-	}
-
-	/**
-	 * Function to insert the node into the tree. Uses treePosition to find parent
-	 * to insert under (y)
-	 * 
-	 * @Complexity O(treePosition) = O(log n), n # nodes in tree
-	 * @param root - WAVLNode root of tree to insert into
-	 * @param z    - WAVLNode to insert
-	 * @return int, for counting purposes
-	 */
-	private int treeInsert(WAVLNode root, WAVLNode z) {
-		WAVLNode y = treePosition(root, z.getKey()); // parent to inser under
-		if (z.getKey() == y.getKey()) { // z is already in the tree
-			return -1;
-		}
-		z.setParent(y); // set z's parent
-
-		// insert z into the right position and return
-		if (z.getKey() < y.getKey()) {
-			y.setLeft(z);
-			return 0;
-		} else {
-			y.setRight(z);
-			return 0;
-		}
 	}
 
 	/**
