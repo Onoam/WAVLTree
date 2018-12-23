@@ -483,6 +483,50 @@ public class WAVLTree {
 			return deleteRebalance(y);
 		}
 	}
+	
+	private void remove(WAVLNode node) {
+		WAVLNode parent = node.getParent();
+		if (node.isLeaf()){
+			removeLeaf(node);
+			}
+		else if (node.getRight() == OUTER_NODE){
+			parent.setRight(node.getRight());
+			node.getRight().setParent(parent);
+			updateSizeUp(parent);
+		}
+		else if (node.getLeft() == OUTER_NODE) {
+			parent.setLeft(node.getLeft());
+			node.getLeft().setParent(parent);
+			updateSizeUp(parent);
+		}
+		else {
+			successorSwap(node);
+		}
+	}
+	
+	private void successorSwap(WAVLNode node) {
+		WAVLNode succ = successor(node);
+		if (succ == this.getRoot()) {
+			removeRoot();
+		}
+		else {
+			remove(succ);
+		}
+		succ.setRank(node.getRank());
+		succ.setLeft(node.getLeft());
+		succ.getLeft().setParent(succ);
+		succ.setRight(node.getRight());
+		succ.getRight().setParent(succ);
+		if (node == node.getParent().getLeft()){
+			node.getParent().setLeft(succ);
+		}
+		else {
+			node.getParent().setLeft(succ);
+		}
+		succ.setParent(node.getParent());
+		succ.updateSubtreeSize();
+		
+	}
 
 	/**
 	 * remove a node from the tree.
@@ -494,7 +538,7 @@ public class WAVLTree {
 	 * 				Each option does constant # operations + updateSizeUp
 	 * @param node node to be removed
 	 */
-	private void remove(WAVLNode node) {
+	private void ONHOLDremove(WAVLNode node) {
 		WAVLNode succ;
 		// Case 1
 		// If leaf of tree, find side of parent and remove
