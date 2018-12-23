@@ -497,7 +497,6 @@ public class WAVLTree {
 		// Case 1
 		// If leaf of tree, find side of parent and remove
 		if (node.isLeaf()) {
-			//TODO Replace with IsLeaf() method
 			removeLeaf(node); // O(1)
 		} else { // Is an inner node
 			succ = successor(node);
@@ -520,6 +519,10 @@ public class WAVLTree {
 				}
 				succ.setRank(node.getRank()); // (5)
 				updateSizeUp(succ); // (4)
+				node.setLeft(OUTER_NODE);
+				node.setRight(OUTER_NODE);
+				node.setParent(null);
+//				node.setRank(WAVLNode.OUTER_NODE_RANK); // this throws an exception
 				// Case 3
 			} else {
 				/*
@@ -537,12 +540,22 @@ public class WAVLTree {
 				* 7) set succ.size to node.size
 				* */
 				succ.getParent().setLeft(succ.getRight()); // (1)
+				succ.getRight().setParent(succ.getParent()); // (1)
 				updateSizeUp(succ.getParent().getLeft()); // (2)
 				succ.setParent(node.getParent()); // (3)
+				if (side(node) == 0) { // (3)
+					node.getParent().setLeft(succ);
+				} else if (side(node) == 1) {
+					node.getParent().setRight(succ);
+				}
 				succ.setRight(node.getRight()); // (4)
 				succ.setLeft(node.getLeft()); // (5)
-				succ.rank = node.getRank(); // (6)
+				succ.setRank(node.getRank()); // (6)
 				succ.size = node.getSubtreeSize(); // (7)
+				node.setParent(null);
+				node.setLeft(OUTER_NODE);
+				node.setRight(OUTER_NODE);
+//				node.setRank(WAVLNode.OUTER_NODE_RANK); // this throws an exception
 			}
 		}
 		node = null; // actually deleting the node, to be removed by GC
