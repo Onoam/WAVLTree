@@ -489,12 +489,12 @@ public class WAVLTree {
 		if (node.isLeaf()){
 			removeLeaf(node);
 			}
-		else if (node.getRight() == OUTER_NODE){
+		else if (node.getLeft() == OUTER_NODE){
 			parent.setRight(node.getRight());
 			node.getRight().setParent(parent);
 			updateSizeUp(parent);
 		}
-		else if (node.getLeft() == OUTER_NODE) {
+		else if (node.getRight() == OUTER_NODE) {
 			parent.setLeft(node.getLeft());
 			node.getLeft().setParent(parent);
 			updateSizeUp(parent);
@@ -521,7 +521,7 @@ public class WAVLTree {
 			node.getParent().setLeft(succ);
 		}
 		else {
-			node.getParent().setLeft(succ);
+			node.getParent().setRight(succ);
 		}
 		succ.setParent(node.getParent());
 		succ.updateSubtreeSize();
