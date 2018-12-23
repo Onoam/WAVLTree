@@ -21,6 +21,7 @@ import dataStructures.WAVLTree.WAVLNode;
  * @author Eytan-c, Onoam
  *
  */
+@SuppressWarnings("WeakerAccess")
 public class WAVLTree {
 	private WAVLNode root;
 	public final WAVLNode OUTER_NODE = new WAVLNode();
@@ -64,10 +65,10 @@ public class WAVLTree {
 	}
 
 	/**
-	 * Implementation of Tree-Search from slides, done deterministicly
+	 * Implementation of Tree-Search from slides, done deterministically
 	 * @Complexity O(log n) - where n # nodes in tree (tree height)
-	 * @param x - WAVLNode
-	 * @param k - int the key to look for
+	 * @param x WAVLNode
+	 * @param k int the key to look for
 	 * @return WAVLNode - if not found, then returns a, OUTER_NODE
 	 */
 	private WAVLNode treeSearch(WAVLNode x, int k) {
@@ -86,8 +87,8 @@ public class WAVLTree {
 	/**
 	 * Implementation of Tree-Position from slides. Done deterministicly.
 	 * @Complexity O(log n) - where n # nodes in tree (tree height)
-	 * @param x - WAVLNode
-	 * @param k - int the key to look for
+	 * @param x WAVLNode
+	 * @param k int the key to look for
 	 * @return WAVLNode - return the last node encountered, or an existing node
 	 */
 	private WAVLNode treePosition(WAVLNode x, int k) {
@@ -121,8 +122,8 @@ public class WAVLTree {
 	 * updateSizeUp(x), and then rebalance(x)
 	 * @Complexity O(treeInsert + updateSize + rebalance) =
 	 * 				O(log n) WC, O(1) amortized
-	 * @param k - int key of WAVLNode to insert
-	 * @param i - String info of WAVLNode to insert
+	 * @param k int key of WAVLNode to insert
+	 * @param i String info of WAVLNode to insert
 	 * @return the number of rebalance operations after inserting x
 	 */
 	public int insert(int k, String i) {
@@ -176,7 +177,7 @@ public class WAVLTree {
 	/**
 	 * performs rebalancing after insertion, case 1
 	 * 
-	 * @param the "problematic" node (the one with the invalid rank difference)
+	 * @param x the "problematic" node (the one with the invalid rank difference)
 	 * @return 1+number of rebalances done after (in case problem moved up)
 	 * @Complexity O(logn) worst case, O(1) amortised, as in class.
 	 */
@@ -430,7 +431,7 @@ public class WAVLTree {
 	 * @return int, for counting purposes
 	 */
 	private int treeInsert(WAVLNode root, WAVLNode z) {
-		WAVLNode y = treePosition(root, z.getKey()); // parent to inser under
+		WAVLNode y = treePosition(root, z.getKey()); // parent to insert under
 		if (z.getKey() == y.getKey()) { // z is already in the tree
 			return -1;
 		}
@@ -439,9 +440,11 @@ public class WAVLTree {
 		// insert z into the right position and return
 		if (z.getKey() < y.getKey()) {
 			y.setLeft(z);
+			updateSizeUp(y);
 			return 0;
 		} else {
 			y.setRight(z);
+			updateSizeUp(y);
 			return 0;
 		}
 	}
@@ -489,14 +492,13 @@ public class WAVLTree {
 	 * 		3) Node's successor is not his right child
 	 * @Complexity O(updateSizeUp) = O(log n)
 	 * 				Each option does constant # operations + updateSizeUp
-	 * @param node
+	 * @param node node to be removed
 	 */
 	private void remove(WAVLNode node) {
 		WAVLNode succ;
 		// Case 1
 		// If leaf of tree, find side of parent and remove
 		if (node.isLeaf()) {
-			//TODO Replace with IsLeaf() method
 			removeLeaf(node); // O(1)
 		} else { // Is an inner node
 			succ = successor(node);
@@ -519,6 +521,10 @@ public class WAVLTree {
 				}
 				succ.setRank(node.getRank()); // (5)
 				updateSizeUp(succ); // (4)
+				node.setLeft(OUTER_NODE);
+				node.setRight(OUTER_NODE);
+				node.setParent(null);
+//				node.setRank(WAVLNode.OUTER_NODE_RANK); // this throws an exception
 				// Case 3
 			} else {
 				/*
@@ -536,12 +542,22 @@ public class WAVLTree {
 				* 7) set succ.size to node.size
 				* */
 				succ.getParent().setLeft(succ.getRight()); // (1)
+				succ.getRight().setParent(succ.getParent()); // (1)
 				updateSizeUp(succ.getParent().getLeft()); // (2)
 				succ.setParent(node.getParent()); // (3)
+				if (side(node) == 0) { // (3)
+					node.getParent().setLeft(succ);
+				} else if (side(node) == 1) {
+					node.getParent().setRight(succ);
+				}
 				succ.setRight(node.getRight()); // (4)
 				succ.setLeft(node.getLeft()); // (5)
-				succ.rank = node.getRank(); // (6)
+				succ.setRank(node.getRank()); // (6)
 				succ.size = node.getSubtreeSize(); // (7)
+				node.setParent(null);
+				node.setLeft(OUTER_NODE);
+				node.setRight(OUTER_NODE);
+//				node.setRank(WAVLNode.OUTER_NODE_RANK); // this throws an exception
 			}
 		}
 		node = null; // actually deleting the node, to be removed by GC
@@ -670,7 +686,7 @@ public class WAVLTree {
 	 * 	Once we reached the root, we exit the loop without
 	 * 	updating the size of root, so we update the size of the last parent.
 	 * @Complexity worst case O(log n) where n is # nodes in tree (height of tree)
-	 * @param node
+	 * @param node node to update size to
 	 */
 	private void updateSizeUp(WAVLNode node) {
 		node.updateSubtreeSize(); // update the size of the first node
@@ -1210,7 +1226,7 @@ public class WAVLTree {
 			this(OUTER_NODE_KEY, null, null, null, null, OUTER_NODE_RANK);
 		}
 
-		/**
+		/*
 		 * All the getters and setters for WAVLNode.
 		 * All run in O(1).
 		 */
