@@ -431,7 +431,7 @@ public class WAVLTree {
 	 * @return int, for counting purposes
 	 */
 	private int treeInsert(WAVLNode root, WAVLNode z) {
-		WAVLNode y = treePosition(root, z.getKey()); // parent to inser under
+		WAVLNode y = treePosition(root, z.getKey()); // parent to insert under
 		if (z.getKey() == y.getKey()) { // z is already in the tree
 			return -1;
 		}
@@ -440,9 +440,11 @@ public class WAVLTree {
 		// insert z into the right position and return
 		if (z.getKey() < y.getKey()) {
 			y.setLeft(z);
+			updateSizeUp(y);
 			return 0;
 		} else {
 			y.setRight(z);
+			updateSizeUp(y);
 			return 0;
 		}
 	}
