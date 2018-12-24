@@ -584,7 +584,7 @@ public class WAVLTree {
 	 * 				Each option does constant # operations + updateSizeUp
 	 * @param node node to be removed
 	 */
-	private void ONHOLDremove(WAVLNode node) {
+	private void ONHOLDremove(WAVLNode node) { //TODO: Delete this
 		WAVLNode succ;
 		// Case 1
 		// If leaf of tree, find side of parent and remove
@@ -789,7 +789,6 @@ public class WAVLTree {
 			// This ensures that we update the the root last, and then stop.
 			while (parent != this.getRoot()) {
 				node = parent; // go up the tree
-				node.updateSubtreeSize(); // update the size of the node
 				parent = node.getParent(); // find the next parent
 			}
 			// the last parent is root, update the size of parent
@@ -853,12 +852,16 @@ public class WAVLTree {
 	 * @param x WAVLNode A node in the tree
 	 * @return y The WAVLNode with the following key
 	 */
+	
 	private WAVLNode successor(WAVLNode x) {
 		if (x.getRight().getRank() != -1) {
 			return min(x.getRight());
-		} else {
+		} else if (side(x) == 0){
+			return x.getParent();
+		}
+		else {
 			WAVLNode y = x.getParent();
-			while (y != null && x == y.getRight()) {
+			while (y != null && y != OUTER_NODE && x == y.getRight()) {
 				x = y;
 				y = x.getParent();
 			}
