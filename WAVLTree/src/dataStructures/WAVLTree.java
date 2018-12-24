@@ -1141,6 +1141,9 @@ public class WAVLTree {
 	 */
 	public static void main(String[] args) {
 		WAVLTree t = new WAVLTree();
+		int count = 0;
+		int[] values3 = new int[] {17,6,1,19,18,3,2,10,13,12,
+                20,15,4,11,7,16,9,5,8,14,21};
 	       while (true) {
 	           System.out.println("(1) Insert");
 	           System.out.println("(2) Delete");
@@ -1154,9 +1157,17 @@ public class WAVLTree {
 	               String s = bufferRead.readLine();
 
 	               if (Integer.parseInt(s) == 1) {
+	            	   if (count < values3.length){
+	            		   System.out.println("inserting from values3: " + values3[count]);
+	            		   int key = values3[count];
+	            		   count++;
+		                   t.insert(key, "AMEN" + key);
+	            	   }
+	            	   else {
 	                   System.out.print("Value to be inserted: ");
 	                   int key =Integer.parseInt(bufferRead.readLine());
 	                   t.insert(key, "AMEN" + key);
+	            	   }
 	               }
 	               else if (Integer.parseInt(s) == 2) {
 	                   System.out.print("Value to be deleted: ");
