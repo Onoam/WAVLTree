@@ -145,7 +145,7 @@ public class WAVLTree {
 	 * this method is called after inserting.
 	 * Checks which rebalance case we are in and calls the appropriate
 	 * rebalance helper-method.
-	 * @param x the node that was inserted.
+	 * @param x the parent of the 	node that was inserted.
 	 * @return the number of rebalance steps
 	 */
 	private int insertRebalance(WAVLNode x) {
@@ -163,14 +163,32 @@ public class WAVLTree {
 		// case 1, including symmetry
 		assert rdiff == 0 || ldiff == 0;
 		if (rdiff + ldiff == 1) { // one is zero (established), the other is 1
+//			System.out.printf("rebalancing on node %s, case 1. "
+//					+ "Children are %s, %s %n", x.getKey(), x.getLeft().getKey(), 
+//					x.getRight().getKey());
+//			if (x.getParent() != null) {
+//				System.out.printf("parent is %s %n", x.getParent().getKey());
+//			}
 			return iCaseOneRebalance(x);
 		}
 		assert ldiff == 2 || rdiff == 2;
 		// case 2, established that x is (0,2) node
 		if ((side == 'l' && x.getLeft().getRankDiff('l') == 1) || (side == 'r' && x.getRight().getRankDiff('r') == 1)) {
+//			System.out.printf("rebalancing on node %s, case 2. "
+//					+ "Children are %s, %s %n", x.getKey(), x.getLeft().getKey(), 
+//					x.getRight().getKey());
+//			if (x.getParent() != null) {
+//				System.out.printf("parent is %s %n", x.getParent().getKey());
+//			}
 			return iCaseTwoRebalance(x, side);
 		}
 		// case 3, the only remaining option
+//		System.out.printf("rebalancing on node %s, case 3. "
+//				+ "Children are %s, %s %n", x.getKey(), x.getLeft().getKey(), 
+//				x.getRight().getKey());
+//		if (x.getParent() != null) {
+//			System.out.printf("parent is %s %n", x.getParent().getKey());
+//		}
 		return iCaseThreeRebalance(x, side);
 	}
 
@@ -385,6 +403,7 @@ public class WAVLTree {
 		} else if (x.getParent() != null) { // x is left child of its parent
 			x.getParent().setLeft(y);
 		}
+		y.getRight().setParent(x);
 		y.setParent(x.getParent());
 		x.setLeft(y.getRight());
 		y.setRight(x);
@@ -409,6 +428,7 @@ public class WAVLTree {
 		} else if (x.getParent() != null) { // y is left child of its parent
 			x.getParent().setLeft(y);
 		}
+		y.getLeft().setParent(x);
 		y.setParent(x.getParent());
 		x.setRight(y.getLeft());
 		y.setLeft(x);
