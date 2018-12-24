@@ -154,6 +154,7 @@ public class ExTester
             if (!actualTree.max().equals(wavlTree.max()) ||
                     !actualTree.min().equals(wavlTree.min())) {
                 // if the maximum / minimum are wrong
+            	System.out.println("min/max problem");
 
                 n++;
             }
@@ -161,7 +162,9 @@ public class ExTester
             for (int val1 : values3) {
                 if ((TesterUtils.intValue(actualTree.search(val1)) == val1) !=
                         (TesterUtils.intValue(wavlTree.search(val1)) == val1)) {
-                	System.out.println("search");
+                	System.out.println("search: should be " + val1 +", tester got " + 
+                        TesterUtils.intValue(actualTree.search(val1)) + "and ours got: " + 
+                        TesterUtils.intValue(wavlTree.search(val1)));
 
                     n++;
                 }
@@ -178,6 +181,7 @@ public class ExTester
             for (int val2 : values3) {
                 if ((TesterUtils.intValue(actualTree.search(val2)) == val2) !=
                         (TesterUtils.intValue(wavlTree.search(val2)) == val2)) {
+                	System.out.println("search error2: " + TesterUtils.intValue(wavlTree.search(val2))); 
                     n++;
                 }
             }
@@ -505,6 +509,8 @@ public class ExTester
                         try {
                             success[3] = tester.caseDelete() ? SuccessStatus.PASS : SuccessStatus.FAIL;
                         } catch (Throwable e) {
+                        	System.out.println("Delete ERROR");
+                        	e.printStackTrace();
                         	System.out.println(e.toString());
                         	System.out.println(e.getCause());
                             success[3] = SuccessStatus.EXCEPTION;
