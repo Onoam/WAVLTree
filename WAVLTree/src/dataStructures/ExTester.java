@@ -509,6 +509,8 @@ public class ExTester
                         try {
                             success[3] = tester.caseDelete() ? SuccessStatus.PASS : SuccessStatus.FAIL;
                         } catch (Throwable e) {
+                        	System.out.println("Delete ERROR");
+                        	e.printStackTrace();
                         	System.out.println(e.toString());
                         	System.out.println(e.getCause());
                             success[3] = SuccessStatus.EXCEPTION;
