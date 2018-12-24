@@ -230,8 +230,10 @@ public class WAVLTester_Tamir
 				return Error_Code.Bad_Sub_Tree_Size;
 			if (!checkSize())
 				return Error_Code.Bad_Size;
-			if (!checkRanks())
+			if (!checkRanks()) {
+				_tree.print(_tree.getRoot());
 				return Error_Code.Bad_WAVL_Ranks;
+			}
 			if (!checkBalanced())
 				return Error_Code.Not_Balanced;
 			int res = checkNodes();

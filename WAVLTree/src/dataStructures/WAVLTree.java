@@ -31,7 +31,7 @@ public class WAVLTree {
 	}
 
 	public WAVLTree() {
-		this.root = new WAVLNode();
+		this.root = OUTER_NODE;
 	}
 
 	/**
@@ -57,6 +57,9 @@ public class WAVLTree {
 	 */
 	public String search(int k) {
 		WAVLNode item = treeSearch(getRoot(), k);
+		if (item == null) {
+			return null;
+		}
 		if (item.getRank() == -1) {
 			return null;
 		} else {
@@ -72,6 +75,9 @@ public class WAVLTree {
 	 * @return WAVLNode - if not found, then returns a, OUTER_NODE
 	 */
 	private WAVLNode treeSearch(WAVLNode x, int k) {
+		if (x == null) {
+			return OUTER_NODE;
+		}
 		while (x.getRank() != -1) {
 			if (k == x.getKey()) {
 				return x;
@@ -92,7 +98,7 @@ public class WAVLTree {
 	 * @return WAVLNode - return the last node encountered, or an existing node
 	 */
 	private WAVLNode treePosition(WAVLNode x, int k) {
-		WAVLNode y = new WAVLNode();
+		WAVLNode y = OUTER_NODE;
 		while (x.getRank() != -1) {
 			y = x;
 			if (k == x.getKey()) {
@@ -667,7 +673,7 @@ public class WAVLTree {
 		WAVLNode currRoot = this.getRoot();
 		// Case 1
 		if (root.isLeaf()) {
-			this.root = new WAVLNode();
+			this.root = OUTER_NODE;
 
 		}
 		// Case 2
@@ -908,7 +914,7 @@ public class WAVLTree {
 	 * @return info of minimal node in tree
 	 */
 	private WAVLNode min(WAVLNode node) {
-		if (node.getLeft() == OUTER_NODE) {
+		if (node == OUTER_NODE || node.getLeft() == OUTER_NODE) {
 			return node;
 		}
 		return min(node.getLeft());
@@ -938,7 +944,7 @@ public class WAVLTree {
 	 * @return info of maximal node in the tree
 	 */
 	private WAVLNode max(WAVLNode node) {
-		if (node.getRight() == OUTER_NODE) {
+		if (node == OUTER_NODE || node.getRight() == OUTER_NODE) {
 			return node;
 		}
 		return max(node.getRight());
@@ -1179,11 +1185,13 @@ public class WAVLTree {
 	 * @main
 	 * Make sure to change this method's name (to `notmain` or something) so it isn't called if you use external tester
 	 */
-	public static void main(String[] args) {
+	public static void main3(String[] args) {
 		WAVLTree t = new WAVLTree();
 		int count = 0;
 		int[] values3 = new int[] {17,6,1,19,18,3,2,10,13,12,
-                20,15,4,11,7,16,9,5,8,14,21};
+                20,15,4,11,7,16,9,5,8,14,21,
+                25, 29, 75, 86, 100, 97, 23, 55,
+                68, 63, 47, 52, 42, 40};
 	       while (true) {
 	           System.out.println("(1) Insert");
 	           System.out.println("(2) Delete");
@@ -1234,9 +1242,9 @@ public class WAVLTree {
 	           }
 	       }
 	}
-	public static void notmain(String[] args) {
+	public static void main(String[] args) {
 		int numOfTests = 1000;
-		int maxOperationsInEachTest = 100;
+		int maxOperationsInEachTest = 50;
 		WAVLTester_Tamir tester = new WAVLTester_Tamir(maxOperationsInEachTest);
 		for (int i = 0; i < numOfTests; ++i) {
 			System.out.println(tester.RunNewTest());
@@ -1289,7 +1297,6 @@ public class WAVLTree {
 		 * @return whether node is leaf
 		 */
 		public boolean isLeaf() {
-			// TODO Auto-generated method stub
 			return getRight().getRank() == OUTER_NODE_RANK && getLeft().getRank() == OUTER_NODE_RANK;
 		}
 
@@ -1379,7 +1386,9 @@ public class WAVLTree {
 		}
 
 		public void setRank(int rank) {
-			this.rank = rank;
+			if (this.getRank() != OUTER_NODE_RANK) {				
+				this.rank = rank;
+			}
 		}
 
 		/**
@@ -1388,13 +1397,13 @@ public class WAVLTree {
 		 * @Complexity O(1).
 		 */
 		public void promote() {
-			if (this.getRank() != -1) {
+			if (this.getRank() != OUTER_NODE_RANK) {
 				setRank(getRank() + 1);
 			}
 		}
 
 		public void demote() {
-			if (this.getRank() != -1) {
+			if (this.getRank() != OUTER_NODE_RANK) {
 				setRank(getRank() - 1);
 			}
 		}
