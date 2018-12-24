@@ -854,7 +854,7 @@ public class WAVLTree {
 	 * @return y The WAVLNode with the following key
 	 */
 	private WAVLNode successor(WAVLNode x) {
-		if (x.getRight().getRank() != -1) {
+		if (x.getRight() != OUTER_NODE) {
 			return min(x.getRight());
 		} else {
 			WAVLNode y = x.getParent();
@@ -878,7 +878,7 @@ public class WAVLTree {
 	 * @return y The WAVLNode with the preceding key
 	 */
 	private WAVLNode predecessor(WAVLNode x) {
-		if (x.getLeft().getRank() != -1) {
+		if (x.getLeft() != OUTER_NODE) {
 			return max(x.getLeft());
 		} else {
 			WAVLNode y = x.getParent();
@@ -965,15 +965,20 @@ public class WAVLTree {
 	 */
 	public int[] keysToArray() {
 		int[] arr = new int[root.size];
-		if (!this.empty()) {
-			WAVLNode current = this.min(root);
-			int i = 0;
-			while (i < root.size) {
-				arr[i] = current.getKey();
-				current = successor(current);
-				i++;
+		// TODO Delete the Exception catching
+//		try {
+			if (!this.empty()) {
+				WAVLNode current = this.min(root);
+				int i = 0;
+				while (i < root.size) {
+					arr[i] = current.getKey();
+					current = successor(current);
+					i++;
+				}
 			}
-		}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		return arr;
 	}
 
@@ -992,7 +997,6 @@ public class WAVLTree {
 	 */
 	public String[] infoToArray() {
 		String[] arr = new String[root.size];
-		int[] count = new int[1];
 		if (!this.empty()) {
 			WAVLNode current = this.min(root);
 			int i = 0;
