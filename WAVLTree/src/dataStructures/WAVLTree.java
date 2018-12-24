@@ -498,30 +498,36 @@ public class WAVLTree {
 			removeRoot();
 			return deleteRebalance(getRoot());
 		} else {
-			WAVLNode y = z.getParent();
-			remove(z);
+			WAVLNode y = remove(z);
+//			remove(z);
 			return deleteRebalance(y);
 		}
 	}
 	
-	private void remove(WAVLNode node) {
+	private WAVLNode remove(WAVLNode node) {
 		WAVLNode parent = node.getParent();
+		WAVLNode ret;
 		if (node.isLeaf()){
+			ret = parent;
 			removeLeaf(node);
 			}
 		else if (node.getLeft() == OUTER_NODE){
-			parent.setRight(node.getRight());
+			parent.setChild(node.getRight(), side(node));
 			node.getRight().setParent(parent);
 			updateSizeUp(parent);
+			ret = parent;
 		}
 		else if (node.getRight() == OUTER_NODE) {
-			parent.setLeft(node.getLeft());
+			parent.setChild(node.getLeft(), side(node));
 			node.getLeft().setParent(parent);
 			updateSizeUp(parent);
-		}
+			ret = parent;
+		} 
 		else {
+			ret = successor(node).getParent(); // TODO: nullcheck?
 			successorSwap(node);
 		}
+		return ret;
 	}
 	
 	private void successorSwap(WAVLNode node) {
@@ -1319,6 +1325,19 @@ public class WAVLTree {
 
 		public WAVLNode getLeft() {
 			return left;
+		}
+		/**
+		 * wrapper for setLeft, setRight
+		 * @param newChild
+		 * @param side 0 for left, 1 for right
+		 */
+		public void setChild(WAVLNode newChild, int side) {
+			if (side == 0) {
+				setLeft(newChild);
+			}
+			else {
+				setRight(newChild);
+			}
 		}
 
 		public void setLeft(WAVLNode left) {
