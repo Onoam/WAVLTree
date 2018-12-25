@@ -523,33 +523,64 @@ public class WAVLTree {
 			return deleteRebalance(y);
 		}
 	}
-	
+
+	/**
+	 * removes node from the tree, based on 4 cases.
+	 * Case 1 - node is a leaf
+	 * Case 2&3 - node is a unary node with a right or left child respectively
+	 * Case 4 - node is a binary node, and in this case uses successorSwap
+	 * @Complexity O(updateSizeUp) = O(log n) worst case
+	 * @param node the node to remove
+	 * @return WAVLNode ret - depends on the case
+	 */
 	private WAVLNode remove(WAVLNode node) {
 		WAVLNode parent = node.getParent();
 		WAVLNode ret;
+		// Case 1 - Node to remove is a leaf
 		if (node.isLeaf()){
 			ret = parent;
 			removeLeaf(node);
 			}
+		// Case 2 - Node to remove is Unary with right child
 		else if (node.getLeft() == OUTER_NODE){
+			// Set pointer from parent to right child
 			parent.setChild(node.getRight(), side(node));
+			// Set pointer the parent of right child from node to parent
 			node.getRight().setParent(parent);
+			// Remove pointers from node to right child and parent
+			node.setRight(OUTER_NODE);
+			node.setParent(null);
+			// Update the size of parent
 			updateSizeUp(parent);
+			// Return parent for re-balancing
 			ret = parent;
 		}
+		// Case 3 - Node to remove is Unary with left child
 		else if (node.getRight() == OUTER_NODE) {
+			// Set pointer from parent to left child
 			parent.setChild(node.getLeft(), side(node));
+			// Set pointer for the parent of left child from node to parent
 			node.getLeft().setParent(parent);
+			// Remove pointers from node to right child and parent
+			node.setLeft(OUTER_NODE);
+			node.setParent(null);
+			// Update the size of parent
 			updateSizeUp(parent);
+			// Return parent for re-balancing
 			ret = parent;
-		} 
+		}
+		// Case 4 - Node to remove is binary
 		else {
 			ret = successor(node).getParent(); // TODO: nullcheck?
 			successorSwap(node);
 		}
 		return ret;
 	}
-	
+
+	/**
+	 *
+	 * @param node node to swap with successor
+	 */
 	private void successorSwap(WAVLNode node) {
 		WAVLNode succ = successor(node);
 		if (succ == this.getRoot()) {
@@ -584,6 +615,7 @@ public class WAVLTree {
 	 * 				Each option does constant # operations + updateSizeUp
 	 * @param node node to be removed
 	 */
+	// TODO Remove if needed
 	private void ONHOLDremove(WAVLNode node) {
 		WAVLNode succ;
 		// Case 1
@@ -727,16 +759,16 @@ public class WAVLTree {
 	 * If the node has no parent, we don't do anything, because in remove
 	 * we make the node null at the end.
 	 * @Complexity O(updateSizeUp) = O(log n)
-	 * @param node - the WAVLNode to remove
+	 * @param node the WAVLNode to remove
 	 */
 	private void removeLeaf(WAVLNode node) {
 		switch (side(node)) {
-		case 0:
+		case 0: // Left
 			node.getParent().setLeft(OUTER_NODE);
 			updateSizeUp(node.getParent());
 			node.setParent(null);
 			break;
-		case 1:
+		case 1: //Right
 			node.getParent().setRight(OUTER_NODE);
 			updateSizeUp(node.getParent());
 			node.setParent(null);
@@ -966,7 +998,6 @@ public class WAVLTree {
 	public int[] keysToArray() {
 		int[] arr = new int[root.size];
 		// TODO Delete the Exception catching
-//		try {
 			if (!this.empty()) {
 				WAVLNode current = this.min(root);
 				int i = 0;
@@ -976,9 +1007,6 @@ public class WAVLTree {
 					i++;
 				}
 			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
 		return arr;
 	}
 
@@ -1353,7 +1381,7 @@ public class WAVLTree {
 		}
 		/**
 		 * wrapper for setLeft, setRight
-		 * @param newChild
+		 * @param newChild WAVLNode to add to parent
 		 * @param side 0 for left, 1 for right
 		 */
 		public void setChild(WAVLNode newChild, int side) {
