@@ -4,9 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
-import dataStructures.WAVLTree.WAVLNode;
 
 /**
  *
@@ -1185,10 +1185,10 @@ public class WAVLTree {
 	 * @main
 	 * Make sure to change this method's name (to `notmain` or something) so it isn't called if you use external tester
 	 */
-	public static void main3(String[] args) {
+	public static void main(String[] args) {
 		WAVLTree t = new WAVLTree();
 		int count = 0;
-		int[] values3 = new int[] {17,6,1,19,18,3,2,10,13,12,
+		Integer[] values3 = new Integer[] {17,6,1,19,18,3,2,10,13,12,
                 20,15,4,11,7,16,9,5,8,14,21,
                 25, 29, 75, 86, 100, 97, 23, 55,
                 68, 63, 47, 52, 42, 40};
@@ -1197,7 +1197,8 @@ public class WAVLTree {
 	           System.out.println("(2) Delete");
 	           System.out.println("(3) Break");
 	           System.out.println("(4) Search");
-
+	           System.out.println("(5) Fast Insert");
+	           System.out.println("(6) Fast Delete"); 
 
 
 	           try {
@@ -1205,18 +1206,10 @@ public class WAVLTree {
 	               String s = bufferRead.readLine();
 
 	               if (Integer.parseInt(s) == 1) {
-	            	   if (count < values3.length){
-	            		   System.out.println("inserting from values3: " + values3[count]);
-	            		   int key = values3[count];
-	            		   count++;
-		                   t.insert(key, "AMEN" + key);
-	            	   }
-	            	   else {
 	                   System.out.print("Value to be inserted: ");
 	                   int key =Integer.parseInt(bufferRead.readLine());
 	                   t.insert(key, "AMEN" + key);
 	            	   }
-	               }
 	               else if (Integer.parseInt(s) == 2) {
 	                   System.out.print("Value to be deleted: ");
 	                   int key =Integer.parseInt(bufferRead.readLine());
@@ -1230,6 +1223,22 @@ public class WAVLTree {
 	            	   int key =Integer.parseInt(bufferRead.readLine());
 	            	   System.out.println(t.search(key));
 	               }
+	               else if (Integer.parseInt(s) == 5) {
+	            	   while (count < values3.length){
+	            		   System.out.println("inserting from values3: " + values3[count]);
+	            		   int key = values3[count];
+	            		   count++;
+		                   t.insert(key, "AMEN" + key);
+	            	   }
+	               }
+	               else if (Integer.parseInt(s) == 6) {
+	            	   List<Integer> shuffled 	= Arrays.asList(values3);
+	            	   Collections.shuffle(shuffled);
+	            	   for (int value : values3) {
+	            		   System.out.println("deleting from values 3: " + value);
+	            		   t.delete(value);
+	            	   }
+	               }
 	               else {
 	                   System.out.println("Invalid choice, try again!");
 	                   continue;
@@ -1242,7 +1251,7 @@ public class WAVLTree {
 	           }
 	       }
 	}
-	public static void main(String[] args) {
+	public static void main3(String[] args) {
 		int numOfTests = 1000;
 		int maxOperationsInEachTest = 50;
 		WAVLTester_Tamir tester = new WAVLTester_Tamir(maxOperationsInEachTest);
