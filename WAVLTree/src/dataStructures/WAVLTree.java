@@ -4,9 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
-import dataStructures.WAVLTree.WAVLNode;
 
 /**
  *
@@ -272,8 +272,8 @@ public class WAVLTree {
 			return 0; // tree is valid WAVL, no rank 2 leaf, no rank diff>=3
 		}
 		if (Math.max(ldiff, rdiff)>3) { //TODO: remove this
-			WAVLTree t = new WAVLTree(x);
-			t.print(x);
+//			WAVLTree t = new WAVLTree(x);
+//			t.print(x);
 			
 		}
 		assert Math.max(ldiff, rdiff) == 3;
@@ -515,15 +515,26 @@ public class WAVLTree {
 			return -1;
 		}
 		if (z == getRoot()) {
-			removeRoot();
-			return deleteRebalance(getRoot());
+			WAVLNode reb = removeRoot();
+			if (reb == OUTER_NODE) {				
+				return 0;
+			}
+			return deleteRebalance(reb);
 		} else {
 			WAVLNode y = remove(z);
 //			remove(z);
-			return deleteRebalance(y);
+			int reb = deleteRebalance(y);
+//			if (!checkRank_rec(this.getRoot())) { //TODO delete this
+//				System.out.println("BALANCE ERROR ON DELETION \n ####");
+//			}
+//			else {
+//				System.out.println("##### SKIP #####");
+//			}
+//			print(this.getRoot());
+			return reb;
 		}
 	}
-	
+		
 	private WAVLNode remove(WAVLNode node) {
 		WAVLNode parent = node.getParent();
 		WAVLNode ret;
@@ -543,6 +554,10 @@ public class WAVLTree {
 			updateSizeUp(parent);
 			ret = parent;
 		} 
+		else  if (node == successor(node).getParent()){
+			ret = successor(node);
+			successorSwap(node);
+		}
 		else {
 			ret = successor(node).getParent(); // TODO: nullcheck?
 			successorSwap(node);
@@ -563,15 +578,17 @@ public class WAVLTree {
 		succ.getLeft().setParent(succ);
 		succ.setRight(node.getRight());
 		succ.getRight().setParent(succ);
-		if (node == node.getParent().getLeft()){
+		if (node != root && node == node.getParent().getLeft()){
 			node.getParent().setLeft(succ);
 		}
-		else {
+		else  if (node != root){
 			node.getParent().setRight(succ);
 		}
 		succ.setParent(node.getParent());
 		succ.updateSubtreeSize();
-		
+		if (node == root) {
+			root = succ;
+		}
 	}
 
 	/**
@@ -667,13 +684,16 @@ public class WAVLTree {
 	 * 	    and set the new root
 	 * 4) Same as case 3 from remove, just that instead of setting the parent,
 	 *    set the root of the tree.
+	 * @return 
 	 */
-	private void removeRoot() {
+	private WAVLNode removeRoot() {
 		WAVLNode newRoot;
+		WAVLNode ret;
 		WAVLNode currRoot = this.getRoot();
 		// Case 1
 		if (root.isLeaf()) {
 			this.root = OUTER_NODE;
+			return root;
 
 		}
 		// Case 2
@@ -681,10 +701,12 @@ public class WAVLTree {
 				getRoot().getLeft().getRank() != WAVLNode.OUTER_NODE_RANK) {
 			getRoot().getLeft().setParent(getRoot().getParent());
 			this.root = this.getRoot().getLeft();
+			return root;
 		}
 		// Case 3 + 4
 		else {
 			newRoot = successor(root);
+			ret = newRoot.getParent(); //This is the node we need to rebalance on
 			// Case 3
 			if (newRoot == getRoot().getRight()) {
 				newRoot.setLeft(getRoot().getLeft());
@@ -709,17 +731,19 @@ public class WAVLTree {
 				 * 6) set newRoot.size to root.size
 				 * 7) set newRoot as this.root
 				 * */
-				newRoot.getParent().setLeft(newRoot.getRight()); // (1)
-				updateSizeUp(newRoot.getParent().getLeft()); // (2)
-				newRoot.setRight(getRoot().getRight()); // (3)
-				newRoot.setLeft(getRoot().getLeft()); // (4)
-				newRoot.setRank(getRoot().getRank()); // (5)
-				newRoot.setParent(getRoot().getParent()); // delete parent
-				newRoot.size = getRoot().getSubtreeSize(); // (6)
+				successorSwap(root);
+//				newRoot.getParent().setLeft(newRoot.getRight()); // (1)
+//				updateSizeUp(newRoot.getParent().getLeft()); // (2)
+//				newRoot.setRight(getRoot().getRight()); // (3)
+//				newRoot.setLeft(getRoot().getLeft()); // (4)
+//				newRoot.setRank(getRoot().getRank()); // (5)
+//				newRoot.setParent(getRoot().getParent()); // delete parent
+//				newRoot.size = getRoot().getSubtreeSize(); // (6)
 				this.root = newRoot; // (7)
 			}
 		}
 		currRoot = null;
+		return ret;
 	}
 
 	/**
@@ -788,6 +812,10 @@ public class WAVLTree {
 			// If we reached the root, then we stop.
 			// This ensures that we update the the root last, and then stop.
 			while (parent != this.getRoot()) {
+				if (parent == null) {
+					System.out.println(node.getKey()); 
+					print(root);//TODO delete this
+				}
 				node = parent; // go up the tree
 				node.updateSubtreeSize(); // update the size of the node
 				parent = node.getParent(); // find the next parent
@@ -1038,7 +1066,24 @@ public class WAVLTree {
 			return this.root;
 		}
 	}
-
+	//TODO delete this
+	private boolean checkRank_rec(WAVLNode node)
+	{
+		if (node == null || (!node.isInnerNode() && node.getRank() == -1))
+			return true;
+		
+		int leftRank = node.getLeft() != null ? ((WAVLNode)node.getLeft()).getRank() : -1;
+		int rightRank = node.getRight() != null ? ((WAVLNode)node.getRight()).getRank() : -1;
+		
+		boolean isType1_1 = (node.getRank() - leftRank) == 1 && (node.getRank() - rightRank) == 1;
+		boolean isType1_2 = (node.getRank() - leftRank) == 1 && (node.getRank() - rightRank) == 2;
+		boolean isType2_1 = (node.getRank() - leftRank) == 2 && (node.getRank() - rightRank) == 1;
+		boolean isType2_2 = (node.getRank() - leftRank) == 2 && (node.getRank() - rightRank) == 2 && !node.isLeaf();
+		if (!isType1_1 && !isType1_2 && !isType2_1 && !isType2_2)
+			return false;
+		
+		return checkRank_rec((WAVLNode)node.getLeft()) && checkRank_rec((WAVLNode)node.getRight());
+	}
 	/**
 	 * public int select(int i)
 	 *
@@ -1185,10 +1230,10 @@ public class WAVLTree {
 	 * @main
 	 * Make sure to change this method's name (to `notmain` or something) so it isn't called if you use external tester
 	 */
-	public static void main3(String[] args) {
+	public static void main(String[] args) {
 		WAVLTree t = new WAVLTree();
 		int count = 0;
-		int[] values3 = new int[] {17,6,1,19,18,3,2,10,13,12,
+		Integer[] values3 = new Integer[] {17,6,1,19,18,3,2,10,13,12,
                 20,15,4,11,7,16,9,5,8,14,21,
                 25, 29, 75, 86, 100, 97, 23, 55,
                 68, 63, 47, 52, 42, 40};
@@ -1197,7 +1242,8 @@ public class WAVLTree {
 	           System.out.println("(2) Delete");
 	           System.out.println("(3) Break");
 	           System.out.println("(4) Search");
-
+	           System.out.println("(5) Fast Insert");
+	           System.out.println("(6) Fast Delete"); 
 
 
 	           try {
@@ -1205,18 +1251,10 @@ public class WAVLTree {
 	               String s = bufferRead.readLine();
 
 	               if (Integer.parseInt(s) == 1) {
-	            	   if (count < values3.length){
-	            		   System.out.println("inserting from values3: " + values3[count]);
-	            		   int key = values3[count];
-	            		   count++;
-		                   t.insert(key, "AMEN" + key);
-	            	   }
-	            	   else {
 	                   System.out.print("Value to be inserted: ");
 	                   int key =Integer.parseInt(bufferRead.readLine());
 	                   t.insert(key, "AMEN" + key);
 	            	   }
-	               }
 	               else if (Integer.parseInt(s) == 2) {
 	                   System.out.print("Value to be deleted: ");
 	                   int key =Integer.parseInt(bufferRead.readLine());
@@ -1230,6 +1268,25 @@ public class WAVLTree {
 	            	   int key =Integer.parseInt(bufferRead.readLine());
 	            	   System.out.println(t.search(key));
 	               }
+	               else if (Integer.parseInt(s) == 5) {
+	            	   if (count>= values3.length){
+	            		   count = 0;
+	            	   }
+	            	   while (count < values3.length){
+	            		   System.out.println("inserting from values3: " + values3[count]);
+	            		   int key = values3[count];
+	            		   count++;
+		                   t.insert(key, "AMEN" + key);
+	            	   }
+	               }
+	               else if (Integer.parseInt(s) == 6) {
+	            	   List<Integer> shuffled 	= Arrays.asList(values3);
+	            	   Collections.shuffle(shuffled);
+	            	   for (int value : values3) {
+	            		   System.out.println("deleting from values 3: " + value);
+	            		   t.delete(value);
+	            	   }
+	               }
 	               else {
 	                   System.out.println("Invalid choice, try again!");
 	                   continue;
@@ -1242,7 +1299,7 @@ public class WAVLTree {
 	           }
 	       }
 	}
-	public static void main(String[] args) {
+	public static void main3(String[] args) {
 		int numOfTests = 1000;
 		int maxOperationsInEachTest = 50;
 		WAVLTester_Tamir tester = new WAVLTester_Tamir(maxOperationsInEachTest);
