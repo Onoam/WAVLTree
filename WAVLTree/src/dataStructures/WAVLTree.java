@@ -149,9 +149,9 @@ public class WAVLTree {
 				return counter; // counter = -1
 			} else {
 				int reb = insertRebalance(x.getParent());
-				if (!checkRank_rec(this.getRoot())){
-					print(this.getRoot());
-				}
+//				if (!checkRank_rec(this.getRoot())){
+//					print(this.getRoot()); TODO delete this
+//				}
 				return reb;
 			}
 		}
@@ -303,11 +303,11 @@ public class WAVLTree {
 		if (Math.max(ldiff, rdiff) < 3) {
 			return 0; // tree is valid WAVL, no rank 2 leaf, no rank diff>=3
 		}
-		if (Math.max(ldiff, rdiff)>3) { //TODO: remove this
-			WAVLTree t = new WAVLTree(x);
-			t.print(x);
-			
-		}
+//		if (Math.max(ldiff, rdiff)>3) { //TODO: remove this
+//			WAVLTree t = new WAVLTree(x);
+//			t.print(x); //TODO Delete this
+//			
+//		}
 		assert Math.max(ldiff, rdiff) == 3;
 		if (Math.min(ldiff, rdiff) == 2) {
 			return dCaseOneRebalance(x);
@@ -315,14 +315,14 @@ public class WAVLTree {
 		assert Math.min(ldiff, rdiff) == 1;
 		// x is confirmed as (3,1) node
 		int[] grandChildDiffs = new int[2];
-		try { //TODO remove this
+//		try { //TODO remove this
 			grandChildDiffs = checkDiffs(x, side);
-		}
-		catch (NullPointerException e){
-			System.out.println(x.getKey() + "rank: " + x.getRank());
-			System.out.println("left " + x.getLeft().getKey() + "rank: " +x.getLeft().getRank());
-			System.out.println("right "+ x.getRight().getKey() + "rank " +x.getRight().getRank());
-		}
+//		}
+//		catch (NullPointerException e){
+//			System.out.println(x.getKey() + "rank: " + x.getRank());
+//			System.out.println("left " + x.getLeft().getKey() + "rank: " +x.getLeft().getRank());
+//			System.out.println("right "+ x.getRight().getKey() + "rank " +x.getRight().getRank());
+//		}
 		
 		if (grandChildDiffs[0] == 2 && grandChildDiffs[1] == 2) {
 			return dCaseTwoRebalance(x, side);
@@ -450,6 +450,9 @@ public class WAVLTree {
 	 */
 	private void rotateRight(WAVLNode x) {
 		WAVLNode y = x.getLeft();
+		if (x == getRoot()) {
+			root = y;
+		}
 		if (x.getParent() != null && x.key > x.getParent().key) {
 			x.getParent().setRight(y);
 		} else if (x.getParent() != null) { // x is left child of its parent
@@ -475,6 +478,9 @@ public class WAVLTree {
 	 */
 	private void rotateLeft(WAVLNode x) {
 		WAVLNode y = x.getRight();
+		if (x == getRoot()) {
+			root = y;
+		}
 		if (x.getParent() != null && x.key > x.getParent().key) {
 			x.getParent().setRight(y);
 		} else if (x.getParent() != null) { // y is left child of its parent
@@ -552,13 +558,13 @@ public class WAVLTree {
 			WAVLNode y = remove(z);
 //			remove(z);
 			int reb = deleteRebalance(y);
-			if (!checkRank_rec(this.getRoot())) {
-				System.out.println("BALANCE ERROR ON DELETION \n ####");
-			}
-			else {
-				System.out.println("##### SKIP #####");
-			}
-			print(this.getRoot());
+//			if (!checkRank_rec(this.getRoot())) { //TODO delete this
+//				System.out.println("BALANCE ERROR ON DELETION \n ####");
+//			}
+//			else {
+//				System.out.println("##### SKIP #####");
+//			}
+//			print(this.getRoot());
 			return reb;
 		}
 	}
@@ -596,9 +602,9 @@ public class WAVLTree {
 	
 	private void successorSwap(WAVLNode node) {
 		WAVLNode succ = successor(node);
-		if (node.getKey() == 13) {
-			System.out.println("trying to replace 13 ");
-		}
+//		if (node.getKey() == 13) {
+//			System.out.println("trying to replace 13 ");
+//		}
 		if (succ == this.getRoot()) {
 			removeRoot();
 		}
@@ -1239,7 +1245,7 @@ public class WAVLTree {
 	 * @main
 	 * Make sure to change this method's name (to `notmain` or something) so it isn't called if you use external tester
 	 */
-	public static void main(String[] args) {
+	public static void main2(String[] args) {
 		WAVLTree t = new WAVLTree();
 		int count = 0;
 		Integer[] values3 = new Integer[] {17,6,1,19,18,3,2,10,13,12,
