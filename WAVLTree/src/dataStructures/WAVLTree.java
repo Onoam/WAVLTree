@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import dataStructures.WAVLTree.WAVLNode;
@@ -146,7 +148,11 @@ public class WAVLTree {
 //				System.out.println(successor(w).getKe5y()); //TODO: delete this
 				return counter; // counter = -1
 			} else {
-				return insertRebalance(x.getParent());
+				int reb = insertRebalance(x.getParent());
+				if (!checkRank_rec(this.getRoot())){
+					print(this.getRoot());
+				}
+				return reb;
 			}
 		}
 	}
@@ -545,7 +551,15 @@ public class WAVLTree {
 		} else {
 			WAVLNode y = remove(z);
 //			remove(z);
-			return deleteRebalance(y);
+			int reb = deleteRebalance(y);
+			if (!checkRank_rec(this.getRoot())) {
+				System.out.println("BALANCE ERROR ON DELETION \n ####");
+			}
+			else {
+				System.out.println("##### SKIP #####");
+			}
+			print(this.getRoot());
+			return reb;
 		}
 	}
 	
@@ -569,7 +583,12 @@ public class WAVLTree {
 			ret = parent;
 		} 
 		else {
-			ret = successor(node).getParent(); // TODO: nullcheck?
+			if (node== successor(node).getParent()){
+				ret = successor(node);
+			}
+			else {
+				ret = successor(node).getParent(); // TODO: nullcheck?
+			}
 			successorSwap(node);
 		}
 		return ret;
@@ -577,8 +596,14 @@ public class WAVLTree {
 	
 	private void successorSwap(WAVLNode node) {
 		WAVLNode succ = successor(node);
+		if (node.getKey() == 13) {
+			System.out.println("trying to replace 13 ");
+		}
 		if (succ == this.getRoot()) {
 			removeRoot();
+		}
+		if (node == this.getRoot()) {
+			this.root = succ;
 		}
 		else {
 			remove(succ);
@@ -809,7 +834,7 @@ public class WAVLTree {
 		// If node isn't the root, then we need to go up the tree
 		if (node != this.getRoot()) {
 			// Find the first parent
-			WAVLNode parent = node.getParent();
+			WAVLNode parent = node;//.getParent();
 			// If we reached the root, then we stop.
 			// This ensures that we update the the root last, and then stop.
 			while (parent != this.getRoot() && parent != null) {
@@ -830,7 +855,7 @@ public class WAVLTree {
 	 * @return counter increased by 1 (1 rebalance operation)
 	 * @post y is x's right child, x is y's parent's child (same side as y was)
 	 */
-	private int rotateRight(WAVLNode x, WAVLNode y, int counter) {
+	private int rotateRight(WAVLNode x, WAVLNode y, int counter) {//TODO delete this
 		if (y.getParent() != null && y.key > y.getParent().key) {
 			y.getParent().setRight(x);
 		} else if (y.getParent() != null) { // y is left child of its parent
@@ -890,7 +915,7 @@ public class WAVLTree {
 				x = y;
 				y = x.getParent();
 			}
-			System.out.println("y is " + y == null ? y : y.getKey());
+			//System.out.println("y is " + y == null ? y : y.getKey()); //TODO: delete this
 			return y;
 		}
 	}
@@ -1217,17 +1242,17 @@ public class WAVLTree {
 	public static void main(String[] args) {
 		WAVLTree t = new WAVLTree();
 		int count = 0;
-		int[] values3 = new int[] {17,6,1,19,18,3,2,10,13,12,
-                20,15,4,11,7,16,9,5,8,14,21}; //,
-//                25, 29, 75, 86, 100, 97, 23, 55,
-//                68, 63, 47, 52, 42, 40};
+		Integer[] values3 = new Integer[] {17,6,1,19,18,3,2,10,13,12,
+                20,15,4,11,7,16,9,5,8,14,21,
+                25, 29, 75, 86, 100, 97, 23, 55,
+                68, 63, 47, 52, 42, 40};
 	       while (true) {
 	           System.out.println("(1) Insert");
 	           System.out.println("(2) Delete");
 	           System.out.println("(3) Break");
 	           System.out.println("(4) Search");
 	           System.out.println("(5) Fast Insert");
-
+	           System.out.println("(6) Fast Delete"); 
 
 
 	           try {
@@ -1258,6 +1283,14 @@ public class WAVLTree {
 	            		   int key = values3[count];
 	            		   count++;
 		                   t.insert(key, "AMEN" + key);
+	            	   }
+	               }
+	               else if (Integer.parseInt(s) == 6) {
+	            	   List<Integer> shuffled 	= Arrays.asList(values3);
+	            	   Collections.shuffle(shuffled);
+	            	   for (int value : values3) {
+	            		   System.out.println("deleting from values 3: " + value);
+	            		   t.delete(value);
 	            	   }
 	               }
 	               else {
