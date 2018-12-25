@@ -571,24 +571,65 @@ public class WAVLTree {
 		}
 		// Case 4 - Node to remove is binary
 		else {
-			ret = successor(node).getParent(); // TODO: nullcheck?
+			ret = successor(node).getParent(); // TODO: nullcheck? or re-uncomment
+//			ret = successor(node);
+//			if (ret != node.getRight() && ret != getRoot()){
+//				ret = ret.getParent();
+//			}
 			successorSwap(node);
 		}
 		return ret;
+	}
+
+	private WAVLNode successorSwap2(WAVLNode node) {
+		WAVLNode succ = successor(node);
+		/*
+		* succ can only be a leaf, or an unary node with right child
+		* Because if succ had a left child, it would be the successor
+		* */
+		WAVLNode tempNode = new WAVLNode(node.getKey(), node.getValue(), node.getParent(),
+				node.getRight(), node.getLeft(), node.getRank());
+		WAVLNode tempSucc = new WAVLNode(succ.getKey(), succ.getValue(), succ.getParent(),
+				succ.getRight(), succ.getLeft(), succ.getRank());
+		int succSide = side(succ);
+		int nodeSide = side(node);
+		switchPointers(node, tempSucc, succSide);
+		switchPointers(succ, tempNode, nodeSide);
+		return remove(node); // because node is now a leaf or unary - returns the parent
+	}
+
+	/**
+	 *
+	 * @param node node to change all it's pointers
+	 * @param temp temp node that has all pointer information
+	 * @param side side of temp node
+	 */
+	private void switchPointers(WAVLNode node, WAVLNode temp, int side) {
+		node.setParent(temp.getParent());
+		node.getParent().setChild(node, side);
+		node.setLeft(temp.getLeft());
+		node.getLeft().setParent(node);
+		node.setRight(temp.getRight());
+		node.getRight().setParent(node);
+		node.setRank(temp.getRank());
+		node.updateSubtreeSize();
 	}
 
 	/**
 	 *
 	 * @param node node to swap with successor
 	 */
+	// TODO Check this with new successorSwap
 	private void successorSwap(WAVLNode node) {
 		WAVLNode succ = successor(node);
+		// Why this?
 		if (succ == this.getRoot()) {
 			removeRoot();
 		}
 		else {
 			remove(succ);
 		}
+
 		succ.setRank(node.getRank());
 		succ.setLeft(node.getLeft());
 		succ.getLeft().setParent(succ);
