@@ -571,7 +571,11 @@ public class WAVLTree {
 		}
 		// Case 4 - Node to remove is binary
 		else {
-			ret = successor(node).getParent(); // TODO: nullcheck? or re-uncomment
+			if (node== successor(node).getParent()) {
+				ret = successor(node);
+			} else {
+				ret = successor(node).getParent(); // TODO: nullcheck? or re-uncomment
+			}
 //			ret = successor(node);
 //			if (ret != node.getRight() && ret != getRoot()){
 //				ret = ret.getParent();
