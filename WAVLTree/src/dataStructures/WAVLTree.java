@@ -520,10 +520,18 @@ public class WAVLTree {
 		} else {
 			WAVLNode y = remove(z);
 //			remove(z);
-			return deleteRebalance(y);
+			int reb = deleteRebalance(y);
+//			if (!checkRank_rec(this.getRoot())) { //TODO delete this
+//				System.out.println("BALANCE ERROR ON DELETION \n ####");
+//			}
+//			else {
+//				System.out.println("##### SKIP #####");
+//			}
+//			print(this.getRoot());
+			return reb;
 		}
 	}
-	
+		
 	private WAVLNode remove(WAVLNode node) {
 		WAVLNode parent = node.getParent();
 		WAVLNode ret;
