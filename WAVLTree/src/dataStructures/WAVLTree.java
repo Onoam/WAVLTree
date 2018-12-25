@@ -515,8 +515,11 @@ public class WAVLTree {
 			return -1;
 		}
 		if (z == getRoot()) {
-			removeRoot();
-			return deleteRebalance(getRoot());
+			WAVLNode reb = removeRoot();
+			if (reb == OUTER_NODE) {				
+				return 0;
+			}
+			return deleteRebalance(reb);
 		} else {
 			WAVLNode y = remove(z);
 //			remove(z);
@@ -681,13 +684,16 @@ public class WAVLTree {
 	 * 	    and set the new root
 	 * 4) Same as case 3 from remove, just that instead of setting the parent,
 	 *    set the root of the tree.
+	 * @return 
 	 */
-	private void removeRoot() {
+	private WAVLNode removeRoot() {
 		WAVLNode newRoot;
+		WAVLNode ret;
 		WAVLNode currRoot = this.getRoot();
 		// Case 1
 		if (root.isLeaf()) {
 			this.root = OUTER_NODE;
+			return root;
 
 		}
 		// Case 2
@@ -695,10 +701,12 @@ public class WAVLTree {
 				getRoot().getLeft().getRank() != WAVLNode.OUTER_NODE_RANK) {
 			getRoot().getLeft().setParent(getRoot().getParent());
 			this.root = this.getRoot().getLeft();
+			return root;
 		}
 		// Case 3 + 4
 		else {
 			newRoot = successor(root);
+			ret = newRoot.getParent(); //This is the node we need to rebalance on
 			// Case 3
 			if (newRoot == getRoot().getRight()) {
 				newRoot.setLeft(getRoot().getLeft());
@@ -735,6 +743,7 @@ public class WAVLTree {
 			}
 		}
 		currRoot = null;
+		return ret;
 	}
 
 	/**
@@ -804,7 +813,8 @@ public class WAVLTree {
 			// This ensures that we update the the root last, and then stop.
 			while (parent != this.getRoot()) {
 				if (parent == null) {
-					System.out.println(node.getKey());
+					System.out.println(node.getKey()); 
+					print(root);//TODO delete this
 				}
 				node = parent; // go up the tree
 				node.updateSubtreeSize(); // update the size of the node
@@ -1259,6 +1269,9 @@ public class WAVLTree {
 	            	   System.out.println(t.search(key));
 	               }
 	               else if (Integer.parseInt(s) == 5) {
+	            	   if (count>= values3.length){
+	            		   count = 0;
+	            	   }
 	            	   while (count < values3.length){
 	            		   System.out.println("inserting from values3: " + values3[count]);
 	            		   int key = values3[count];
