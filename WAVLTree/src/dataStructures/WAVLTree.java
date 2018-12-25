@@ -272,8 +272,8 @@ public class WAVLTree {
 			return 0; // tree is valid WAVL, no rank 2 leaf, no rank diff>=3
 		}
 		if (Math.max(ldiff, rdiff)>3) { //TODO: remove this
-			WAVLTree t = new WAVLTree(x);
-			t.print(x);
+//			WAVLTree t = new WAVLTree(x);
+//			t.print(x);
 			
 		}
 		assert Math.max(ldiff, rdiff) == 3;
@@ -543,6 +543,9 @@ public class WAVLTree {
 			updateSizeUp(parent);
 			ret = parent;
 		} 
+		else  if (node == successor(node).getParent()){
+			ret = successor(node);
+		}
 		else {
 			ret = successor(node).getParent(); // TODO: nullcheck?
 			successorSwap(node);
@@ -563,15 +566,17 @@ public class WAVLTree {
 		succ.getLeft().setParent(succ);
 		succ.setRight(node.getRight());
 		succ.getRight().setParent(succ);
-		if (node == node.getParent().getLeft()){
+		if (node != root && node == node.getParent().getLeft()){
 			node.getParent().setLeft(succ);
 		}
-		else {
+		else  if (node != root){
 			node.getParent().setRight(succ);
 		}
 		succ.setParent(node.getParent());
 		succ.updateSubtreeSize();
-		
+		if (node == root) {
+			root = succ;
+		}
 	}
 
 	/**
@@ -709,13 +714,14 @@ public class WAVLTree {
 				 * 6) set newRoot.size to root.size
 				 * 7) set newRoot as this.root
 				 * */
-				newRoot.getParent().setLeft(newRoot.getRight()); // (1)
-				updateSizeUp(newRoot.getParent().getLeft()); // (2)
-				newRoot.setRight(getRoot().getRight()); // (3)
-				newRoot.setLeft(getRoot().getLeft()); // (4)
-				newRoot.setRank(getRoot().getRank()); // (5)
-				newRoot.setParent(getRoot().getParent()); // delete parent
-				newRoot.size = getRoot().getSubtreeSize(); // (6)
+				successorSwap(root);
+//				newRoot.getParent().setLeft(newRoot.getRight()); // (1)
+//				updateSizeUp(newRoot.getParent().getLeft()); // (2)
+//				newRoot.setRight(getRoot().getRight()); // (3)
+//				newRoot.setLeft(getRoot().getLeft()); // (4)
+//				newRoot.setRank(getRoot().getRank()); // (5)
+//				newRoot.setParent(getRoot().getParent()); // delete parent
+//				newRoot.size = getRoot().getSubtreeSize(); // (6)
 				this.root = newRoot; // (7)
 			}
 		}
@@ -788,6 +794,9 @@ public class WAVLTree {
 			// If we reached the root, then we stop.
 			// This ensures that we update the the root last, and then stop.
 			while (parent != this.getRoot()) {
+				if (parent == null) {
+					System.out.println(node.getKey());
+				}
 				node = parent; // go up the tree
 				node.updateSubtreeSize(); // update the size of the node
 				parent = node.getParent(); // find the next parent
