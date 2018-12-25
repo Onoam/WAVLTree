@@ -23,15 +23,17 @@ import java.util.List;
  */
 @SuppressWarnings("WeakerAccess")
 public class WAVLTree {
-	private WAVLNode root;
+	//private WAVLNode root;
 	public final WAVLNode OUTER_NODE = new WAVLNode();
+	private final WAVLNode SENTINEL = OUTER_NODE;
 
 	public WAVLTree(WAVLNode root) {
-		this.root = root;
+		SENTINEL.setRight(root);
 	}
 
 	public WAVLTree() {
-		this.root = OUTER_NODE;
+		this.setRoot(OUTER_NODE);
+		SENTINEL.setRight(getRoot());
 	}
 
 	/**
@@ -44,7 +46,7 @@ public class WAVLTree {
 	 * @return boolean false if root is an inner node
 	 **/
 	public boolean empty() {
-		return !this.root.isInnerNode();
+		return SENTINEL.getRight() == OUTER_NODE;
 	}
 
 	/**
@@ -135,7 +137,7 @@ public class WAVLTree {
 	public int insert(int k, String i) {
 		WAVLNode x = new WAVLNode(k, i, null, OUTER_NODE, OUTER_NODE);
 		if (empty()) {
-			this.root = x;
+			this.setRoot(x);
 			return 0;
 		} else {
 			int counter = treeInsert(getRoot(), x);
@@ -431,7 +433,7 @@ public class WAVLTree {
 		x.updateSubtreeSize();
 		y.updateSubtreeSize();
 		if (x == this.getRoot()) {
-			this.root = y;
+			this.setRoot(y);
 		}
 	}
 
@@ -456,7 +458,7 @@ public class WAVLTree {
 		x.updateSubtreeSize();
 		y.updateSubtreeSize();
 		if (x == this.getRoot()) {
-			this.root = y;
+			this.setRoot(y);
 		}
 
 	}
@@ -559,7 +561,7 @@ public class WAVLTree {
 			removeRoot();
 		}
 		else if(node == this.getRoot()) {
-			root = succ;
+			setRoot(succ);
 		}
 		else {
 			remove(succ);
@@ -678,24 +680,24 @@ public class WAVLTree {
 		WAVLNode newRoot;
 		WAVLNode currRoot = this.getRoot();
 		// Case 1
-		if (root.isLeaf()) {
-			this.root = OUTER_NODE;
+		if (getRoot().isLeaf()) {
+			this.setRoot(OUTER_NODE);
 
 		}
 		// Case 2
 		else if (getRoot().getRight().getRank() == WAVLNode.OUTER_NODE_RANK &&
 				getRoot().getLeft().getRank() != WAVLNode.OUTER_NODE_RANK) {
 			getRoot().getLeft().setParent(getRoot().getParent());
-			this.root = this.getRoot().getLeft();
+			this.setRoot(this.getRoot().getLeft());
 		}
 		// Case 3 + 4
 		else {
-			newRoot = successor(root);
+			newRoot = successor(getRoot());
 			// Case 3
 			if (newRoot == getRoot().getRight()) {
 				newRoot.setLeft(getRoot().getLeft());
 				newRoot.setParent(getRoot().getParent());
-				this.root = newRoot;
+				this.setRoot(newRoot);
 				getRoot().getSubtreeSize();
 			}
 			// Case 4
@@ -722,7 +724,7 @@ public class WAVLTree {
 				newRoot.setRank(getRoot().getRank()); // (5)
 				newRoot.setParent(getRoot().getParent()); // delete parent
 				newRoot.size = getRoot().getSubtreeSize(); // (6)
-				this.root = newRoot; // (7)
+				this.setRoot(newRoot); // (7)
 			}
 		}
 		currRoot = null;
@@ -749,6 +751,9 @@ public class WAVLTree {
 			break;
 		default:
 			break;
+		}
+		if(node == this.getRoot()) {
+			this.setRoot(OUTER_NODE);
 		}
 	}
 
@@ -908,7 +913,7 @@ public class WAVLTree {
 	 * @return the value of the node with the minimal key
 	 */
 	public String min() {
-		return min(root).getValue();
+		return min(getRoot()).getValue();
 	}
 
 	/**
@@ -938,7 +943,7 @@ public class WAVLTree {
 	 * @return the value of the node with the maximal key
 	 */
 	public String max() {
-		return max(root).getValue();
+		return max(getRoot()).getValue();
 	}
 
 	/**
@@ -970,11 +975,11 @@ public class WAVLTree {
 	 * @return arr int[] sorted array of the keys of tree nodes
 	 */
 	public int[] keysToArray() {
-		int[] arr = new int[root.size];
+		int[] arr = new int[getRoot().size];
 		if (!this.empty()) {
-			WAVLNode current = this.min(root);
+			WAVLNode current = this.min(getRoot());
 			int i = 0;
-			while (i < root.size) {
+			while (i < getRoot().size) {
 				arr[i] = current.getKey();
 				current = successor(current);
 				i++;
@@ -997,12 +1002,12 @@ public class WAVLTree {
 	 * @return arr String[] sorted array of the keys of tree nodes
 	 */
 	public String[] infoToArray() {
-		String[] arr = new String[root.size];
+		String[] arr = new String[getRoot().size];
 		int[] count = new int[1];
 		if (!this.empty()) {
-			WAVLNode current = this.min(root);
+			WAVLNode current = this.min(getRoot());
 			int i = 0;
-			while (i < root.size) {
+			while (i < getRoot().size) {
 				arr[i] = current.getValue();
 				current = successor(current);
 				i++;
@@ -1038,11 +1043,16 @@ public class WAVLTree {
 	 * @return the root of the tree
 	 */
 	public WAVLNode getRoot() {
-		if (this.empty()) {
-			return null;
-		} else {
-			return this.root;
-		}
+		return SENTINEL.getRight() == null ? null: SENTINEL.getRight();
+//		if (this.empty()) {
+//			return null;
+//		} else {
+//			return this.root;
+//		}
+	}
+
+	public void setRoot(WAVLNode root) {
+		this.SENTINEL.setRight(root);
 	}
 
 	/**
@@ -1105,17 +1115,17 @@ public class WAVLTree {
 
 	public void print(WAVLNode node) {
 
-		if (root == OUTER_NODE) {
+		if (getRoot() == OUTER_NODE) {
 			System.out.println("(XXXXXX)");
 			return;
 		}
 
-		int height = hight(root); // PROBLEM??
+		int height = hight(getRoot()); // PROBLEM??
 		int width = (int) Math.pow(2, height - 1);
 
 		// Preparing variables for loop.
 		List<WAVLNode> current = new ArrayList<WAVLNode>(1), next = new ArrayList<WAVLNode>(2);
-		current.add(root);
+		current.add(getRoot());
 
 		final int maxHalfLength = 4;
 		int elements = 1;
@@ -1250,7 +1260,7 @@ public class WAVLTree {
 	                   continue;
 	               }
 
-	               t.print(t.root);
+	               t.print(t.getRoot());
 	           }
 	           catch(IOException e) {
 	               e.printStackTrace();
