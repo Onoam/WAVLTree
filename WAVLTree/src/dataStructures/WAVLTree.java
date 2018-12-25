@@ -514,14 +514,14 @@ public class WAVLTree {
 		if (z.getRank() == -1) {
 			return -1;
 		}
-		if (z == getRoot()) {
-			removeRoot();
-			return deleteRebalance(getRoot());
-		} else {
+		//if (z == getRoot()) {
+//			removeRoot();
+//			return deleteRebalance(getRoot());
+		//} else {
 			WAVLNode y = remove(z);
 //			remove(z);
 			return deleteRebalance(y);
-		}
+		//}
 	}
 	
 	private WAVLNode remove(WAVLNode node) {
@@ -543,6 +543,9 @@ public class WAVLTree {
 			updateSizeUp(parent);
 			ret = parent;
 		} 
+		else if (node == successor(node).getParent()) {
+			ret = successor(node);
+		}
 		else {
 			ret = successor(node).getParent(); // TODO: nullcheck?
 			successorSwap(node);
@@ -554,6 +557,9 @@ public class WAVLTree {
 		WAVLNode succ = successor(node);
 		if (succ == this.getRoot()) {
 			removeRoot();
+		}
+		else if(node == this.getRoot()) {
+			root = succ;
 		}
 		else {
 			remove(succ);
