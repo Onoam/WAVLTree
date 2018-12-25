@@ -1262,7 +1262,7 @@ public class WAVLTree {
 	 * @main
 	 * Make sure to change this method's name (to `notmain` or something) so it isn't called if you use external tester
 	 */
-	public static void main3(String[] args) {
+	public static void main(String[] args) {
 		WAVLTree t = new WAVLTree();
 		int count = 0;
 		int[] values3 = new int[] {17,6,1,19,18,3,2,10,13,12,
@@ -1319,7 +1319,7 @@ public class WAVLTree {
 	           }
 	       }
 	}
-	public static void main(String[] args) {
+	public static void main4(String[] args) {
 		int numOfTests = 1000;
 		int maxOperationsInEachTest = 50;
 		WAVLTester_Tamir tester = new WAVLTester_Tamir(maxOperationsInEachTest);
