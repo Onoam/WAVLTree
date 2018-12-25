@@ -143,14 +143,36 @@ public class WAVLTree {
 //				WAVLNode w = treeSearch(getRoot(), x.getKey());
 //				System.out.println(successor(this.getRoot()).getKey());
 //				System.out.println(w.getKey() + " " + w.getParent() == null ? w: w.getParent().getKey());
-//				System.out.println(successor(w).getKey()); //TODO: delete this
+//				System.out.println(successor(w).getKe5y()); //TODO: delete this
 				return counter; // counter = -1
 			} else {
 				return insertRebalance(x.getParent());
 			}
 		}
 	}
-
+	/**
+	 * added for testing, taken from WAVLTamir
+	 * TODO delete this method
+	 * @param node check recursively
+	 * @return if tree is valid WAVL Tree
+	 */
+	private boolean checkRank_rec(WAVLNode node)
+	{
+		if (node == null || (!node.isInnerNode() && node.getRank() == -1))
+			return true;
+		
+		int leftRank = node.getLeft() != null ? ((WAVLNode)node.getLeft()).getRank() : -1;
+		int rightRank = node.getRight() != null ? ((WAVLNode)node.getRight()).getRank() : -1;
+		
+		boolean isType1_1 = (node.getRank() - leftRank) == 1 && (node.getRank() - rightRank) == 1;
+		boolean isType1_2 = (node.getRank() - leftRank) == 1 && (node.getRank() - rightRank) == 2;
+		boolean isType2_1 = (node.getRank() - leftRank) == 2 && (node.getRank() - rightRank) == 1;
+		boolean isType2_2 = (node.getRank() - leftRank) == 2 && (node.getRank() - rightRank) == 2 && !node.isLeaf();
+		if (!isType1_1 && !isType1_2 && !isType2_1 && !isType2_2)
+			return false;
+		
+		return checkRank_rec((WAVLNode)node.getLeft()) && checkRank_rec((WAVLNode)node.getRight());
+	}
 	/**
 	 * this method is called after inserting.
 	 * Checks which rebalance case we are in and calls the appropriate
