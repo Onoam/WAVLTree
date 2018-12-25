@@ -553,6 +553,7 @@ public class WAVLTree {
 		} 
 		else  if (node == successor(node).getParent()){
 			ret = successor(node);
+			successorSwap(node);
 		}
 		else {
 			ret = successor(node).getParent(); // TODO: nullcheck?
