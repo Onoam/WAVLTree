@@ -639,18 +639,8 @@ public class WAVLTree {
 			else {
 				/*
 				 * If newRoot isn't root's right child then:
-				 * 1) If newRoot has a right child, set it as the
-				 *    left child of newRoot's parent
-				 * 		## succ can't have a left child,
-				 * 		## because then it would be the successor
-				 * 2) update the sizes starting from newRoot's right child
-				 * 		## this ensures that the size newRoot get's at stage 7
-				 * 	 	## is the correct size.
-				 * 3) set newRoot.right to root.right
-				 * 4) set newRoot.left to root.left
-				 * 5) set newRoot.rank to root.rank
-				 * 6) set newRoot.size to root.size
-				 * 7) set newRoot as this.root
+				 * perform successor swap
+				 *
 				 * */
 				successorSwap(root);
 				this.root = newRoot; // (7)
@@ -662,8 +652,9 @@ public class WAVLTree {
 
 	/**
 	 * Function to remove leaf nodes. Used for readability.
-	 * If the node has no parent, we don't do anything, because in remove
-	 * we make the node null at the end.
+	 * We check the side of node, and accordingly:
+	 * Set the child of of node.parent to OUTER_NODE,
+	 * and updateSizeUp from node.parent.
 	 * @Complexity O(updateSizeUp) = O(log n)
 	 * @param node the WAVLNode to remove
 	 */
@@ -1341,7 +1332,6 @@ public class WAVLTree {
 			return left;
 		}
 
-		//TODO reorder getters and setters for easy reading
 		/**
 		 * Setter for left child
 		 * @Complexity O(1)
