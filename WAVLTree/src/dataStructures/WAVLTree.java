@@ -125,7 +125,7 @@ public class WAVLTree {
 	 * If treeInsert found that the key is already in the tree - return -1
 	 * Else, x was already inserted in treeInsert, so we need to
 	 * updateSizeUp(x), and then rebalance(x)
-	 * @Complexity O(treeInsert + updateSize + rebalance) =
+	 * @Complexity O(max{treeInsert, updateSizeUp, insertRebalance}) =
 	 * 				O(log n) WC, O(1) amortized
 	 * @param k int key of WAVLNode to insert
 	 * @param i String info of WAVLNode to insert
@@ -1151,7 +1151,7 @@ public class WAVLTree {
 	 * @main
 	 * Make sure to change this method's name (to `notmain` or something) so it isn't called if you use external tester
 	 */
-	public static void main(String[] args) {
+	public static void main2(String[] args) {
 		WAVLTree t = new WAVLTree();
 		int count = 0;
 		Integer[] values3 = new Integer[] {17,6,1,19,18,3,2,10,13,12,
@@ -1226,6 +1226,13 @@ public class WAVLTree {
 		WAVLTester_Tamir tester = new WAVLTester_Tamir(maxOperationsInEachTest);
 		for (int i = 0; i < numOfTests; ++i) {
 			System.out.println(tester.RunNewTest());
+		}
+	}
+	public static void mainExperimets(String[] args) {
+		for (int i = 1; i <= 10; i++)
+		{
+			DocMeasurement d = new DocMeasurement(i);
+			d.print();
 		}
 	}
 
