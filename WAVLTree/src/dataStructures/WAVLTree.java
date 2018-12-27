@@ -909,25 +909,7 @@ public class WAVLTree {
 			return this.root;
 		}
 	}
-	//TODO delete this
-	@SuppressWarnings("RedundantCast")
-	private boolean checkRank_rec(WAVLNode node)
-	{
-		if (node == null || (!node.isInnerNode() && node.getRank() == -1))
-			return true;
-		
-		int leftRank = node.getLeft() != null ? ((WAVLNode)node.getLeft()).getRank() : -1;
-		int rightRank = node.getRight() != null ? ((WAVLNode)node.getRight()).getRank() : -1;
-		
-		boolean isType1_1 = (node.getRank() - leftRank) == 1 && (node.getRank() - rightRank) == 1;
-		boolean isType1_2 = (node.getRank() - leftRank) == 1 && (node.getRank() - rightRank) == 2;
-		boolean isType2_1 = (node.getRank() - leftRank) == 2 && (node.getRank() - rightRank) == 1;
-		boolean isType2_2 = (node.getRank() - leftRank) == 2 && (node.getRank() - rightRank) == 2 && !node.isLeaf();
-		if (!isType1_1 && !isType1_2 && !isType2_1 && !isType2_2)
-			return false;
-		
-		return checkRank_rec((WAVLNode)node.getLeft()) && checkRank_rec((WAVLNode)node.getRight());
-	}
+
 	/**
 	 * public int select(int i)
 	 *
