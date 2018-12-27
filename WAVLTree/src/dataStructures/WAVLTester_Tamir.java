@@ -231,7 +231,7 @@ public class WAVLTester_Tamir
 			if (!checkSize())
 				return Error_Code.Bad_Size;
 			if (!checkRanks()) {
-				_tree.print(_tree.getRoot());
+//				_tree.print(_tree.getRoot());
 				return Error_Code.Bad_WAVL_Ranks;
 			}
 			if (!checkBalanced())

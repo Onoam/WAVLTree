@@ -258,11 +258,6 @@ public class WAVLTree {
 		if (Math.max(ldiff, rdiff) < 3) {
 			return 0; // tree is valid WAVL, no rank 2 leaf, no rank diff>=3
 		}
-//		if (Math.max(ldiff, rdiff)>3) { //TODO: remove this empty if statement
-////			WAVLTree t = new WAVLTree(x);
-////			t.print(x);
-//
-//		}
 		assert Math.max(ldiff, rdiff) == 3;
 		if (Math.min(ldiff, rdiff) == 2) {
 			return dCaseOneRebalance(x);
@@ -270,14 +265,8 @@ public class WAVLTree {
 		assert Math.min(ldiff, rdiff) == 1;
 		// x is confirmed as (3,1) node
 		int[] grandChildDiffs = new int[2];
-		try { //TODO remove this
-			grandChildDiffs = checkDiffs(x, side);
-		}
-		catch (NullPointerException e){
-			System.out.println(x.getKey() + "rank: " + x.getRank());
-			System.out.println("left " + x.getLeft().getKey() + "rank: " +x.getLeft().getRank());
-			System.out.println("right "+ x.getRight().getKey() + "rank " +x.getRight().getRank());
-		}
+		grandChildDiffs = checkDiffs(x, side);
+
 		
 		if (grandChildDiffs[0] == 2 && grandChildDiffs[1] == 2) {
 			return dCaseTwoRebalance(x, side);
@@ -717,10 +706,6 @@ public class WAVLTree {
 			// If we reached the root, then we stop.
 			// This ensures that we update the the root last, and then stop.
 			while (parent != this.getRoot()) {
-				if (parent == null) {
-					System.out.println(node.getKey()); 
-					print(root);//TODO delete this
-				}
 				node = parent; // go up the tree
 				node.updateSubtreeSize(); // update the size of the node //TODO make sure this doesn't cause problems
 				parent = node.getParent(); // find the next parent
