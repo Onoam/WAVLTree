@@ -716,51 +716,6 @@ public class WAVLTree {
 	}
 
 	/**
-	 * performs right rotation. Does not handle demotions.
-	 *
-	 * @param x       y's left child
-	 * @param y       x's parent
-	 * @param counter the rebalance counter
-	 * @return counter increased by 1 (1 rebalance operation)
-	 * @post y is x's right child, x is y's parent's child (same side as y was)
-	 */
-	private int rotateRight(WAVLNode x, WAVLNode y, int counter) { //TODO method is never used - delete?
-		if (y.getParent() != null && y.key > y.getParent().key) {
-			y.getParent().setRight(x);
-		} else if (y.getParent() != null) { // y is left child of its parent
-			y.getParent().setLeft(x);
-		}
-		x.setParent(y.getParent());
-		y.setLeft(x.getRight());
-		x.setRight(y);
-		y.setParent(x);
-		return counter + 1;
-	}
-
-	/**
-	 * performs left rotation, does not handle demotions.
-	 *
-	 * @param z       x's right child
-	 * @param x       z's parent
-	 * @param counter the rebalance counter
-	 * @return counter increased by 1 (1 rebalance operation)
-	 * @post x is z's left child, z is x's parent's child (same side as x was)
-	 */
-	private int rotateLeft(WAVLNode z, WAVLNode x, int counter) { //TODO method is never used - delete?
-
-		if (x.getParent() != null && x.key > x.getParent().key) {
-			x.getParent().setRight(z);
-		} else if (x.getParent() != null) { // y is left child of its parent
-			x.getParent().setLeft(z);
-		}
-		z.setParent(x.getParent());
-		x.setRight(z.getLeft());
-		z.setLeft(x);
-		x.setParent(z);
-		return counter + 1;
-	}
-
-	/**
 	 * Returns the node with the key directly following x.
 	 * This does not deal with call successor on the maximum of the tree,
 	 * because we don't meet this case in any other operation.
