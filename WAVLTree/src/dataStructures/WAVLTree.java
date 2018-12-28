@@ -258,11 +258,6 @@ public class WAVLTree {
 		if (Math.max(ldiff, rdiff) < 3) {
 			return 0; // tree is valid WAVL, no rank 2 leaf, no rank diff>=3
 		}
-//		if (Math.max(ldiff, rdiff)>3) { //TODO: remove this empty if statement
-////			WAVLTree t = new WAVLTree(x);
-////			t.print(x);
-//
-//		}
 		assert Math.max(ldiff, rdiff) == 3;
 		if (Math.min(ldiff, rdiff) == 2) {
 			return dCaseOneRebalance(x);
@@ -270,14 +265,8 @@ public class WAVLTree {
 		assert Math.min(ldiff, rdiff) == 1;
 		// x is confirmed as (3,1) node
 		int[] grandChildDiffs = new int[2];
-		try { //TODO remove this
-			grandChildDiffs = checkDiffs(x, side);
-		}
-		catch (NullPointerException e){
-			System.out.println(x.getKey() + "rank: " + x.getRank());
-			System.out.println("left " + x.getLeft().getKey() + "rank: " +x.getLeft().getRank());
-			System.out.println("right "+ x.getRight().getKey() + "rank " +x.getRight().getRank());
-		}
+		grandChildDiffs = checkDiffs(x, side);
+
 		
 		if (grandChildDiffs[0] == 2 && grandChildDiffs[1] == 2) {
 			return dCaseTwoRebalance(x, side);
@@ -717,10 +706,6 @@ public class WAVLTree {
 			// If we reached the root, then we stop.
 			// This ensures that we update the the root last, and then stop.
 			while (parent != this.getRoot()) {
-				if (parent == null) {
-					System.out.println(node.getKey()); 
-					print(root);//TODO delete this
-				}
 				node = parent; // go up the tree
 				node.updateSubtreeSize(); // update the size of the node //TODO make sure this doesn't cause problems
 				parent = node.getParent(); // find the next parent
@@ -728,51 +713,6 @@ public class WAVLTree {
 			// the last parent is root, update the size of parent
 			parent.updateSubtreeSize();
 		}
-	}
-
-	/**
-	 * performs right rotation. Does not handle demotions.
-	 *
-	 * @param x       y's left child
-	 * @param y       x's parent
-	 * @param counter the rebalance counter
-	 * @return counter increased by 1 (1 rebalance operation)
-	 * @post y is x's right child, x is y's parent's child (same side as y was)
-	 */
-	private int rotateRight(WAVLNode x, WAVLNode y, int counter) { //TODO method is never used - delete?
-		if (y.getParent() != null && y.key > y.getParent().key) {
-			y.getParent().setRight(x);
-		} else if (y.getParent() != null) { // y is left child of its parent
-			y.getParent().setLeft(x);
-		}
-		x.setParent(y.getParent());
-		y.setLeft(x.getRight());
-		x.setRight(y);
-		y.setParent(x);
-		return counter + 1;
-	}
-
-	/**
-	 * performs left rotation, does not handle demotions.
-	 *
-	 * @param z       x's right child
-	 * @param x       z's parent
-	 * @param counter the rebalance counter
-	 * @return counter increased by 1 (1 rebalance operation)
-	 * @post x is z's left child, z is x's parent's child (same side as x was)
-	 */
-	private int rotateLeft(WAVLNode z, WAVLNode x, int counter) { //TODO method is never used - delete?
-
-		if (x.getParent() != null && x.key > x.getParent().key) {
-			x.getParent().setRight(z);
-		} else if (x.getParent() != null) { // y is left child of its parent
-			x.getParent().setLeft(z);
-		}
-		z.setParent(x.getParent());
-		x.setRight(z.getLeft());
-		z.setLeft(x);
-		x.setParent(z);
-		return counter + 1;
 	}
 
 	/**
@@ -969,25 +909,7 @@ public class WAVLTree {
 			return this.root;
 		}
 	}
-	//TODO delete this
-	@SuppressWarnings("RedundantCast")
-	private boolean checkRank_rec(WAVLNode node)
-	{
-		if (node == null || (!node.isInnerNode() && node.getRank() == -1))
-			return true;
-		
-		int leftRank = node.getLeft() != null ? ((WAVLNode)node.getLeft()).getRank() : -1;
-		int rightRank = node.getRight() != null ? ((WAVLNode)node.getRight()).getRank() : -1;
-		
-		boolean isType1_1 = (node.getRank() - leftRank) == 1 && (node.getRank() - rightRank) == 1;
-		boolean isType1_2 = (node.getRank() - leftRank) == 1 && (node.getRank() - rightRank) == 2;
-		boolean isType2_1 = (node.getRank() - leftRank) == 2 && (node.getRank() - rightRank) == 1;
-		boolean isType2_2 = (node.getRank() - leftRank) == 2 && (node.getRank() - rightRank) == 2 && !node.isLeaf();
-		if (!isType1_1 && !isType1_2 && !isType2_1 && !isType2_2)
-			return false;
-		
-		return checkRank_rec((WAVLNode)node.getLeft()) && checkRank_rec((WAVLNode)node.getRight());
-	}
+
 	/**
 	 * public int select(int i)
 	 *
@@ -1037,195 +959,6 @@ public class WAVLTree {
 		}
 	}
 
-	/**
-	 * done recursively. height of node = 1 + Max(left.height, right.height)
-	 * @param n WAVLNode to find height
-	 * @return height of node (recursion: 1 + Max(left.height, right.height))
-	 */
-	public static int hight(WAVLNode n) { //TODO there is a typo here, should be height, but do we really want to change?
-
-		if (n == null || n.rank == WAVLNode.OUTER_NODE_RANK) {
-			return 0;
-		}
-
-		return 1 + Math.max(hight(n.getRight()), hight(n.getLeft()));
-	}
-
-	//TODO do we need to hand in this function? (public void print(WAVLNode node))
-	@SuppressWarnings("Convert2Diamond")
-	public void print(WAVLNode node) {
-
-		if (root == OUTER_NODE) {
-			System.out.println("(XXXXXX)");
-			return;
-		}
-
-		int height = hight(root); // PROBLEM??
-		int width = (int) Math.pow(2, height - 1);
-
-		// Preparing variables for loop.
-		List<WAVLNode> current = new ArrayList<WAVLNode>(1), next = new ArrayList<WAVLNode>(2);
-		current.add(root);
-
-		final int maxHalfLength = 4;
-		int elements = 1;
-
-		StringBuilder sb = new StringBuilder(maxHalfLength * width);
-		for (int i = 0; i < maxHalfLength * width; i++)
-			sb.append(' ');
-		String textBuffer;
-
-		// Iterating through height levels.
-		for (int i = 0; i < height; i++) {
-
-			sb.setLength(maxHalfLength * ((int) Math.pow(2, height - 1 - i) - 1));
-
-			// Creating spacer space indicator.
-			textBuffer = sb.toString();
-
-			// Print tree node elements
-			for (WAVLNode n : current) {
-
-				System.out.print(textBuffer);
-
-				if (n == null) {
-
-					System.out.print("        ");
-					next.add(null);
-					next.add(null);
-
-				} else {
-
-					System.out.printf("(" + Integer.toString(n.key) + "," + Integer.toString(n.rank) + ")	");
-					next.add(n.getLeft());
-					next.add(n.getRight());
-
-				}
-
-				System.out.print(textBuffer);
-
-			}
-
-			System.out.println();
-			// Print tree node extensions for next level.
-			if (i < height - 1) {
-
-				for (WAVLNode n : current) {
-
-					System.out.print(textBuffer);
-
-					if (n == null)
-						System.out.print("        ");
-					else
-						System.out.printf("%s      %s", n.getLeft() == null ? " " : "/",
-								n.getRight() == null ? " " : "\\");
-
-					System.out.print(textBuffer);
-
-				}
-
-				System.out.println();
-
-			}
-
-			// Renewing indicators for next run.
-			elements *= 2;
-			current = next;
-			next = new ArrayList<WAVLNode>(elements);
-
-		}
-
-	}
-
-	//TODO Do we need the main functions?
-	/**
-	 * @main
-	 * Make sure to change this method's name (to `notmain` or something) so it isn't called if you use external tester
-	 */
-	public static void main2(String[] args) {
-		WAVLTree t = new WAVLTree();
-		int count = 0;
-		Integer[] values3 = new Integer[] {17,6,1,19,18,3,2,10,13,12,
-                20,15,4,11,7,16,9,5,8,14,21,
-                25, 29, 75, 86, 100, 97, 23, 55,
-                68, 63, 47, 52, 42, 40};
-	       while (true) {
-	           System.out.println("(1) Insert");
-	           System.out.println("(2) Delete");
-	           System.out.println("(3) Break");
-	           System.out.println("(4) Search");
-	           System.out.println("(5) Fast Insert");
-	           System.out.println("(6) Fast Delete"); 
-
-
-	           try {
-	               BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-	               String s = bufferRead.readLine();
-
-	               if (Integer.parseInt(s) == 1) {
-	                   System.out.print("Value to be inserted: ");
-	                   int key =Integer.parseInt(bufferRead.readLine());
-	                   t.insert(key, "AMEN" + key);
-	            	   }
-	               else if (Integer.parseInt(s) == 2) {
-	                   System.out.print("Value to be deleted: ");
-	                   int key =Integer.parseInt(bufferRead.readLine());
-	                   t.delete(key);
-	               }
-	               else if (Integer.parseInt(s) == 3) {
-	            	   break;
-	               }
-	               else if (Integer.parseInt(s) == 4) {
-	            	   System.out.print("Value to be searched: ");
-	            	   int key =Integer.parseInt(bufferRead.readLine());
-	            	   System.out.println(t.search(key));
-	               }
-	               else if (Integer.parseInt(s) == 5) {
-	            	   if (count>= values3.length){
-	            		   count = 0;
-	            	   }
-	            	   while (count < values3.length){
-	            		   System.out.println("inserting from values3: " + values3[count]);
-	            		   int key = values3[count];
-	            		   count++;
-		                   t.insert(key, "AMEN" + key);
-	            	   }
-	               }
-	               else if (Integer.parseInt(s) == 6) {
-	            	   List<Integer> shuffled 	= Arrays.asList(values3);
-	            	   Collections.shuffle(shuffled);
-	            	   for (int value : values3) {
-	            		   System.out.println("deleting from values 3: " + value);
-	            		   t.delete(value);
-	            	   }
-	               }
-	               else {
-	                   System.out.println("Invalid choice, try again!");
-	                   continue;
-	               }
-
-	               t.print(t.root);
-	           }
-	           catch(IOException e) {
-	               e.printStackTrace();
-	           }
-	       }
-	}
-	public static void main3(String[] args) {
-		int numOfTests = 1000;
-		int maxOperationsInEachTest = 50;
-		WAVLTester_Tamir tester = new WAVLTester_Tamir(maxOperationsInEachTest);
-		for (int i = 0; i < numOfTests; ++i) {
-			System.out.println(tester.RunNewTest());
-		}
-	}
-	public static void mainExperimets(String[] args) {
-		for (int i = 1; i <= 10; i++)
-		{
-			DocMeasurement d = new DocMeasurement(i);
-			d.print();
-		}
-	}
 
 	/**
 	 * public class WAVLNode
@@ -1263,18 +996,6 @@ public class WAVLTree {
 			this.setLeft(left);
 			this.rank = rank;
 			this.size = this.getSubtreeSize();
-		}
-
-		//TODO delete this method if deprecated?
-		/**
-		 * @deprecated constructor for building a WAVLNode item with only key and value
-		 *             DEPRECATED: should use constructor with left and right children
-		 *             (so we can use OUTER_NODE for left and right)
-		 * @param key int
-		 * @param value String
-		 */
-		public WAVLNode(int key, String value) {
-			this(key, value, null, null, null, 0);
 		}
 
 		/**
