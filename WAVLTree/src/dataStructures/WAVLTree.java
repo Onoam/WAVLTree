@@ -1,13 +1,5 @@
 package dataStructures;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 /**
  *
  * WAVLTree
@@ -156,7 +148,7 @@ public class WAVLTree {
 	 * @return the number of rebalance steps
 	 */
 	private int insertRebalance(WAVLNode x) {
-		if (x == null) { // should only happen if we've reached the root //TODO change to OUTER_NODE instaed of null?
+		if (x == null) { // should only happen if we've reached the root 
 			return 0;
 		}
 		int ldiff = x.getRankDiff('l');
@@ -246,7 +238,7 @@ public class WAVLTree {
 	 * @pre x.parent is not OUTER_NODE
 	 */
 	private int deleteRebalance(WAVLNode x) {
-		if (x == null) { // should only happen if we've reached the root //TODO shouldn't be OUTER_NODE instead of null?
+		if (x == null) { // should only happen if we've reached the root 
 			return 0;
 		}
 		if (x.getRank() == 1 && x.isLeaf()) {// x is leaf
@@ -544,14 +536,16 @@ public class WAVLTree {
 		}
 		// Case 5 - node to remove is binary, successor(node) != node.right
 		else {
-			ret = successor(node).getParent(); // TODO: nullcheck?
+			ret = successor(node).getParent(); 
 			successorSwap(node);
 		}
 		return ret; // node to return for rebalancing
 	}
 
 	/**
-	 * //TODO added detailed operation description
+	 * Replace node with its successor,
+	 * Placing the successor in node's place in the tree
+	 * and removes node from the tree
 	 * @param node node to swap with successor
 	 * @Complexity O(1)
 	 */
@@ -599,7 +593,6 @@ public class WAVLTree {
 	private WAVLNode removeRoot() {
 		WAVLNode newRoot;
 		WAVLNode ret;
-		WAVLNode currRoot = this.getRoot();
 		// Case 1
 		if (root.isLeaf()) {
 			this.root = OUTER_NODE;
@@ -635,7 +628,6 @@ public class WAVLTree {
 				this.root = newRoot; // (7)
 			}
 		}
-		currRoot = null; //TODO check if this line can be deleted
 		return ret;
 	}
 
@@ -707,7 +699,7 @@ public class WAVLTree {
 			// This ensures that we update the the root last, and then stop.
 			while (parent != this.getRoot()) {
 				node = parent; // go up the tree
-				node.updateSubtreeSize(); // update the size of the node //TODO make sure this doesn't cause problems
+				node.updateSubtreeSize(); // update the size of the node 
 				parent = node.getParent(); // find the next parent
 			}
 			// the last parent is root, update the size of parent
@@ -739,29 +731,6 @@ public class WAVLTree {
 		}
 	}
 
-	/**
-	 * Returns the node with the key directly preceding x.
-	 * This does not deal with call predecessor on the minimum of the tree,
-	 * because we don't meet this case in any other operation.
-	 *
-	 * Implement by pseudo-code from class
-	 *
-	 * @Complexity O(log n) worst case, where n is the number of nodes in the tree
-	 * @param x WAVLNode A node in the tree
-	 * @return y The WAVLNode with the preceding key
-	 */
-	private WAVLNode predecessor(WAVLNode x) { //TODO method is never used - delete?
-		if (x.getLeft().getRank() != -1) {
-			return max(x.getLeft());
-		} else {
-			WAVLNode y = x.getParent();
-			while (y != null && x == y.getLeft()) {
-				x = y;
-				y = x.getParent();
-			}
-			return y;
-		}
-	}
 
 	/**
 	 * public String min()
