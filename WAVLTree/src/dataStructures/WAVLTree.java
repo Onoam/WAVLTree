@@ -699,7 +699,7 @@ public class WAVLTree {
 			// This ensures that we update the the root last, and then stop.
 			while (parent != this.getRoot()) {
 				node = parent; // go up the tree
-				node.updateSubtreeSize(); // update the size of the node //TODO make sure this doesn't cause problems
+				node.updateSubtreeSize(); // update the size of the node 
 				parent = node.getParent(); // find the next parent
 			}
 			// the last parent is root, update the size of parent
