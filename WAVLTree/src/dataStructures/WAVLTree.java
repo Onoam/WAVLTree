@@ -1099,7 +1099,7 @@ public class WAVLTree {
 	 * @return String - the value of the i'th smallest node
 	 */
 	public String select(int i) {
-		if (empty()) {
+		if (empty() || i > size()) {
 			return null;
 		} else {
 			WAVLNode x = selectNode(getRoot(), i - 1);
@@ -1241,7 +1241,7 @@ public class WAVLTree {
 	           System.out.println("(1) Insert");
 	           System.out.println("(2) Delete");
 	           System.out.println("(3) Break");
-	           System.out.println("(4) Search");
+	           System.out.println("(4) Select");
 	           System.out.println("(5) Fast Insert");
 	           System.out.println("(6) Fast Delete"); 
 
@@ -1266,7 +1266,7 @@ public class WAVLTree {
 	               else if (Integer.parseInt(s) == 4) {
 	            	   System.out.print("Value to be searched: ");
 	            	   int key =Integer.parseInt(bufferRead.readLine());
-	            	   System.out.println(t.search(key));
+	            	   System.out.println(t.select(key));
 	               }
 	               else if (Integer.parseInt(s) == 5) {
 	            	   if (count>= values3.length){
