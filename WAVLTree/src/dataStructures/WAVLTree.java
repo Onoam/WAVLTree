@@ -894,7 +894,7 @@ public class WAVLTree {
 	 * @return the value of the i'th smallest node
 	 */
 	public String select(int i) {
-		if (empty()) {
+		if (empty() || i > size()) {
 			return null;
 		} else {
 			WAVLNode x = selectNode(getRoot(), i - 1);
